@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "inventorysorter",
+  "version": "1.0.0",
+  "name": "Inventory Sorter",
+  "description": "Quickly and easily sort inventorys",
+  "authors": [
+    "kyrptonaught"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/inventorysorter/icon.png",
+  "environment": "*",
+  "mixins": [
+    {
+    "config": "net.kyrptonaught.inventorysorter.json",
+      "environment": "client"
+    }
+  ],
+  "entrypoints": {
+    "main": [
+      "net.kyrptonaught.inventorysorter.InventorySorterMod"
+    ]
+  },
+  "requires": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

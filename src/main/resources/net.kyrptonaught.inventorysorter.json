@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "net.kyrptonaught.inventorysorter.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinAbstractContainerScreen"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

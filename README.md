@@ -1,2 +1,2 @@
 # Inventory-Sorter
-Inventory Sorter for Fabric
+Lighweight and simple inventory Sorter for Minecraft, written in Fabric

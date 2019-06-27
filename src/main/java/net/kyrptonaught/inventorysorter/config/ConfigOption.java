@@ -16,16 +16,16 @@ public class ConfigOption {
         return display + ": " + value + " ";
     }
 
-    public String buildString() {
-        return "/* " + comments + "*/\n" + buildDisplayLine() + value;
+    String generateConfig() {
+        return "/* " + comments + "*/\n" + generateDisplayLine() + value;
     }
 
-    private String buildDisplayLine() {
+    private String generateDisplayLine() {
         return '"' + display + '"' + ": ";
     }
 
     void parseString(String line) {
-        line = line.substring(buildDisplayLine().length());
+        line = line.substring(generateDisplayLine().length());
         line = line.replaceAll("[^a-zA-Z]", "");
         value = Boolean.parseBoolean(line);
     }

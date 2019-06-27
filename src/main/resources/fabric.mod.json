@@ -26,6 +26,9 @@
     ],
     "client": [
       "net.kyrptonaught.inventorysorter.InventorySorterMod"
+    ],
+    "modmenu": [
+      "net.kyrptonaught.inventorysorter.config.InventorySorterModMenu"
     ]
   },
   "requires": {

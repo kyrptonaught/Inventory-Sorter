@@ -38,12 +38,20 @@ public class ConfigHelper {
         return config;
     }
 
+    void saveConfig() {
+        File configFile = new File(FabricLoader.getInstance().getConfigDirectory(), InventorySorterMod.MOD_ID + ".json");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
+            writer.write(buildConfig());
+        } catch (IOException e) {
+            System.out.println("Inventory Sorter: error writing config file");
+        }
+    }
     public String toString() {
         return displaySortButton.toString() + enableMiddleClick.toString();
     }
 
     public String buildConfig() {
-        return "{\n" + displaySortButton.buildString() + ",\n" + enableMiddleClick.buildString() + "\n}";
+        return "{\n" + displaySortButton.generateConfig() + ",\n" + enableMiddleClick.generateConfig() + "\n}";
     }
 
     private void readConfig(List<String> configLines) {

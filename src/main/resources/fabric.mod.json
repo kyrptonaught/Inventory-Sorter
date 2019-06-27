@@ -8,8 +8,8 @@
     "kyrptonaught"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/kyrptonaught/Inventory-Sorter",
+    "sources": "https://github.com/kyrptonaught/Inventory-Sorter"
   },
   "license": "CC0-1.0",
   "icon": "assets/inventorysorter/icon.png",
@@ -22,6 +22,9 @@
   ],
   "entrypoints": {
     "main": [
+      "net.kyrptonaught.inventorysorter.InventorySorterMod"
+    ],
+    "client": [
       "net.kyrptonaught.inventorysorter.InventorySorterMod"
     ]
   },

@@ -32,7 +32,7 @@ public class InventoryHelper {
         }
     }
 
-    public static Inventory getInventoryAt(World world_1, double double_1, double double_2, double double_3) {
+    static Inventory getInventoryAt(World world_1, double double_1, double double_2, double double_3) {
         Inventory inventory_1 = null;
         BlockPos blockPos_1 = new BlockPos(double_1, double_2, double_3);
         BlockState blockState_1 = world_1.getBlockState(blockPos_1);

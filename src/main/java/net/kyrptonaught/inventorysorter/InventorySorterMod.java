@@ -1,17 +1,20 @@
 package net.kyrptonaught.inventorysorter;
 
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
+import net.kyrptonaught.inventorysorter.config.ConfigHelper;
 
-public class InventorySorterMod implements ModInitializer {
+public class InventorySorterMod implements ModInitializer, ClientModInitializer {
     public static final String MOD_ID = "inventorysorter";
-    public static ItemGroup modItemGroup = FabricItemGroupBuilder.build(new Identifier("inventorysorter", "inventorysorter"), () -> new ItemStack(Items.DIAMOND_PICKAXE));
+    public static ConfigHelper config;
+
     @Override
     public void onInitialize() {
-       InventorySorter.registerReceivePacket();
+        InventorySorter.registerReceivePacket();
+    }
+
+    @Override
+    public void onInitializeClient() {
+        config = ConfigHelper.loadConfig();
     }
 }

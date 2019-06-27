@@ -35,7 +35,14 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
                 this.setMessage(config.displaySortButton.value.toString());
             }
         });
-        this.addButton(new AbstractButtonWidget(this.width / 2 + 10, 70, config.enableMiddleClick.value.toString()) {
+        this.addButton(new AbstractButtonWidget(this.width / 2 + 10, 70, config.leftDisplay.value.toString()) {
+            @Override
+            public void onClick(double x, double y) {
+                config.leftDisplay.value = !config.leftDisplay.value;
+                this.setMessage(config.leftDisplay.value.toString());
+            }
+        });
+        this.addButton(new AbstractButtonWidget(this.width / 2 + 10, 90, config.enableMiddleClick.value.toString()) {
             @Override
             public void onClick(double x, double y) {
                 config.enableMiddleClick.value = !config.enableMiddleClick.value;
@@ -51,7 +58,8 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
         super.render(mouseX, mouseY, partialTicks);
 
         drawString(font, "Display Sort Button", this.width / 2 - 155, 50 + 2, 0xffffff);
-        drawString(font, "Middle Click Sort", this.width / 2 - 155, 70 + 2, 0xffffff);
+        drawString(font, "Display Left Side", this.width / 2 - 155, 70 + 2, 0xffffff);
+        drawString(font, "Middle Click Sort", this.width / 2 - 155, 90 + 2, 0xffffff);
     }
 
     @Override

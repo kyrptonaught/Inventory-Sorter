@@ -13,14 +13,17 @@ import java.util.List;
 public class ConfigHelper {
     public ConfigOption displaySortButton;
     public ConfigOption enableMiddleClick;
+    public ConfigOption leftDisplay;
 
-    private ConfigHelper(boolean displayButton, boolean middleClick) {
+    private ConfigHelper(boolean displayButton, boolean middleClick, boolean left) {
         this.displaySortButton = new ConfigOption("display_Sort", displayButton, "Should the Sort button be displayed in inventorys");
         this.enableMiddleClick = new ConfigOption("enable_Middle_Click", middleClick, "Allows clicking the middle mouse button to sort inventorys");
+        this.leftDisplay = new ConfigOption("display_left_side", left, "Should the Sort button be displayed on the left instead");
+
     }
 
     public static ConfigHelper loadConfig() {
-        ConfigHelper config = new ConfigHelper(true, true);
+        ConfigHelper config = new ConfigHelper(true, true, false);
         File configFile = new File(FabricLoader.getInstance().getConfigDirectory(), InventorySorterMod.MOD_ID + ".json");
         if (!configFile.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
@@ -47,15 +50,16 @@ public class ConfigHelper {
         }
     }
     public String toString() {
-        return displaySortButton.toString() + enableMiddleClick.toString();
+        return displaySortButton.toString() + enableMiddleClick.toString() + leftDisplay.toString();
     }
 
     public String buildConfig() {
-        return "{\n" + displaySortButton.generateConfig() + ",\n" + enableMiddleClick.generateConfig() + "\n}";
+        return "{\n" + displaySortButton.generateConfig() + ",\n" + enableMiddleClick.generateConfig() + ",\n" + leftDisplay.generateConfig() + "\n}";
     }
 
     private void readConfig(List<String> configLines) {
         this.displaySortButton.parseString(configLines.get(2));
         this.enableMiddleClick.parseString(configLines.get(4));
+        this.leftDisplay.parseString(configLines.get(6));
     }
 }

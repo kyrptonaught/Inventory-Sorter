@@ -29,7 +29,9 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         if (InventorySorterMod.config.displaySortButton.value) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!shouldInejct(currentScreen)) return;
-            this.addButton(new ButtonWidget((this.width - containerWidth) / 2 + containerWidth + 5, top, 35, 18, "Sort", var1 -> sendPacketToClient(currentScreen)));
+            int offset = this.containerWidth / 2 + 5;
+            if (InventorySorterMod.config.leftDisplay.value) offset = -(this.containerWidth / 2 + 40);
+            this.addButton(new ButtonWidget((this.width / 2) + offset, top, 35, 18, "Sort", var1 -> sendPacketToClient(currentScreen)));
         }
     }
 

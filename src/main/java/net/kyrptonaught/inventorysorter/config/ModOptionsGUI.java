@@ -9,13 +9,11 @@ import java.util.function.Supplier;
 public class ModOptionsGUI extends Screen implements Supplier<Screen> {
 
     private final Screen parent;
-    private final String modName;
     private final ConfigHelper config;
 
     ModOptionsGUI(Screen parent, String modName, ConfigHelper confHandler) {
         super(new TextComponent(modName));
         this.parent = parent;
-        this.modName = modName;
         this.config = confHandler;
     }
 

@@ -28,27 +28,17 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
                 minecraft.openScreen(parent);
             }
         });
-        this.addButton(new AbstractButtonWidget(this.width / 2 + 10, 50, config.displaySortButton.value.toString()) {
-            @Override
-            public void onClick(double x, double y) {
-                config.displaySortButton.value = !config.displaySortButton.value;
-                this.setMessage(config.displaySortButton.value.toString());
-            }
-        });
-        this.addButton(new AbstractButtonWidget(this.width / 2 + 10, 70, config.leftDisplay.value.toString()) {
-            @Override
-            public void onClick(double x, double y) {
-                config.leftDisplay.value = !config.leftDisplay.value;
-                this.setMessage(config.leftDisplay.value.toString());
-            }
-        });
-        this.addButton(new AbstractButtonWidget(this.width / 2 + 10, 90, config.enableMiddleClick.value.toString()) {
-            @Override
-            public void onClick(double x, double y) {
-                config.enableMiddleClick.value = !config.enableMiddleClick.value;
-                this.setMessage(config.enableMiddleClick.value.toString());
-            }
-        });
+        int starty = 50;
+        for (int i = 0; i < config.configOptions.length; i++) {
+            int finalI = i;
+            this.addButton(new AbstractButtonWidget(this.width / 2 + 10, starty + (finalI * 20), config.configOptions[finalI].value.toString()) {
+                @Override
+                public void onClick(double x, double y) {
+                    config.configOptions[finalI].value = !config.configOptions[finalI].value;
+                    this.setMessage(config.configOptions[finalI].value.toString());
+                }
+            });
+        }
     }
 
     @Override
@@ -56,12 +46,11 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
         renderBackground();
         drawCenteredString(font, "Inventory Sorter Configuration", this.width / 2, 20, 0xffffff);
         super.render(mouseX, mouseY, partialTicks);
-
-        drawString(font, "Display Sort Button", this.width / 2 - 155, 50 + 2, 0xffffff);
-        drawString(font, "Display Left Side", this.width / 2 - 155, 70 + 2, 0xffffff);
-        drawString(font, "Middle Click Sort", this.width / 2 - 155, 90 + 2, 0xffffff);
+        int starty = 52;
+        for (int i = 0; i < config.configOptions.length; i++) {
+            drawString(font, config.configOptions[i].display, this.width / 2 - 200, starty + (i * 20), 0xffffff);
+        }
     }
-
     @Override
     public Screen get() {
         return this;

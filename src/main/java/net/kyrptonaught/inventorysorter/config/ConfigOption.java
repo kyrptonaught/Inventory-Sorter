@@ -1,9 +1,9 @@
 package net.kyrptonaught.inventorysorter.config;
 
 public class ConfigOption {
-    private String display;
+    public String display;
     public Boolean value;
-    private String comments;
+    public String comments;
 
     public ConfigOption(String display, Boolean value, String comments) {
         this.display = display;

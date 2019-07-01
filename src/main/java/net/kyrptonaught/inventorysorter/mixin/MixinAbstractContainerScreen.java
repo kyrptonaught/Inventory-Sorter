@@ -2,6 +2,7 @@ package net.kyrptonaught.inventorysorter.mixin;
 
 import net.kyrptonaught.inventorysorter.InventorySorter;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
+import net.kyrptonaught.inventorysorter.config.ConfigHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.*;
@@ -27,18 +28,20 @@ public abstract class MixinAbstractContainerScreen extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
     protected void init(CallbackInfo callbackinfo) {
-        if (InventorySorterMod.config.displaySortButton.value) {
+        if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.display_sort).value) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!shouldInject(currentScreen)) return;
             int offset = this.containerWidth / 2 + 5;
-            if (InventorySorterMod.config.leftDisplay.value) offset = -(this.containerWidth / 2 + 40);
-            this.addButton(new ButtonWidget((this.width / 2) + offset, top, 35, 18, "Sort", var1 -> sendPacketToClient(currentScreen)));
+            if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.left_display).value)
+                offset = -(this.containerWidth / 2 + 40);
+            int finalOffset = offset;
+            this.addButton(new ButtonWidget((this.width / 2) + finalOffset, top, 35, 18, "Sort", var1 -> sendPacketToClient(currentScreen)));
         }
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     public void onMouseClick(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (InventorySorterMod.config.enableMiddleClick.value && button == 2) {
+        if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.middle_click).value && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!shouldInject(currentScreen)) return;
             sendPacketToClient(currentScreen);
@@ -49,7 +52,11 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     private void sendPacketToClient(Screen currentScreen) {
         if (currentScreen instanceof InventoryScreen)
             InventorySorter.sendPacket(true);
-        else InventorySorter.sendPacket(false);
+        else {
+            InventorySorter.sendPacket(false);
+            if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.sort_player).value)
+                InventorySorter.sendPacket(true);
+        }
     }
 
     private Boolean shouldInject(Screen currentScreen) {

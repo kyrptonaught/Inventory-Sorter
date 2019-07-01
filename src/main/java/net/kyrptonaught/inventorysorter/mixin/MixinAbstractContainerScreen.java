@@ -49,6 +49,16 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         }
     }
 
+    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+    public void keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+        if (InventorySorterMod.keyBinding.matchesKey(keycode, scancode)) {
+            Screen currentScreen = MinecraftClient.getInstance().currentScreen;
+            if (currentScreen instanceof AbstractContainerScreen && shouldInject(currentScreen))
+                sendPacketToClient(currentScreen);
+            callbackInfoReturnable.setReturnValue(true);
+        }
+    }
+
     private void sendPacketToClient(Screen currentScreen) {
         if (currentScreen instanceof InventoryScreen)
             InventorySorter.sendPacket(true);

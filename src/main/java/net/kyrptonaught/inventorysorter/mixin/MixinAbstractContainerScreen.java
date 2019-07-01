@@ -1,4 +1,5 @@
 package net.kyrptonaught.inventorysorter.mixin;
+
 import net.kyrptonaught.inventorysorter.InventorySorter;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.minecraft.client.MinecraftClient;
@@ -28,7 +29,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     protected void init(CallbackInfo callbackinfo) {
         if (InventorySorterMod.config.displaySortButton.value) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (!shouldInejct(currentScreen)) return;
+            if (!shouldInject(currentScreen)) return;
             int offset = this.containerWidth / 2 + 5;
             if (InventorySorterMod.config.leftDisplay.value) offset = -(this.containerWidth / 2 + 40);
             this.addButton(new ButtonWidget((this.width / 2) + offset, top, 35, 18, "Sort", var1 -> sendPacketToClient(currentScreen)));
@@ -39,7 +40,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void onMouseClick(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.config.enableMiddleClick.value && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (!shouldInejct(currentScreen)) return;
+            if (!shouldInject(currentScreen)) return;
             sendPacketToClient(currentScreen);
             callbackInfoReturnable.setReturnValue(true);
         }
@@ -51,7 +52,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         else InventorySorter.sendPacket(false);
     }
 
-    private Boolean shouldInejct(Screen currentScreen) {
+    private Boolean shouldInject(Screen currentScreen) {
         return !(currentScreen instanceof CreativeInventoryScreen) && !(currentScreen instanceof BeaconScreen) && !(currentScreen instanceof AnvilScreen) && !(currentScreen instanceof EnchantingScreen) && !(currentScreen instanceof GrindstoneScreen) && !(currentScreen instanceof AbstractFurnaceScreen) && !(currentScreen instanceof LoomScreen) && !(currentScreen instanceof CraftingTableScreen) && !(currentScreen instanceof BrewingStandScreen) && !(currentScreen instanceof HorseScreen);
     }
 }

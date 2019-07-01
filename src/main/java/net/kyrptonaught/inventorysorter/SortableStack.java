@@ -8,7 +8,8 @@ public class SortableStack implements Comparable {
     SortableStack(ItemStack stack) {
         sortStack = stack;
     }
-    ItemStack getStack(){
+
+    ItemStack getStack() {
         return sortStack;
     }
     private static String getCleanName(ItemStack stack) {

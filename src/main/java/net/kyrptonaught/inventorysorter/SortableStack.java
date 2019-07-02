@@ -14,7 +14,7 @@ public class SortableStack implements Comparable {
     }
 
     private static String getCleanName(ItemStack stack) {
-        return stack.getItem().getName().getText();
+        return stack.getItem().getName().asFormattedString();
     }
 
     @Override

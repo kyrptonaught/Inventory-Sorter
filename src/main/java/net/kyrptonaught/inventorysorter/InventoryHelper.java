@@ -1,19 +1,7 @@
 package net.kyrptonaught.inventorysorter;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.InventoryProvider;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BoundingBox;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -31,34 +19,6 @@ public class InventoryHelper {
             }
         }
     }
-
-    static Inventory getInventoryAt(World world_1, double double_1, double double_2, double double_3) {
-        Inventory inventory_1 = null;
-        BlockPos blockPos_1 = new BlockPos(double_1, double_2, double_3);
-        BlockState blockState_1 = world_1.getBlockState(blockPos_1);
-        Block block_1 = blockState_1.getBlock();
-        if (block_1 instanceof InventoryProvider) {
-            inventory_1 = ((InventoryProvider) block_1).getInventory(blockState_1, world_1, blockPos_1);
-        } else if (block_1.hasBlockEntity()) {
-            BlockEntity blockEntity_1 = world_1.getBlockEntity(blockPos_1);
-            if (blockEntity_1 instanceof Inventory) {
-                inventory_1 = (Inventory) blockEntity_1;
-                if (inventory_1 instanceof ChestBlockEntity && block_1 instanceof ChestBlock) {
-                    inventory_1 = ChestBlock.getInventory(blockState_1, world_1, blockPos_1, true);
-                }
-            }
-        }
-
-        if (inventory_1 == null) {
-            List<Entity> list_1 = world_1.getEntities((Entity) null, new BoundingBox(double_1 - 0.5D, double_2 - 0.5D, double_3 - 0.5D, double_1 + 0.5D, double_2 + 0.5D, double_3 + 0.5D), EntityPredicates.VALID_INVENTORIES);
-            if (!list_1.isEmpty()) {
-                inventory_1 = (Inventory) list_1.get(world_1.random.nextInt(list_1.size()));
-            }
-        }
-
-        return inventory_1;
-    }
-
     private static boolean isStackFull(ItemStack stack) {
         return stack.getCount() == stack.getMaxCount();
     }
@@ -71,26 +31,6 @@ public class InventoryHelper {
         int maxInsertAmount = Math.min(stack.getMaxCount() - stack.getCount(), stack2.getCount());
         stack.increment(maxInsertAmount);
         stack2.increment(-maxInsertAmount);
-    }
-
-    public static ItemStack insertStack(Inventory inventory, ItemStack insertStack) {
-        for (int j = 0; j < inventory.getInvSize(); j++) {
-            ItemStack invStack = inventory.getInvStack(j);
-            if (!invStack.isStackable()) continue;
-            if (canMergeItems(invStack, insertStack)) {
-                combineStacks(invStack, insertStack);
-                if (insertStack.getCount() == 0) return insertStack;
-            }
-        }
-        for (int j = 0; j < inventory.getInvSize(); j++) {
-            ItemStack invStack = inventory.getInvStack(j);
-            if (invStack.isEmpty()) {
-                inventory.setInvStack(j, insertStack.copy());
-                insertStack.setCount(0);
-                return insertStack;
-            }
-        }
-        return insertStack;
     }
 
     private static boolean canMergeItems(ItemStack itemStack_1, ItemStack itemStack_2) {

@@ -2,7 +2,7 @@ package net.kyrptonaught.inventorysorter.config;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.text.Text;
 
 import java.util.function.Supplier;
 
@@ -11,8 +11,8 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
     private final Screen parent;
     private final ConfigHelper config;
 
-    ModOptionsGUI(Screen parent, String modName, ConfigHelper confHandler) {
-        super(new TextComponent(modName));
+    ModOptionsGUI(Screen parent, Text modName, ConfigHelper confHandler) {
+        super(modName);
         this.parent = parent;
         this.config = confHandler;
     }

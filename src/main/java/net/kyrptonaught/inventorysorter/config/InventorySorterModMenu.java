@@ -3,6 +3,7 @@ package net.kyrptonaught.inventorysorter.config;
 import io.github.prospector.modmenu.api.ModMenuApi;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.TranslatableText;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -15,6 +16,6 @@ public class InventorySorterModMenu implements ModMenuApi {
 
     @Override
     public Optional<Supplier<Screen>> getConfigScreen(Screen screen) {
-        return Optional.of(new ModOptionsGUI(screen, InventorySorterMod.MOD_ID, InventorySorterMod.config));
+        return Optional.of(new ModOptionsGUI(screen, new TranslatableText(InventorySorterMod.MOD_ID), InventorySorterMod.config));
     }
 }

@@ -2,7 +2,10 @@ package net.kyrptonaught.inventorysorter;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.kyrptonaught.inventorysorter.config.ConfigHelper;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -49,10 +52,19 @@ public class InventorySorter {
         inv.markDirty();
     }
 
-    public static void sendPacket(Boolean isPlayer) {
-        MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(isPlayer));
+    public static void sendSortPacket(Screen currentScreen) {
+        if (currentScreen instanceof InventoryScreen)
+            MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(true));
+        else {
+            MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(false));
+            if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.sort_player).value)
+                MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(true));
+        }
     }
 
+    public static void sendSortPacketWithValue(Boolean isPlayer) {
+        MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(isPlayer));
+    }
     private static CustomPayloadC2SPacket createSortPacket(boolean isPlayer) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(isPlayer);

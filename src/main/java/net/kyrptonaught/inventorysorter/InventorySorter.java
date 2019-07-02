@@ -48,6 +48,7 @@ public class InventorySorter {
             inv.setInvStack(startSlot + i, stacks.get(i).getStack());
         inv.markDirty();
     }
+
     public static void sendPacket(Boolean isPlayer) {
         MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(isPlayer));
     }

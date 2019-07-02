@@ -49,6 +49,7 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
             drawString(font, config.configOptions[i].display, this.width / 2 - 200, starty + (i * 20), 0xffffff);
         }
     }
+
     @Override
     public Screen get() {
         return this;

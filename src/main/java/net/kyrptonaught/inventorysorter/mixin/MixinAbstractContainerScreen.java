@@ -26,19 +26,26 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     @Shadow
     private int containerWidth;
     @Shadow
+    private int containerHeight;
+    @Shadow
     private int top;
-    int calcOffset;
-    TexturedButtonWidget btn;
+    @Shadow
+    private int left;
+
     private Identifier BUTTON_TEX = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
+    private TexturedButtonWidget btn;
+
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
     protected void init(CallbackInfo callbackinfo) {
         if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.display_sort).value) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!shouldInject(currentScreen)) return;
-            calcOffset = (this.width / 2) + (this.containerWidth / 2);
+            int calcOffset = this.left + this.containerWidth;
             if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.left_display).value)
-                calcOffset = (this.width / 2) - (this.containerWidth / 2 + 35);
+                calcOffset = this.left - 20;
             this.addButton(btn = new TexturedButtonWidget(calcOffset, top, 20, 18, 0, 0, 19, BUTTON_TEX, var1 -> sendPacketToClient(currentScreen)));
+            if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.two_btns).value && !(currentScreen instanceof InventoryScreen))
+                this.addButton(new TexturedButtonWidget(calcOffset, containerHeight - 85, 20, 18, 0, 0, 19, BUTTON_TEX, var1 -> InventorySorter.sendPacket(true)));
         }
     }
 
@@ -65,12 +72,10 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void render(int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
         Screen currentScreen = MinecraftClient.getInstance().currentScreen;
         if (currentScreen instanceof InventoryScreen) {
-            InventoryScreen invScreen = (InventoryScreen) currentScreen;
-            if (invScreen.getRecipeBookGui().isOpen())
-                btn.setPos((this.width / 2) + (this.containerWidth / 2) + 75, btn.y);
-            else btn.setPos(calcOffset, btn.y);
+            btn.setPos(this.left + 125, this.height / 2 - 22);
         }
     }
+
     private void sendPacketToClient(Screen currentScreen) {
         if (currentScreen instanceof InventoryScreen)
             InventorySorter.sendPacket(true);

@@ -9,23 +9,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+
 public class ConfigHelper {
     public enum Option {
-        display_sort, middle_click, left_display, sort_player
+        display_sort, middle_click, left_display, two_btns, sort_player
     }
 
-    public ConfigOption[] configOptions;
+    ConfigOption[] configOptions;
 
-    private ConfigHelper(boolean displayButton, boolean middleClick, boolean left, boolean playerSort) {
-        ConfigOption displaySortButton = new ConfigOption("display_Sort", displayButton, "Should the Sort button be displayed in inventorys");
-        ConfigOption enableMiddleClick = new ConfigOption("enable_Middle_Click", middleClick, "Allows clicking the middle mouse button to sort inventorys");
-        ConfigOption leftDisplay = new ConfigOption("display_left_side", left, "Should the Sort button be displayed on the left instead");
-        ConfigOption sortPlayerInventory = new ConfigOption("always_sort_player_inventory", playerSort, "Should sorting another inventory also sort the players");
-        configOptions = new ConfigOption[]{displaySortButton, enableMiddleClick, leftDisplay, sortPlayerInventory};
+    private ConfigHelper(boolean displayButton, boolean middleClick, boolean left, boolean separate, boolean playerSort) {
+        ConfigOption displaySortButton = new ConfigOption("display_Sort_btn", displayButton, "Should the Sort button be displayed in inventorys");
+        ConfigOption enableMiddleClick = new ConfigOption("enable_MiddleClick_sort", middleClick, "Allows clicking the middle mouse button to sort inventorys");
+        ConfigOption leftDisplay = new ConfigOption("display_sort_on_left", left, "Should the Sort button be displayed on the left instead");
+        ConfigOption separatePlayerInvSortBtn = new ConfigOption("separate_playerInv_sort_btn", separate, "Should a second btn be displayed to sort player inventory");
+        ConfigOption sortPlayerInventory = new ConfigOption("also_sort_player_inventory", playerSort, "Should sorting another inventory also sort the players");
+        configOptions = new ConfigOption[]{displaySortButton, enableMiddleClick, leftDisplay, separatePlayerInvSortBtn, sortPlayerInventory};
     }
 
     public static ConfigHelper loadConfig() {
-        ConfigHelper config = new ConfigHelper(true, true, false, false);
+        ConfigHelper config = new ConfigHelper(true, true, false, false, false);
         File configFile = new File(FabricLoader.getInstance().getConfigDirectory(), InventorySorterMod.MOD_ID + ".json");
         if (!configFile.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {

@@ -30,17 +30,17 @@ public class ConfigHelper {
         if (!configFile.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
                 writer.write(config.buildConfig());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.out.println("Inventory Sorter: error writing config file");
             }
         } else {
             try {
                 config.readConfig(Files.readAllLines(configFile.toPath()));
-            } catch (Exception e) {
+            } catch (IOException e) {
                 System.out.println("Inventory Sorter: error reading config file");
-                config.saveConfig();
             }
         }
+        config.saveConfig();
         return config;
     }
 
@@ -63,6 +63,7 @@ public class ConfigHelper {
     public ConfigOption getConfigOption(Option option) {
         return configOptions[option.ordinal()];
     }
+
     public String buildConfig() {
         String string = "{\n";
         for (int i = 0; i < configOptions.length; i++)
@@ -71,8 +72,10 @@ public class ConfigHelper {
     }
 
     private void readConfig(List<String> configLines) {
-        for (int i = 0; i < configOptions.length; i++) {
-            configOptions[i].parseString(configLines.get(2 + (i * 2)));
+        for (int i = 0; i < configLines.size(); i++) {
+            for (int j = 0; j < configOptions.length; j++) {
+                configOptions[j].isConfigLine(configLines.get(i));
+            }
         }
     }
 }

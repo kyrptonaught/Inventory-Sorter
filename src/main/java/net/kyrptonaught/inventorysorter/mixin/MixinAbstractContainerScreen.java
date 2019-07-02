@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+
 @Mixin(AbstractContainerScreen.class)
 public abstract class MixinAbstractContainerScreen extends Screen {
     protected MixinAbstractContainerScreen(Component component) {
@@ -40,12 +41,11 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
-    public void onMouseClick(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+    public void mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.middle_click).value && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!shouldInject(currentScreen)) return;
             sendPacketToClient(currentScreen);
-            callbackInfoReturnable.setReturnValue(true);
         }
     }
 

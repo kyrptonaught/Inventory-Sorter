@@ -6,8 +6,9 @@ import net.kyrptonaught.inventorysorter.config.ConfigHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.*;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,16 +28,18 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     @Shadow
     private int top;
 
+    TexturedButtonWidget sortBtn;
+    int calcOffset;
+    Identifier BUTTON_TEX = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
     protected void init(CallbackInfo callbackinfo) {
         if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.display_sort).value) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!shouldInject(currentScreen)) return;
-            int offset = this.containerWidth / 2 + 5;
+            calcOffset = this.containerWidth / 2;
             if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.left_display).value)
-                offset = -(this.containerWidth / 2 + 40);
-            int finalOffset = offset;
-            this.addButton(new ButtonWidget((this.width / 2) + finalOffset, top, 35, 18, "Sort", var1 -> sendPacketToClient(currentScreen)));
+                calcOffset = -(this.containerWidth / 2 + 35);
+            this.addButton(sortBtn = new TexturedButtonWidget((this.width / 2) + calcOffset, top, 20, 18, 0, 0, 19, BUTTON_TEX, var1 -> sendPacketToClient(currentScreen)));
         }
     }
 
@@ -58,7 +61,6 @@ public abstract class MixinAbstractContainerScreen extends Screen {
             callbackInfoReturnable.setReturnValue(true);
         }
     }
-
     private void sendPacketToClient(Screen currentScreen) {
         if (currentScreen instanceof InventoryScreen)
             InventorySorter.sendPacket(true);

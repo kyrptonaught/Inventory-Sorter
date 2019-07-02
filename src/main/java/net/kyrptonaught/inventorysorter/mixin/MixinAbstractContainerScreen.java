@@ -75,6 +75,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
             btn.setPos(this.left + 125, this.height / 2 - 22);
         }
     }
+
     private Boolean shouldInject(Screen currentScreen) {
         return !(currentScreen instanceof CreativeInventoryScreen) && !(currentScreen instanceof BeaconScreen) && !(currentScreen instanceof AnvilScreen) && !(currentScreen instanceof EnchantingScreen) && !(currentScreen instanceof GrindstoneScreen) && !(currentScreen instanceof AbstractFurnaceScreen) && !(currentScreen instanceof LoomScreen) && !(currentScreen instanceof CraftingTableScreen) && !(currentScreen instanceof BrewingStandScreen) && !(currentScreen instanceof HorseScreen);
     }

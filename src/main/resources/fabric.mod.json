@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "inventorysorter",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "name": "Inventory Sorter",
   "description": "Quickly and easily sort inventorys",
   "authors": [
@@ -16,7 +16,7 @@
   "environment": "*",
   "mixins": [
     {
-    "config": "net.kyrptonaught.inventorysorter.json",
+      "config": "net.kyrptonaught.inventorysorter.json",
       "environment": "client"
     }
   ],

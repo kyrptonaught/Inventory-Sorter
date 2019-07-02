@@ -65,6 +65,7 @@ public class InventorySorter {
     public static void sendSortPacketWithValue(Boolean isPlayer) {
         MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(isPlayer));
     }
+
     private static CustomPayloadC2SPacket createSortPacket(boolean isPlayer) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(isPlayer);

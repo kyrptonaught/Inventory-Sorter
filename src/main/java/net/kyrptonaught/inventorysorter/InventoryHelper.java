@@ -19,6 +19,7 @@ public class InventoryHelper {
             }
         }
     }
+
     private static boolean isStackFull(ItemStack stack) {
         return stack.getCount() == stack.getMaxCount();
     }

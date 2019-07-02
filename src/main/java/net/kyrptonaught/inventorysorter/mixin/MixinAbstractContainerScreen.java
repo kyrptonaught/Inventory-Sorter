@@ -27,19 +27,18 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     private int containerWidth;
     @Shadow
     private int top;
-
-    TexturedButtonWidget sortBtn;
     int calcOffset;
-    Identifier BUTTON_TEX = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
+    TexturedButtonWidget btn;
+    private Identifier BUTTON_TEX = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
     protected void init(CallbackInfo callbackinfo) {
         if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.display_sort).value) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!shouldInject(currentScreen)) return;
-            calcOffset = this.containerWidth / 2;
+            calcOffset = (this.width / 2) + (this.containerWidth / 2);
             if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.left_display).value)
-                calcOffset = -(this.containerWidth / 2 + 35);
-            this.addButton(sortBtn = new TexturedButtonWidget((this.width / 2) + calcOffset, top, 20, 18, 0, 0, 19, BUTTON_TEX, var1 -> sendPacketToClient(currentScreen)));
+                calcOffset = (this.width / 2) - (this.containerWidth / 2 + 35);
+            this.addButton(btn = new TexturedButtonWidget(calcOffset, top, 20, 18, 0, 0, 19, BUTTON_TEX, var1 -> sendPacketToClient(currentScreen)));
         }
     }
 
@@ -59,6 +58,17 @@ public abstract class MixinAbstractContainerScreen extends Screen {
             if (currentScreen instanceof AbstractContainerScreen && shouldInject(currentScreen))
                 sendPacketToClient(currentScreen);
             callbackInfoReturnable.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "render", at = @At("TAIL"), cancellable = true)
+    public void render(int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
+        Screen currentScreen = MinecraftClient.getInstance().currentScreen;
+        if (currentScreen instanceof InventoryScreen) {
+            InventoryScreen invScreen = (InventoryScreen) currentScreen;
+            if (invScreen.getRecipeBookGui().isOpen())
+                btn.setPos((this.width / 2) + (this.containerWidth / 2) + 75, btn.y);
+            else btn.setPos(calcOffset, btn.y);
         }
     }
     private void sendPacketToClient(Screen currentScreen) {

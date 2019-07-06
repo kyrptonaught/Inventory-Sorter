@@ -53,8 +53,10 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.middle_click).value && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (!shouldInject(currentScreen)) return;
-            InventorySorter.sendSortPacket(currentScreen);
+            if (shouldInject(currentScreen)) {
+                InventorySorter.sendSortPacket(currentScreen);
+                callbackInfoReturnable.setReturnValue(true);
+            }
         }
     }
 
@@ -62,16 +64,17 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.keyBinding.matchesKey(keycode, scancode)) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (currentScreen instanceof AbstractContainerScreen && shouldInject(currentScreen))
+            if (currentScreen instanceof AbstractContainerScreen && shouldInject(currentScreen)) {
                 InventorySorter.sendSortPacket(currentScreen);
-            callbackInfoReturnable.setReturnValue(true);
+                callbackInfoReturnable.setReturnValue(true);
+            }
         }
     }
 
     @Inject(method = "render", at = @At("TAIL"), cancellable = true)
     public void render(int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
         Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-        if (currentScreen instanceof InventoryScreen) {
+        if (btn != null && currentScreen instanceof InventoryScreen) {
             btn.setPos(this.left + 125, this.height / 2 - 22);
         }
     }

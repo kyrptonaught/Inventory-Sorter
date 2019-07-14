@@ -2,10 +2,9 @@ package net.kyrptonaught.inventorysorter;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.kyrptonaught.inventorysorter.config.ConfigHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.client.gui.screen.ingame.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -57,7 +56,7 @@ public class InventorySorter {
             MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(true));
         else {
             MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(false));
-            if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.sort_player).value)
+            if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.sort_player).value)
                 MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(true));
         }
     }
@@ -70,5 +69,9 @@ public class InventorySorter {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(isPlayer);
         return new CustomPayloadC2SPacket(SORT_INV, new PacketByteBuf(buf));
+    }
+
+    public static Boolean shouldInject(Screen currentScreen) {
+        return !(currentScreen instanceof CreativeInventoryScreen) && !(currentScreen instanceof BeaconScreen) && !(currentScreen instanceof AnvilScreen) && !(currentScreen instanceof EnchantingScreen) && !(currentScreen instanceof GrindstoneScreen) && !(currentScreen instanceof AbstractFurnaceScreen) && !(currentScreen instanceof LoomScreen) && !(currentScreen instanceof CraftingTableScreen) && !(currentScreen instanceof BrewingStandScreen) && !(currentScreen instanceof HorseScreen);
     }
 }

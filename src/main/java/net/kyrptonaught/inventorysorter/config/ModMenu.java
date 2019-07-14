@@ -8,7 +8,7 @@ import net.minecraft.text.TranslatableText;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class InventorySorterModMenu implements ModMenuApi {
+public class ModMenu implements ModMenuApi {
     @Override
     public String getModId() {
         return InventorySorterMod.MOD_ID;

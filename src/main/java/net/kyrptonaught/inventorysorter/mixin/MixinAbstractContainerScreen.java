@@ -2,10 +2,10 @@ package net.kyrptonaught.inventorysorter.mixin;
 
 import net.kyrptonaught.inventorysorter.InventorySorter;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
-import net.kyrptonaught.inventorysorter.config.ConfigHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.*;
+import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -32,28 +32,28 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     @Shadow
     private int left;
 
-    private Identifier BUTTON_TEX = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
-    private TexturedButtonWidget btn;
+    private Identifier invsort$BUTTON_TEX = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
+    private TexturedButtonWidget invsort$btn;
 
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
-    protected void init(CallbackInfo callbackinfo) {
-        if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.display_sort).value) {
+    protected void invsort$init(CallbackInfo callbackinfo) {
+        if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.display_sort).value) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (!shouldInject(currentScreen)) return;
+            if (!InventorySorter.shouldInject(currentScreen)) return;
             int calcOffset = this.left + this.containerWidth;
-            if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.left_display).value)
+            if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.left_display).value)
                 calcOffset = this.left - 20;
-            this.addButton(btn = new TexturedButtonWidget(calcOffset, top, 20, 18, 0, 0, 19, BUTTON_TEX, var1 -> InventorySorter.sendSortPacket(currentScreen)));
-            if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.two_btns).value && !(currentScreen instanceof InventoryScreen))
-                this.addButton(new TexturedButtonWidget(calcOffset, containerHeight - 85, 20, 18, 0, 0, 19, BUTTON_TEX, var1 -> InventorySorter.sendSortPacketWithValue(true)));
+            this.addButton(invsort$btn = new TexturedButtonWidget(calcOffset, top, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySorter.sendSortPacket(currentScreen)));
+            if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.seperate_btn).value && !(currentScreen instanceof InventoryScreen))
+                this.addButton(new TexturedButtonWidget(calcOffset, containerHeight - 85, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySorter.sendSortPacketWithValue(true)));
         }
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
-    public void mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (InventorySorterMod.config.getConfigOption(ConfigHelper.Option.middle_click).value && button == 2) {
+    public void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+        if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.middle_click).value && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (shouldInject(currentScreen)) {
+            if (InventorySorter.shouldInject(currentScreen)) {
                 InventorySorter.sendSortPacket(currentScreen);
                 callbackInfoReturnable.setReturnValue(true);
             }
@@ -61,10 +61,10 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    public void keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+    public void invsort$keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.keyBinding.matchesKey(keycode, scancode)) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (currentScreen instanceof AbstractContainerScreen && shouldInject(currentScreen)) {
+            if (currentScreen instanceof AbstractContainerScreen && InventorySorter.shouldInject(currentScreen)) {
                 InventorySorter.sendSortPacket(currentScreen);
                 callbackInfoReturnable.setReturnValue(true);
             }
@@ -72,14 +72,10 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     }
 
     @Inject(method = "render", at = @At("TAIL"), cancellable = true)
-    public void render(int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
+    public void invsort$render(int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
         Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-        if (btn != null && currentScreen instanceof InventoryScreen) {
-            btn.setPos(this.left + 125, this.height / 2 - 22);
+        if (invsort$btn != null && currentScreen instanceof InventoryScreen) {
+            invsort$btn.setPos(this.left + 125, this.height / 2 - 22);
         }
-    }
-
-    private Boolean shouldInject(Screen currentScreen) {
-        return !(currentScreen instanceof CreativeInventoryScreen) && !(currentScreen instanceof BeaconScreen) && !(currentScreen instanceof AnvilScreen) && !(currentScreen instanceof EnchantingScreen) && !(currentScreen instanceof GrindstoneScreen) && !(currentScreen instanceof AbstractFurnaceScreen) && !(currentScreen instanceof LoomScreen) && !(currentScreen instanceof CraftingTableScreen) && !(currentScreen instanceof BrewingStandScreen) && !(currentScreen instanceof HorseScreen);
     }
 }

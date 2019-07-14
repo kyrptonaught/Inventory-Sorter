@@ -29,11 +29,11 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
         int starty = 50;
         for (int i = 0; i < config.configOptions.length; i++) {
             int finalI = i;
-            this.addButton(new AbstractButtonWidget(this.width / 2 + 10, starty + (finalI * 20), config.configOptions[finalI].value.toString()) {
+            this.addButton(new AbstractButtonWidget(this.width / 2 + 10, starty + (finalI * 20), config.configOptions[finalI].getDisplay()) {
                 @Override
                 public void onClick(double x, double y) {
-                    config.configOptions[finalI].value = !config.configOptions[finalI].value;
-                    this.setMessage(config.configOptions[finalI].value.toString());
+                    config.configOptions[finalI].btnPressed();
+                    this.setMessage(config.configOptions[finalI].getDisplay());
                 }
             });
         }
@@ -42,7 +42,7 @@ public class ModOptionsGUI extends Screen implements Supplier<Screen> {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         renderBackground();
-        drawCenteredString(font, "Inventory Sorter Configuration", this.width / 2, 20, 0xffffff);
+        drawCenteredString(font, ConfigHelper.cleanName + " Configuration", this.width / 2, 20, 0xffffff);
         super.render(mouseX, mouseY, partialTicks);
         int starty = 52;
         for (int i = 0; i < config.configOptions.length; i++) {

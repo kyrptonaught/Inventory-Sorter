@@ -4,6 +4,7 @@ public class ConfigOption {
     String display;
     public Boolean value;
     private String comments;
+    Boolean writeToConfig = true;
 
     public ConfigOption(String display, Boolean value, String comments) {
         this.display = display;
@@ -17,6 +18,14 @@ public class ConfigOption {
         String tempDisplay = display.replaceAll("[^a-zA-Z\\s]", "").toLowerCase();
         if (line.contains(tempDisplay))
             parseString(line);
+    }
+
+    public void btnPressed() {
+        this.value = !this.value;
+    }
+
+    public String getDisplay() {
+        return value.toString();
     }
 
     public String toString() {

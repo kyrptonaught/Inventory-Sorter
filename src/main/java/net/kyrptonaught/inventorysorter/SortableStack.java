@@ -27,7 +27,7 @@ public class SortableStack implements Comparable {
         ItemStack otherStack = ((SortableStack) o).getStack();
         int compared = getCleanName(sortStack).compareTo(getCleanName(otherStack));
         if (compared == 0)
-            compared = sortStack.getCount() >= otherStack.getCount() ? 1 : -1;
+            compared = sortStack.getCount() >= otherStack.getCount() ? -1 : 1;
         return compared;
     }
 }

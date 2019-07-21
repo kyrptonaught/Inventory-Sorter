@@ -37,21 +37,21 @@ public abstract class MixinAbstractContainerScreen extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
     protected void invsort$init(CallbackInfo callbackinfo) {
-        if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.display_sort).value) {
+        if (InventorySorterMod.config.config.display_sort) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (!InventorySorter.shouldInject(currentScreen)) return;
             int calcOffset = this.left + this.containerWidth;
-            if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.left_display).value)
+            if (InventorySorterMod.config.config.left_display)
                 calcOffset = this.left - 20;
             this.addButton(invsort$btn = new TexturedButtonWidget(calcOffset, top, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySorter.sendSortPacket(currentScreen)));
-            if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.seperate_btn).value && !(currentScreen instanceof InventoryScreen))
+            if (InventorySorterMod.config.config.seperate_btn && !(currentScreen instanceof InventoryScreen))
                 this.addButton(new TexturedButtonWidget(calcOffset, containerHeight - 85, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySorter.sendSortPacketWithValue(true)));
         }
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     public void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.middle_click).value && button == 2) {
+        if (InventorySorterMod.config.config.middle_click && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
             if (InventorySorter.shouldInject(currentScreen)) {
                 InventorySorter.sendSortPacket(currentScreen);

@@ -2,6 +2,7 @@ package net.kyrptonaught.inventorysorter;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.kyrptonaught.inventorysorter.config.ConfigManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.*;
@@ -56,7 +57,7 @@ public class InventorySorter {
             MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(true));
         else {
             MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(false));
-            if (InventorySorterMod.config.getConfigOption(InventorySorterMod.ConfigNames.sort_player).value)
+            if (InventorySorterMod.config.config.sort_player)
                 MinecraftClient.getInstance().getNetworkHandler().getClientConnection().send(createSortPacket(true));
         }
     }

@@ -19,7 +19,13 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modCompile "io.github.prospector.modmenu:ModMenu:1.+"
+	modImplementation "io.github.prospector.modmenu:ModMenu:1.+"
+
+	modImplementation 'me.shedaniel.cloth:config-2:0.+'
+	include 'me.shedaniel.cloth:config-2:0.+'
+
+	modApi "blue.endless:jankson:1.+"
+	include "blue.endless:jankson:1.+"
 }
 
 processResources {

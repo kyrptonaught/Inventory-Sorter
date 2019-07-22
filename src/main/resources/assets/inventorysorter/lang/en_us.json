@@ -5,6 +5,6 @@
   "key.inventorysorter.config.display_sort": "Enable 'Sort' button in inventorys",
   "key.inventorysorter.config.left_display": "Middle click to sort inventorys",
   "key.inventorysorter.config.middle_click": "Display 'Sort' button on left",
-  "key.inventorysorter.config.seperate_btn": "Enable second 'Sort' button in player inv",
+  "key.inventorysorter.config.seperate_btn": "Second 'Sort' in player inv",
   "key.inventorysorter.config.sort_player": "Sorting inv also sorts player inv"
 }

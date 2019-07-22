@@ -19,9 +19,6 @@ public class ConfigManager {
 
     public ConfigManager() {
         this.configFile = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json5");
-        File old = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json");
-        if (old.exists())
-            loadConfig(old);
     }
 
     public void saveConfig() {
@@ -72,29 +69,5 @@ public class ConfigManager {
             config = new ConfigOptions();
         }
         saveConfig();
-    }
-
-    public void loadConfig(File file) {
-        if (!file.exists() || !file.canRead()) {
-            System.out.println(InventorySorterMod.MOD_ID + " Config not found! Creating one.");
-            config = new ConfigOptions();
-            saveConfig();
-            return;
-        }
-        boolean failed = false;
-        try {
-            JsonObject configJson = JANKSON.load(file);
-            String regularized = configJson.toJson(false, false, 0);
-            config = GSON.fromJson(regularized, ConfigOptions.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            failed = true;
-        }
-        if (failed || config == null) {
-            System.out.println(InventorySorterMod.MOD_ID + " Failed to load config! Overwriting with default config.");
-            config = new ConfigOptions();
-        }
-        saveConfig();
-        file.delete();
     }
 }

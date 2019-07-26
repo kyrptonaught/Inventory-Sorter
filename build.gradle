@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.4-SNAPSHOT'
+	id 'fabric-loom' version '0.2.5-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -19,13 +19,15 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "io.github.prospector.modmenu:ModMenu:1.+"
 
-	modImplementation 'me.shedaniel.cloth:config-2:0.+'
-	include 'me.shedaniel.cloth:config-2:0.+'
+	modImplementation "io.github.prospector.modmenu:ModMenu:+"
 
-	modApi "blue.endless:jankson:1.+"
-	include "blue.endless:jankson:1.+"
+	modImplementation ('me.shedaniel.cloth:config-2:0.+'){transitive = false}
+	include "me.shedaniel.cloth:config-2:+"
+
+	modApi "blue.endless:jankson:+"
+	include "blue.endless:jankson:+"
+
 }
 
 processResources {

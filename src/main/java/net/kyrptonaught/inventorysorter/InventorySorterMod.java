@@ -11,15 +11,14 @@ import org.lwjgl.glfw.GLFW;
 
 public class InventorySorterMod implements ModInitializer, ClientModInitializer {
     public static final String MOD_ID = "inventorysorter";
+    private static final String KEY_BINDING_CATEGORY = "key.categories." + MOD_ID;
     public static ConfigManager config = new ConfigManager();
+    public static FabricKeyBinding keyBinding;
 
     @Override
     public void onInitialize() {
-        InventorySorter.registerReceivePacket();
+        InventorySortPacket.registerReceivePacket();
     }
-
-    private static final String KEY_BINDING_CATEGORY = "key.categories." + MOD_ID;
-    public static FabricKeyBinding keyBinding;
 
     @Override
     public void onInitializeClient() {
@@ -32,9 +31,5 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
         ).build();
         KeyBindingRegistry.INSTANCE.addCategory(KEY_BINDING_CATEGORY);
         KeyBindingRegistry.INSTANCE.register(keyBinding);
-    }
-
-    public enum ConfigNames {
-        display_sort, middle_click, left_display, seperate_btn, sort_player
     }
 }

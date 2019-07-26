@@ -1,6 +1,7 @@
 package net.kyrptonaught.inventorysorter.mixin;
 
-import net.kyrptonaught.inventorysorter.InventorySorter;
+import net.kyrptonaught.inventorysorter.InventoryHelper;
+import net.kyrptonaught.inventorysorter.InventorySortPacket;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,10 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractContainerScreen.class)
 public abstract class MixinAbstractContainerScreen extends Screen {
-    protected MixinAbstractContainerScreen(Text component) {
-        super(component);
-    }
-
     @Shadow
     private int containerWidth;
     @Shadow
@@ -31,21 +28,24 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     private int top;
     @Shadow
     private int left;
-
     private Identifier invsort$BUTTON_TEX = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
     private TexturedButtonWidget invsort$btn;
+
+    protected MixinAbstractContainerScreen(Text component) {
+        super(component);
+    }
 
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
     protected void invsort$init(CallbackInfo callbackinfo) {
         if (InventorySorterMod.config.config.display_sort) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (!InventorySorter.shouldInject(currentScreen)) return;
+            if (!InventoryHelper.shouldInject(currentScreen)) return;
             int calcOffset = this.left + this.containerWidth;
             if (InventorySorterMod.config.config.left_display)
                 calcOffset = this.left - 20;
-            this.addButton(invsort$btn = new TexturedButtonWidget(calcOffset, top, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySorter.sendSortPacket(currentScreen)));
+            this.addButton(invsort$btn = new TexturedButtonWidget(calcOffset, top, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySortPacket.sendSortPacket(currentScreen)));
             if (InventorySorterMod.config.config.seperate_btn && !(currentScreen instanceof InventoryScreen))
-                this.addButton(new TexturedButtonWidget(calcOffset, containerHeight - 85, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySorter.sendSortPacketWithValue(true)));
+                this.addButton(new TexturedButtonWidget(calcOffset, containerHeight - 85, 20, 18, 0, 0, 19, invsort$BUTTON_TEX, var1 -> InventorySortPacket.sendSortPacket(true)));
         }
     }
 
@@ -53,8 +53,8 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.config.config.middle_click && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (InventorySorter.shouldInject(currentScreen)) {
-                InventorySorter.sendSortPacket(currentScreen);
+            if (InventoryHelper.shouldInject(currentScreen)) {
+                InventorySortPacket.sendSortPacket(currentScreen);
                 callbackInfoReturnable.setReturnValue(true);
             }
         }
@@ -64,8 +64,8 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void invsort$keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.keyBinding.matchesKey(keycode, scancode)) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (currentScreen instanceof AbstractContainerScreen && InventorySorter.shouldInject(currentScreen)) {
-                InventorySorter.sendSortPacket(currentScreen);
+            if (currentScreen instanceof AbstractContainerScreen && InventoryHelper.shouldInject(currentScreen)) {
+                InventorySortPacket.sendSortPacket(currentScreen);
                 callbackInfoReturnable.setReturnValue(true);
             }
         }

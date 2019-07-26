@@ -2,7 +2,6 @@ package net.kyrptonaught.inventorysorter;
 
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.ListTag;
 
 public class SortableStack implements Comparable {
     private ItemStack sortStack;
@@ -11,14 +10,14 @@ public class SortableStack implements Comparable {
         sortStack = stack;
     }
 
-    ItemStack getStack() {
-        return sortStack;
-    }
-
     private static String getCleanName(ItemStack stack) {
         if (stack.getItem() instanceof EnchantedBookItem)
             return SpecialSortCases.EnchantedBookNameCase(stack);
         return stack.getItem().toString();
+    }
+
+    ItemStack getStack() {
+        return sortStack;
     }
 
     @Override

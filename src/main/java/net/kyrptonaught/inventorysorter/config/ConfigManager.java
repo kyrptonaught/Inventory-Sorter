@@ -14,10 +14,12 @@ import java.io.IOException;
 public class ConfigManager {
     private static final Gson GSON = new GsonBuilder().create();
     private static final Jankson JANKSON = Jankson.builder().build();
-    public ConfigOptions config;
     private final File configFile;
+    public ConfigOptions config;
 
     public ConfigManager() {
+        File oldConfig = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json");
+        if (oldConfig.exists()) oldConfig.delete();
         this.configFile = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json5");
     }
 

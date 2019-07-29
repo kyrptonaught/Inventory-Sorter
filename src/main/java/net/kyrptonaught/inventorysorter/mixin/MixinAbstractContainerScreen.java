@@ -1,11 +1,12 @@
 package net.kyrptonaught.inventorysorter.mixin;
 
-import com.google.common.collect.ImmutableSet;
+import net.kyrptonaught.inventorysorter.InventoryHelper;
 import net.kyrptonaught.inventorysorter.InventorySortPacket;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.*;
+import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -15,8 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.HashSet;
 
 
 @Mixin(AbstractContainerScreen.class)
@@ -40,7 +39,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     protected void invsort$init(CallbackInfo callbackinfo) {
         if (InventorySorterMod.config.config.display_sort) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (!invsort$shouldInject(currentScreen)) return;
+            if (!InventoryHelper.shouldInject(currentScreen)) return;
             int calcOffset = this.left + this.containerWidth;
             if (InventorySorterMod.config.config.left_display)
                 calcOffset = this.left - 20;
@@ -54,7 +53,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.config.config.middle_click && button == 2) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (invsort$shouldInject(currentScreen)) {
+            if (InventoryHelper.shouldInject(currentScreen)) {
                 InventorySortPacket.sendSortPacket(currentScreen);
                 callbackInfoReturnable.setReturnValue(true);
             }
@@ -65,7 +64,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     public void invsort$keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterMod.keyBinding.matchesKey(keycode, scancode)) {
             Screen currentScreen = MinecraftClient.getInstance().currentScreen;
-            if (currentScreen instanceof AbstractContainerScreen && invsort$shouldInject(currentScreen)) {
+            if (currentScreen instanceof AbstractContainerScreen && InventoryHelper.shouldInject(currentScreen)) {
                 InventorySortPacket.sendSortPacket(currentScreen);
                 callbackInfoReturnable.setReturnValue(true);
             }
@@ -78,14 +77,5 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         if (invsort$btn != null && currentScreen instanceof InventoryScreen) {
             invsort$btn.setPos(this.left + 125, this.height / 2 - 22);
         }
-    }
-
-    private HashSet<String> invsort$invalidScreens = new HashSet<>(ImmutableSet.of(CreativeInventoryScreen.class.getName(),
-            BeaconScreen.class.getName(), AnvilScreen.class.getName(), EnchantingScreen.class.getName(),
-            GrindstoneScreen.class.getName(), AbstractContainerScreen.class.getName(), LoomScreen.class.getName(),
-            CraftingTableScreen.class.getName(), BrewingStandScreen.class.getName(), HorseScreen.class.getName()));
-
-    private Boolean invsort$shouldInject(Screen currentScreen) {
-        return !invsort$invalidScreens.contains(currentScreen.getClass().getName());
     }
 }

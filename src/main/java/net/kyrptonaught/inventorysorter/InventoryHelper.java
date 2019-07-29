@@ -1,11 +1,17 @@
 package net.kyrptonaught.inventorysorter;
 
+import com.google.common.collect.ImmutableSet;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.*;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 public class InventoryHelper {
@@ -61,5 +67,20 @@ public class InventoryHelper {
         } else {
             return ItemStack.areTagsEqual(itemStack_1, itemStack_2);
         }
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void registerScreens() {
+        invalidScreens = new HashSet<>(ImmutableSet.of(CreativeInventoryScreen.class.getName(),
+                BeaconScreen.class.getName(), AnvilScreen.class.getName(), EnchantingScreen.class.getName(),
+                GrindstoneScreen.class.getName(), AbstractContainerScreen.class.getName(), LoomScreen.class.getName(),
+                CraftingTableScreen.class.getName(), BrewingStandScreen.class.getName(), HorseScreen.class.getName()));
+    }
+
+    private static HashSet<String> invalidScreens;
+
+    @Environment(EnvType.CLIENT)
+    public static Boolean shouldInject(Screen currentScreen) {
+        return !invalidScreens.contains(currentScreen.getClass().getName());
     }
 }

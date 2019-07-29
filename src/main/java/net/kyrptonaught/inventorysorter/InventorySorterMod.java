@@ -9,6 +9,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
+
 public class InventorySorterMod implements ModInitializer, ClientModInitializer {
     public static final String MOD_ID = "inventorysorter";
     private static final String KEY_BINDING_CATEGORY = "key.categories." + MOD_ID;
@@ -23,6 +24,7 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
     @Override
     public void onInitializeClient() {
         config.loadConfig();
+        InventoryHelper.registerScreens();
         keyBinding = FabricKeyBinding.Builder.create(
                 new Identifier(MOD_ID, "sort"),
                 InputUtil.Type.KEYSYM,

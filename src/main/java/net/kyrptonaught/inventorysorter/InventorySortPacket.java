@@ -1,6 +1,8 @@
 package net.kyrptonaught.inventorysorter;
 
 import io.netty.buffer.Unpooled;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -29,6 +31,7 @@ public class InventorySortPacket {
         });
     }
 
+    @Environment(EnvType.CLIENT)
     public static void sendSortPacket(Screen currentScreen) {
         if (currentScreen instanceof InventoryScreen)
             sendSortPacket(true);

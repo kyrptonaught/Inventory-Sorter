@@ -1,18 +1,19 @@
 package net.kyrptonaught.inventorysorter.config;
 
 import blue.endless.jankson.Comment;
+import net.kyrptonaught.inventorysorter.SortableStack;
 
 public class ConfigOptions {
 
     @Comment("Enable 'Sort' button in inventorys")
-    public boolean display_sort = true;
+    public boolean displaySort = true;
     @Comment("Middle click to sort inventorys")
-    public boolean middle_click = true;
-    @Comment("Display 'Sort' button on left")
-    public boolean left_display = false;
+    public boolean middleClick = true;
     @Comment("Enable second 'Sort' button in player inv")
-    public boolean seperate_btn = false;
+    public boolean seperateBtn = true;
     @Comment("Sorting inv also sorts player inv")
-    public boolean sort_player = false;
+    public boolean sortPlayer = false;
+    @Comment("Method of sorting, NAME,CATEGORY,MOD")
+    public SortableStack.SortType sortType = SortableStack.SortType.NAME;
 
 }

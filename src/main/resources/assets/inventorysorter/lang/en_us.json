@@ -2,9 +2,9 @@
   "key.categories.inventorysorter": "Inventory Sorting",
   "key.inventorysorter.sort": "Sort Inventory",
   "key.inventorysorter.config.category.main": "Main",
-  "key.inventorysorter.config.display_sort": "Enable 'Sort' button in inventorys",
-  "key.inventorysorter.config.left_display": "Middle click to sort inventorys",
-  "key.inventorysorter.config.middle_click": "Display 'Sort' button on left",
-  "key.inventorysorter.config.seperate_btn": "Second 'Sort' in player inv",
-  "key.inventorysorter.config.sort_player": "Sorting inv also sorts player inv"
+  "key.inventorysorter.config.display_sort": "Display button in inventory",
+  "key.inventorysorter.config.middle_click": "Middle click to sort inventory",
+  "key.inventorysorter.config.seperate_btn": "Display second button for player inv",
+  "key.inventorysorter.config.sort_player": "Sorting always sorts player inv too",
+  "key.inventorysorter.config.sorttype": "Sorting method"
 }

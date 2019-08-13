@@ -1,19 +1,33 @@
 package net.kyrptonaught.inventorysorter;
 
 import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.registry.Registry;
 
 public class SortableStack implements Comparable {
+    public enum SortType {
+        NAME, CATEGORY, MOD
+    }
+
     private ItemStack sortStack;
 
     SortableStack(ItemStack stack) {
         sortStack = stack;
     }
 
-    private static String getCleanName(ItemStack stack) {
+    private static String getSortString(ItemStack stack) {
+        Item item = stack.getItem();
+        String itemName = item.toString();
         if (stack.getItem() instanceof EnchantedBookItem)
-            return SpecialSortCases.EnchantedBookNameCase(stack);
-        return stack.getItem().toString();
+            itemName = SpecialSortCases.EnchantedBookNameCase(stack);
+        switch (InventorySorterMod.configManager.config.sortType) {
+            case CATEGORY:
+                return item.getGroup().getName() + itemName;
+            case MOD:
+                return Registry.ITEM.getId(item).getNamespace() + itemName;
+        }
+        return itemName;
     }
 
     ItemStack getStack() {
@@ -21,14 +35,9 @@ public class SortableStack implements Comparable {
     }
 
     @Override
-    public String toString() {
-        return getCleanName(sortStack) + " x" + sortStack.getCount();
-    }
-
-    @Override
     public int compareTo(Object o) {
         ItemStack otherStack = ((SortableStack) o).getStack();
-        int compared = getCleanName(sortStack).compareTo(getCleanName(otherStack));
+        int compared = getSortString(sortStack).compareTo(getSortString(otherStack));
         if (compared == 0) {
             compared = sortStack.getCount() >= otherStack.getCount() ? -1 : 1;
         }

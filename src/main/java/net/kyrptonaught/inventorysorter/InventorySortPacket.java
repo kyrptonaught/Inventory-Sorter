@@ -36,11 +36,12 @@ public class InventorySortPacket {
         if (currentScreen instanceof InventoryScreen)
             sendSortPacket(true);
         else {
-            if (InventorySorterMod.config.config.sort_player) sendSortPacket(true);
+            if (InventorySorterMod.configManager.config.sortPlayer) sendSortPacket(true);
             sendSortPacket(false);
         }
     }
 
+    @Environment(EnvType.CLIENT)
     public static void sendSortPacket(boolean isPlayer) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(isPlayer);

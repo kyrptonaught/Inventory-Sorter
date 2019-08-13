@@ -19,6 +19,7 @@ public class InventorySortPacket {
     static void registerReceivePacket() {
         ServerSidePacketRegistry.INSTANCE.register(SORT_INV, (packetContext, packetByteBuf) -> {
             boolean isPlayer = packetByteBuf.readBoolean();
+            InventoryHelper.sortType = SortableStack.SortType.values()[packetByteBuf.readInt()];
             packetContext.getTaskQueue().execute(() -> {
                 PlayerEntity player = packetContext.getPlayer();
                 if (isPlayer) {
@@ -45,6 +46,7 @@ public class InventorySortPacket {
     public static void sendSortPacket(boolean isPlayer) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(isPlayer);
+        buf.writeInt(InventorySorterMod.getConfig().sortType.ordinal());
         MinecraftClient.getInstance().getNetworkHandler().getConnection().send(new CustomPayloadC2SPacket(SORT_INV, new PacketByteBuf(buf)));
     }
 }

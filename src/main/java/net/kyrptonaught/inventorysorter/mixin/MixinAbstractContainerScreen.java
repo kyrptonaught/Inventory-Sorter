@@ -39,7 +39,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         if (InventorySorterMod.getConfig().displaySort) {
             this.addButton(invsort$SortBtn = new SortButtonWidget(this.left + this.containerWidth - 20, top + 6, press -> InventorySortPacket.sendSortPacket(this)));
             if (InventorySorterMod.getConfig().seperateBtn && !(super.minecraft.currentScreen instanceof InventoryScreen))
-                this.addButton(new SortButtonWidget(invsort$SortBtn.x, containerHeight - 86, press -> InventorySortPacket.sendSortPacket(true)));
+                this.addButton(new SortButtonWidget(invsort$SortBtn.x, top + (containerHeight - 95), press -> InventorySortPacket.sendSortPacket(true)));
         }
     }
 

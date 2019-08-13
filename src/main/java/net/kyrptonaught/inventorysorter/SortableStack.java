@@ -21,7 +21,7 @@ public class SortableStack implements Comparable {
         String itemName = item.toString();
         if (stack.getItem() instanceof EnchantedBookItem)
             itemName = SpecialSortCases.EnchantedBookNameCase(stack);
-        switch (InventorySorterMod.configManager.config.sortType) {
+        switch (InventoryHelper.sortType) {
             case CATEGORY:
                 return item.getGroup().getName() + itemName;
             case MOD:

@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class InventoryHelper {
+    public static SortableStack.SortType sortType = SortableStack.SortType.NAME;
+
     static void sortInv(Inventory inv, int startSlot, int invSize) {
         List<SortableStack> stacks = new ArrayList<>();
         for (int i = 0; i < invSize; i++) {

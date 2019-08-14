@@ -1,15 +1,28 @@
 package net.kyrptonaught.inventorysorter;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 
+@Environment(EnvType.CLIENT)
 public class SortButtonWidget extends TexturedButtonWidget {
     private static final Identifier texture = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
 
     public SortButtonWidget(int int_1, int int_2, PressAction pressAction) {
         super(int_1, int_2, 10, 10, 0, 0, 19, texture, 20, 37, pressAction, "");
+    }
+
+    @Override
+    public void onPress() {
+        if (InventorySorterMod.getConfig().debugMode && GLFW.glfwGetKey(MinecraftClient.getInstance().window.getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
+            System.out.println("Add this line below to config/inventorysorter/blacklist.json5 to blacklist this inventory");
+            System.out.println(MinecraftClient.getInstance().currentScreen.getClass().getName());
+        } else this.onPress.onPress(this);
     }
 
     @Override

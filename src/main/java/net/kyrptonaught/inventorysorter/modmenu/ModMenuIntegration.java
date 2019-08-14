@@ -7,7 +7,7 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
-import net.kyrptonaught.inventorysorter.SortableStack;
+import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.config.ConfigOptions;
 import net.minecraft.client.gui.screen.Screen;
 
@@ -27,7 +27,7 @@ public class ModMenuIntegration implements ModMenuApi {
         ConfigOptions options = InventorySorterMod.configManager.config;
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(screen).setTitle("Inventory Sorting Config");
         builder.setSavingRunnable(() -> {
-            InventorySorterMod.configManager.saveConfig();
+            InventorySorterMod.configManager.saveAll();
         });
         ConfigCategory category = builder.getOrCreateCategory("key.inventorysorter.config.category.main");
         ConfigEntryBuilder entryBuilder = ConfigEntryBuilder.create();
@@ -36,7 +36,7 @@ public class ModMenuIntegration implements ModMenuApi {
         category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.middle_click", options.middleClick).setSaveConsumer(val -> options.middleClick = val).setDefaultValue(true).build());
         category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.seperate_btn", options.seperateBtn).setSaveConsumer(val -> options.seperateBtn = val).setDefaultValue(true).build());
         category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.sort_player", options.sortPlayer).setSaveConsumer(val -> options.sortPlayer = val).setDefaultValue(false).build());
-        category.addEntry(entryBuilder.startEnumSelector("key.inventorysorter.config.sorttype", SortableStack.SortType.class, options.sortType).setSaveConsumer(val -> options.sortType = val).build());
+        category.addEntry(entryBuilder.startEnumSelector("key.inventorysorter.config.sorttype", SortCases.SortType.class, options.sortType).setSaveConsumer(val -> options.sortType = val).build());
         return Optional.of(builder::build);
     }
 }

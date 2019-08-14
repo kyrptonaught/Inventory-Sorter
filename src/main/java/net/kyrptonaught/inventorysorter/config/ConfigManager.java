@@ -7,69 +7,107 @@ import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.stream.Collectors;
 
 public class ConfigManager {
     private static final Gson GSON = new GsonBuilder().create();
     private static final Jankson JANKSON = Jankson.builder().build();
-    private final File configFile;
+    private final File configFile, ignoreFile;
     public ConfigOptions config;
+    public IgnoreList blacklist;
 
     public ConfigManager() {
-        File oldConfig = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json");
-        if (oldConfig.exists()) oldConfig.delete();
-        this.configFile = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json5");
+        File dir = new File(FabricLoader.getInstance().getConfigDirectory() + "/inventorysorter");
+        if (!Files.exists(dir.toPath())) {
+            try {
+                Files.createDirectories(dir.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        File oldConfig = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json5");
+        if (oldConfig.exists())
+            oldConfig.renameTo(new File(dir, "config.json5"));
+        this.configFile = new File(dir, "config.json5");
+        this.ignoreFile = new File(dir, "blacklist.json5");
+
     }
 
-    public void saveConfig() {
+    public void saveAll() {
+        save(configFile, true);
+        save(ignoreFile, false);
+    }
+
+    public void loadAll() {
+        load(configFile, true);
+        load(ignoreFile, false);
+    }
+
+    public Gson getGSON() {
+        return GSON;
+    }
+
+    private void save(File saveFile, boolean isConfig) {
         try {
-            if (!configFile.exists() && !configFile.createNewFile()) {
+            if (!saveFile.exists() && !saveFile.createNewFile()) {
                 System.out.println(InventorySorterMod.MOD_ID + " Failed to save config! Overwriting with default config.");
-                config = new ConfigOptions();
+                resetToDefault(isConfig);
                 return;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            String result = JANKSON.toJson(config).toJson(true, true, 0);
-            if (!configFile.exists())
-                configFile.createNewFile();
-            FileOutputStream out = new FileOutputStream(configFile, false);
-
+        try (FileOutputStream out = new FileOutputStream(saveFile, false)) {
+            String result = JANKSON.toJson(isConfig ? config : blacklist).toJson(true, true, 0);
+            if (!saveFile.exists())
+                saveFile.createNewFile();
             out.write(result.getBytes());
-            out.flush();
-            out.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(InventorySorterMod.MOD_ID + " Failed to save config! Overwriting with default config.");
-            config = new ConfigOptions();
-            return;
+            resetToDefault(isConfig);
         }
     }
 
-    public void loadConfig() {
-        if (!configFile.exists() || !configFile.canRead()) {
+    private void load(File saveFile, boolean isConfig) {
+        if (!saveFile.exists() || !saveFile.canRead()) {
             System.out.println(InventorySorterMod.MOD_ID + " Config not found! Creating one.");
-            config = new ConfigOptions();
-            saveConfig();
+            resetToDefault(isConfig);
+            save(saveFile, isConfig);
             return;
         }
         boolean failed = false;
         try {
-            JsonObject configJson = JANKSON.load(configFile);
+            JsonObject configJson = JANKSON.load(saveFile);
             String regularized = configJson.toJson(false, false, 0);
-            config = GSON.fromJson(regularized, ConfigOptions.class);
+            if (isConfig) config = GSON.fromJson(regularized, ConfigOptions.class);
+            else blacklist = GSON.fromJson(regularized, IgnoreList.class);
         } catch (Exception e) {
             e.printStackTrace();
             failed = true;
         }
-        if (failed || config == null) {
+        if (failed || (isConfig && config == null) || (!isConfig && blacklist == null)) {
             System.out.println(InventorySorterMod.MOD_ID + " Failed to load config! Overwriting with default config.");
-            config = new ConfigOptions();
+            resetToDefault(isConfig);
         }
-        saveConfig();
+        save(saveFile, isConfig);
+    }
+
+    public void loadDefaultBlacklist() {
+        String file = "/data/blacklistedInventories.json";
+        InputStream in = InventorySorterMod.class.getResourceAsStream(file);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        String lines = reader.lines().collect(Collectors.joining());
+        blacklist.defaultBlacklist = GSON.fromJson(lines, IgnoreList.DefaultList.class).defaultBlacklist;
+    }
+
+    private void resetToDefault(boolean isConfig) {
+        if (isConfig) config = new ConfigOptions();
+        else {
+            blacklist = new IgnoreList();
+            loadDefaultBlacklist();
+        }
     }
 }

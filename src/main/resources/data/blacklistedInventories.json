@@ -1,0 +1,15 @@
+{
+  "defaultBlacklist": [
+    "net.minecraft.client.gui.screen.ingame.GrindstoneScreen",
+    "net.minecraft.client.gui.screen.ingame.LoomScreen",
+    "net.minecraft.client.gui.screen.ingame.CraftingTableScreen",
+    "net.minecraft.client.gui.screen.ingame.BrewingStandScreen",
+    "net.minecraft.client.gui.screen.ingame.EnchantingScreen",
+    "net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen",
+    "net.minecraft.client.gui.screen.ingame.AnvilScreen",
+    "net.minecraft.client.gui.screen.ingame.AbstractContainerScreen",
+    "net.minecraft.client.gui.screen.ingame.HorseScreen",
+    "net.minecraft.client.gui.screen.ingame.BeaconScreen",
+    "com.github.briansemrau.cosmeticarmorslots.client.gui.screen.ingame.CosmeticArmorInventoryScreen"
+  ]
+}

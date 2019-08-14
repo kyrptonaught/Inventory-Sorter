@@ -9,46 +9,34 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class InventoryHelper {
-    public static SortableStack.SortType sortType = SortableStack.SortType.NAME;
+    static SortCases.SortType sortType = SortCases.SortType.NAME;
 
     static void sortInv(Inventory inv, int startSlot, int invSize) {
-        List<SortableStack> stacks = new ArrayList<>();
+        List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < invSize; i++) {
-            ItemStack stack = inv.getInvStack(startSlot + i);
-            if (stack.getItem() != Items.AIR)
-                stacks.add(new SortableStack(stack));
-        }
-        mergeStacks(stacks);
-        Collections.sort(stacks);
-        for (int i = 0; i < invSize; i++) {
+            addStackWithMerge(stacks, inv.getInvStack(startSlot + i).copy());
             inv.setInvStack(startSlot + i, ItemStack.EMPTY);
         }
+        stacks.sort(Comparator.comparing(SortCases::getStringForSort));
         for (int i = 0; i < stacks.size(); i++)
-            inv.setInvStack(startSlot + i, stacks.get(i).getStack());
+            inv.setInvStack(startSlot + i, stacks.get(i));
         inv.markDirty();
     }
 
-    private static void mergeStacks(List<SortableStack> stacks) {
-        for (int i = 0; i < stacks.size(); i++) {
-            ItemStack stack = stacks.get(i).getStack();
-            if (!stack.isStackable() || isStackFull(stack)) continue;
-            for (int j = stacks.size() - 1; j > i && !isStackFull(stack); j--) {
-                ItemStack stack2 = stacks.get(j).getStack();
-                if (canMergeItems(stack, stack2))
-                    combineStacks(stack, stack2);
-                if (stack2.getItem() == Items.AIR || stack2.getCount() == 0) stacks.remove(j);
+    private static void addStackWithMerge(List<ItemStack> stacks, ItemStack newStack) {
+        if (newStack.getItem() == Items.AIR) return;
+        if (newStack.isStackable() && newStack.getCount() != newStack.getMaxCount())
+            for (int j = stacks.size() - 1; j >= 0; j--) {
+                ItemStack oldStack = stacks.get(j);
+                if (canMergeItems(newStack, oldStack)) {
+                    combineStacks(newStack, oldStack);
+                    if (oldStack.getItem() == Items.AIR || oldStack.getCount() == 0) stacks.remove(j);
+                }
             }
-        }
-    }
-
-    private static boolean isStackFull(ItemStack stack) {
-        return stack.getCount() == stack.getMaxCount();
+        stacks.add(newStack);
     }
 
     private static void combineStacks(ItemStack stack, ItemStack stack2) {
@@ -62,32 +50,29 @@ public class InventoryHelper {
     }
 
     private static boolean canMergeItems(ItemStack itemStack_1, ItemStack itemStack_2) {
-        if (itemStack_1.getItem() != itemStack_2.getItem()) {
+        if (!itemStack_1.isStackable() || !itemStack_2.isStackable())
             return false;
-        } else if (itemStack_1.getDamage() != itemStack_2.getDamage()) {
+        if (itemStack_1.getCount() == itemStack_1.getMaxCount() || itemStack_2.getCount() == itemStack_2.getMaxCount())
             return false;
-        } else {
-            return ItemStack.areTagsEqual(itemStack_1, itemStack_2);
-        }
+        if (itemStack_1.getItem() != itemStack_2.getItem())
+            return false;
+        if (itemStack_1.getDamage() != itemStack_2.getDamage())
+            return false;
+        return ItemStack.areTagsEqual(itemStack_1, itemStack_2);
     }
 
-    //Start Client only
+    //Start client side only
     private static HashSet<String> invalidScreens;
 
     @Environment(EnvType.CLIENT)
     static void registerScreens() {
-        invalidScreens = new HashSet<>(ImmutableSet.of(CreativeInventoryScreen.class.getName(),
-                BeaconScreen.class.getName(), AnvilScreen.class.getName(), EnchantingScreen.class.getName(),
-                GrindstoneScreen.class.getName(), AbstractContainerScreen.class.getName(), LoomScreen.class.getName(),
-                CraftingTableScreen.class.getName(), BrewingStandScreen.class.getName(), HorseScreen.class.getName()));
+        List<String> invalids = InventorySorterMod.configManager.blacklist.defaultBlacklist;
+        invalids.addAll(InventorySorterMod.configManager.blacklist.blacklistedInventories);
+        invalidScreens = new HashSet<>(invalids);
     }
 
     @Environment(EnvType.CLIENT)
     public static Boolean isSortableInventory(Screen currentScreen) {
         return currentScreen != null && !invalidScreens.contains(currentScreen.getClass().getName());
-    }
-
-    public static void sortTriggered() {
-
     }
 }

@@ -1,7 +1,7 @@
 package net.kyrptonaught.inventorysorter.config;
 
 import blue.endless.jankson.Comment;
-import net.kyrptonaught.inventorysorter.SortableStack;
+import net.kyrptonaught.inventorysorter.SortCases;
 
 public class ConfigOptions {
 
@@ -14,6 +14,8 @@ public class ConfigOptions {
     @Comment("Sorting inv also sorts player inv")
     public boolean sortPlayer = false;
     @Comment("Method of sorting, NAME,CATEGORY,MOD")
-    public SortableStack.SortType sortType = SortableStack.SortType.NAME;
+    public SortCases.SortType sortType = SortCases.SortType.NAME;
+
+    public boolean debugMode = false;
 
 }

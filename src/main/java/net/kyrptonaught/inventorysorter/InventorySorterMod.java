@@ -24,7 +24,8 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
 
     @Override
     public void onInitializeClient() {
-        configManager.loadConfig();
+        configManager.loadAll();
+        configManager.loadDefaultBlacklist();
         InventoryHelper.registerScreens();
         keyBinding = FabricKeyBinding.Builder.create(
                 new Identifier(MOD_ID, "sort"),

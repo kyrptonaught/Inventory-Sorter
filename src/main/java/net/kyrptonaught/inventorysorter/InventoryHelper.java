@@ -1,28 +1,28 @@
 package net.kyrptonaught.inventorysorter;
 
-import com.google.common.collect.ImmutableSet;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.*;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 
 public class InventoryHelper {
     static SortCases.SortType sortType = SortCases.SortType.NAME;
 
     static void sortInv(Inventory inv, int startSlot, int invSize) {
         List<ItemStack> stacks = new ArrayList<>();
-        for (int i = 0; i < invSize; i++) {
+        for (int i = 0; i < invSize; i++)
             addStackWithMerge(stacks, inv.getInvStack(startSlot + i).copy());
-            inv.setInvStack(startSlot + i, ItemStack.EMPTY);
-        }
+
         stacks.sort(Comparator.comparing(SortCases::getStringForSort));
-        for (int i = 0; i < stacks.size(); i++)
-            inv.setInvStack(startSlot + i, stacks.get(i));
+        for (int i = 0; i < invSize; i++)
+            inv.setInvStack(startSlot + i, i < stacks.size() ? stacks.get(i) : ItemStack.EMPTY);
         inv.markDirty();
     }
 
@@ -66,8 +66,8 @@ public class InventoryHelper {
 
     @Environment(EnvType.CLIENT)
     static void registerScreens() {
-        List<String> invalids = InventorySorterMod.configManager.blacklist.defaultBlacklist;
-        invalids.addAll(InventorySorterMod.configManager.blacklist.blacklistedInventories);
+        List<String> invalids = InventorySorterMod.configManager.blacklist.blacklistedInventories;
+        invalids.addAll(InventorySorterMod.configManager.blacklist.defaultBlacklist);
         invalidScreens = new HashSet<>(invalids);
     }
 

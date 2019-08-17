@@ -5,7 +5,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -20,7 +19,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
     @Override
     public void onPress() {
         if (InventorySorterMod.getConfig().debugMode && GLFW.glfwGetKey(MinecraftClient.getInstance().window.getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
-            System.out.println("Add this line below to config/inventorysorter/blacklist.json5 to blacklist this inventory");
+            System.out.println("Add the line below to config/inventorysorter/blacklist.json5 to blacklist this inventory");
             System.out.println(MinecraftClient.getInstance().currentScreen.getClass().getName());
         } else this.onPress.onPress(this);
     }
@@ -30,13 +29,12 @@ public class SortButtonWidget extends TexturedButtonWidget {
         GlStateManager.pushMatrix();
         MinecraftClient minecraftClient_1 = MinecraftClient.getInstance();
         minecraftClient_1.getTextureManager().bindTexture(texture);
-        GlStateManager.disableDepthTest();
         GlStateManager.scalef(.5f, .5f, 1);
         GlStateManager.translatef(this.x, this.y, 0);
         blit(this.x, this.y, 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
-        GlStateManager.enableDepthTest();
-        GlStateManager.popMatrix();
         this.renderToolTip(int_1, int_2);
+        GlStateManager.disableLighting();
+        GlStateManager.popMatrix();
     }
 
     @Override

@@ -7,9 +7,10 @@ import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.util.stream.Collectors;
 
 public class ConfigManager {
     private static final Gson GSON = new GsonBuilder().create();
@@ -28,8 +29,7 @@ public class ConfigManager {
             }
         }
         File oldConfig = new File(FabricLoader.getInstance().getConfigDirectory(), "inventorysorter.json5");
-        if (oldConfig.exists())
-            oldConfig.renameTo(new File(dir, "config.json5"));
+        if (oldConfig.exists()) oldConfig.renameTo(new File(dir, "config.json5"));
         this.configFile = new File(dir, "config.json5");
         this.ignoreFile = new File(dir, "blacklist.json5");
 
@@ -95,19 +95,9 @@ public class ConfigManager {
         save(saveFile, isConfig);
     }
 
-    public void loadDefaultBlacklist() {
-        String file = "/data/blacklistedInventories.json";
-        InputStream in = InventorySorterMod.class.getResourceAsStream(file);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        String lines = reader.lines().collect(Collectors.joining());
-        blacklist.defaultBlacklist = GSON.fromJson(lines, IgnoreList.DefaultList.class).defaultBlacklist;
-    }
-
     private void resetToDefault(boolean isConfig) {
         if (isConfig) config = new ConfigOptions();
-        else {
+        else
             blacklist = new IgnoreList();
-            loadDefaultBlacklist();
-        }
     }
 }

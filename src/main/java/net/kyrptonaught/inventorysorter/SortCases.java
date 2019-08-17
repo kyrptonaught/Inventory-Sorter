@@ -1,10 +1,7 @@
 package net.kyrptonaught.inventorysorter;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Identifier;
@@ -24,7 +21,8 @@ public class SortCases {
         String itemName = specialCases(stack);
         switch (InventoryHelper.sortType) {
             case CATEGORY:
-                return item.getGroup().getName() + itemName;
+                ItemGroup group = item.getGroup();
+                return group != null ? group.getName() : "zzz" + itemName;
             case MOD:
                 return Registry.ITEM.getId(item).getNamespace() + itemName;
         }

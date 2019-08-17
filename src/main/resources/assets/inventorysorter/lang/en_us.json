@@ -6,5 +6,6 @@
   "key.inventorysorter.config.middle_click": "Middle click to sort inventory",
   "key.inventorysorter.config.seperate_btn": "Display second button for player inv",
   "key.inventorysorter.config.sort_player": "Sorting always sorts player inv too",
-  "key.inventorysorter.config.sorttype": "Sorting method"
+  "key.inventorysorter.config.sorttype": "Sorting method",
+  "key.inventorysorter.config.display_tooltip": "Display Sort Button Tooltip"
 }

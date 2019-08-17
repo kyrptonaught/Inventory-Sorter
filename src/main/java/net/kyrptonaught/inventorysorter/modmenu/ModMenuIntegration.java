@@ -37,6 +37,8 @@ public class ModMenuIntegration implements ModMenuApi {
         category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.seperate_btn", options.seperateBtn).setSaveConsumer(val -> options.seperateBtn = val).setDefaultValue(true).build());
         category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.sort_player", options.sortPlayer).setSaveConsumer(val -> options.sortPlayer = val).setDefaultValue(false).build());
         category.addEntry(entryBuilder.startEnumSelector("key.inventorysorter.config.sorttype", SortCases.SortType.class, options.sortType).setSaveConsumer(val -> options.sortType = val).build());
+        category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.display_tooltip", options.displayTooltip).setSaveConsumer(val -> options.displayTooltip = val).setDefaultValue(true).build());
+
         return Optional.of(builder::build);
     }
 }

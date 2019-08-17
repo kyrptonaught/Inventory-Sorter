@@ -39,7 +39,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
 
     @Override
     public void renderToolTip(int x, int y) {
-        if (this.isHovered())
+        if (InventorySorterMod.getConfig().displayTooltip && this.isHovered())
             MinecraftClient.getInstance().currentScreen.renderTooltip("Sort by: " + InventorySorterMod.getConfig().sortType, x, y);
     }
 }

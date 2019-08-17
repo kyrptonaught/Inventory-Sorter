@@ -66,9 +66,8 @@ public class InventoryHelper {
 
     @Environment(EnvType.CLIENT)
     static void registerScreens() {
-        List<String> invalids = InventorySorterMod.configManager.blacklist.blacklistedInventories;
-        invalids.addAll(InventorySorterMod.configManager.blacklist.defaultBlacklist);
-        invalidScreens = new HashSet<>(invalids);
+        invalidScreens = new HashSet<>(InventorySorterMod.configManager.blacklist.defaultBlacklist);
+        invalidScreens.addAll(InventorySorterMod.configManager.blacklist.blacklistedInventories);
     }
 
     @Environment(EnvType.CLIENT)

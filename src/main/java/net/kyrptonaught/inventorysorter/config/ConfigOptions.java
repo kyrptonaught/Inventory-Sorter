@@ -15,6 +15,8 @@ public class ConfigOptions {
     public boolean sortPlayer = false;
     @Comment("Method of sorting, NAME,CATEGORY,MOD")
     public SortCases.SortType sortType = SortCases.SortType.NAME;
+    @Comment("Display Sort Button Tooltip")
+    public boolean displayTooltip = true;
 
     public boolean debugMode = false;
 

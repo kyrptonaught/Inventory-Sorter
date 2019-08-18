@@ -71,7 +71,7 @@ public class InventoryHelper {
     }
 
     @Environment(EnvType.CLIENT)
-    public static Boolean isSortableInventory(Screen currentScreen) {
-        return currentScreen != null && !invalidScreens.contains(currentScreen.getClass().getName());
+    public static Boolean isPlayerOnlyInventory(Screen currentScreen) {
+        return currentScreen != null && invalidScreens.contains(currentScreen.getClass().getName());
     }
 }

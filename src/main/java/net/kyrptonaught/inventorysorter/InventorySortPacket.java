@@ -6,7 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.container.HorseContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.packet.CustomPayloadC2SPacket;
@@ -34,7 +34,7 @@ public class InventorySortPacket {
 
     @Environment(EnvType.CLIENT)
     public static void sendSortPacket(Screen currentScreen) {
-        if (currentScreen instanceof InventoryScreen)
+        if (InventoryHelper.isPlayerOnlyInventory(currentScreen))
             sendSortPacket(true);
         else {
             if (InventorySorterMod.configManager.config.sortPlayer)

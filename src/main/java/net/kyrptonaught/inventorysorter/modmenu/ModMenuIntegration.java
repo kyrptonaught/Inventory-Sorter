@@ -29,15 +29,17 @@ public class ModMenuIntegration implements ModMenuApi {
         builder.setSavingRunnable(() -> {
             InventorySorterMod.configManager.saveAll();
         });
-        ConfigCategory category = builder.getOrCreateCategory("key.inventorysorter.config.category.main");
         ConfigEntryBuilder entryBuilder = ConfigEntryBuilder.create();
 
-        category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.display_sort", options.displaySort).setSaveConsumer(val -> options.displaySort = val).setDefaultValue(true).build());
-        category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.middle_click", options.middleClick).setSaveConsumer(val -> options.middleClick = val).setDefaultValue(true).build());
-        category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.seperate_btn", options.seperateBtn).setSaveConsumer(val -> options.seperateBtn = val).setDefaultValue(true).build());
-        category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.sort_player", options.sortPlayer).setSaveConsumer(val -> options.sortPlayer = val).setDefaultValue(false).build());
-        category.addEntry(entryBuilder.startEnumSelector("key.inventorysorter.config.sorttype", SortCases.SortType.class, options.sortType).setSaveConsumer(val -> options.sortType = val).build());
-        category.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.display_tooltip", options.displayTooltip).setSaveConsumer(val -> options.displayTooltip = val).setDefaultValue(true).build());
+        ConfigCategory displayCat = builder.getOrCreateCategory("key.inventorysorter.config.category.display");
+        displayCat.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.displaysort", options.displaySort).setSaveConsumer(val -> options.displaySort = val).setDefaultValue(true).build());
+         displayCat.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.seperatebtn", options.seperateBtn).setSaveConsumer(val -> options.seperateBtn = val).setDefaultValue(true).build());
+        displayCat.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.displaytooltip", options.displayTooltip).setSaveConsumer(val -> options.displayTooltip = val).setDefaultValue(true).build());
+
+        ConfigCategory logicCat = builder.getOrCreateCategory("key.inventorysorter.config.category.logic");
+        logicCat.addEntry(entryBuilder.startEnumSelector("key.inventorysorter.config.sorttype", SortCases.SortType.class, options.sortType).setSaveConsumer(val -> options.sortType = val).build());
+        logicCat.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.sortplayer", options.sortPlayer).setSaveConsumer(val -> options.sortPlayer = val).setDefaultValue(false).build());
+        logicCat.addEntry(entryBuilder.startBooleanToggle("key.inventorysorter.config.middleclick", options.middleClick).setSaveConsumer(val -> options.middleClick = val).setDefaultValue(true).build());
 
         return Optional.of(builder::build);
     }

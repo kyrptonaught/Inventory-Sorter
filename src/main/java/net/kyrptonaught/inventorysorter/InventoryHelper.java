@@ -13,14 +13,13 @@ import java.util.HashSet;
 import java.util.List;
 
 public class InventoryHelper {
-    static SortCases.SortType sortType = SortCases.SortType.NAME;
-
-    static void sortInv(Inventory inv, int startSlot, int invSize) {
+    static void sortInv(Inventory inv, int startSlot, int invSize, SortCases.SortType sortType) {
         List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < invSize; i++)
-            addStackWithMerge(stacks, inv.getInvStack(startSlot + i).copy());
+            addStackWithMerge(stacks, inv.getInvStack(startSlot + i));
 
-        stacks.sort(Comparator.comparing(SortCases::getStringForSort));
+        stacks.sort(Comparator.comparing(stack -> SortCases.getStringForSort(stack, sortType)));
+        if (stacks.size() == 0) return;
         for (int i = 0; i < invSize; i++)
             inv.setInvStack(startSlot + i, i < stacks.size() ? stacks.get(i) : ItemStack.EMPTY);
         inv.markDirty();
@@ -46,7 +45,7 @@ public class InventoryHelper {
         }
         int maxInsertAmount = Math.min(stack.getMaxCount() - stack.getCount(), stack2.getCount());
         stack.increment(maxInsertAmount);
-        stack2.increment(-maxInsertAmount);
+        stack2.decrement(maxInsertAmount);
     }
 
     private static boolean canMergeItems(ItemStack itemStack_1, ItemStack itemStack_2) {
@@ -62,16 +61,16 @@ public class InventoryHelper {
     }
 
     //Start client side only
-    private static HashSet<String> invalidScreens;
+    private static HashSet<String> playerOnlyScreens;
 
     @Environment(EnvType.CLIENT)
     static void registerScreens() {
-        invalidScreens = new HashSet<>(InventorySorterMod.configManager.blacklist.defaultBlacklist);
-        invalidScreens.addAll(InventorySorterMod.configManager.blacklist.blacklistedInventories);
+        playerOnlyScreens = new HashSet<>(InventorySorterMod.configManager.blacklist.defaultBlacklist);
+        playerOnlyScreens.addAll(InventorySorterMod.configManager.blacklist.blacklistedInventories);
     }
 
     @Environment(EnvType.CLIENT)
     public static Boolean isPlayerOnlyInventory(Screen currentScreen) {
-        return currentScreen != null && invalidScreens.contains(currentScreen.getClass().getName());
+        return playerOnlyScreens.contains(currentScreen.getClass().getName());
     }
 }

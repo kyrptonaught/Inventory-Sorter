@@ -16,10 +16,10 @@ public class SortCases {
         NAME, CATEGORY, MOD
     }
 
-    static String getStringForSort(ItemStack stack) {
+    public static String getStringForSort(ItemStack stack, SortType sortType) {
         Item item = stack.getItem();
         String itemName = specialCases(stack);
-        switch (InventoryHelper.sortType) {
+        switch (sortType) {
             case CATEGORY:
                 ItemGroup group = item.getGroup();
                 return group != null ? group.getName() : "zzz" + itemName;
@@ -31,11 +31,11 @@ public class SortCases {
 
     private static String specialCases(ItemStack stack) {
         if (stack.getCount() != stack.getMaxCount())
-            return SortCases.stackSize(stack);
+            return stackSize(stack);
         if (stack.getItem() instanceof EnchantedBookItem)
-            return SortCases.enchantedBookNameCase(stack);
+            return enchantedBookNameCase(stack);
         if (stack.getItem() instanceof ToolItem)
-            return SortCases.toolDuribilityCase(stack);
+            return toolDuribilityCase(stack);
         return stack.getItem().toString();
     }
 

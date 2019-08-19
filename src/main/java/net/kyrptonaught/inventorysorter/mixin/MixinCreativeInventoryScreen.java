@@ -1,6 +1,7 @@
 package net.kyrptonaught.inventorysorter.mixin;
 
-import net.kyrptonaught.inventorysorter.*;
+import net.kyrptonaught.inventorysorter.client.SortButtonWidget;
+import net.kyrptonaught.inventorysorter.client.SortableContainerScreen;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -13,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CreativeInventoryScreen.class)
-public abstract class MixinCreativeInventoryScreen extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeContainer> {
+public abstract class MixinCreativeInventoryScreen extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeContainer> implements SortableContainerScreen {
     public MixinCreativeInventoryScreen(CreativeInventoryScreen.CreativeContainer container_1, PlayerInventory playerInventory_1, Text text_1) {
         super(container_1, playerInventory_1, text_1);
     }
@@ -23,13 +24,13 @@ public abstract class MixinCreativeInventoryScreen extends AbstractInventoryScre
 
     @Inject(method = "init", at = @At("TAIL"), cancellable = true)
     private void invsort$init(CallbackInfo callbackinfo) {
-        SortButtonWidget sortbtn = ((SortableContainerScreen) this.minecraft.currentScreen).getSortButton();
+        SortButtonWidget sortbtn = this.getSortButton();
         sortbtn.visible = selectedTab == ItemGroup.INVENTORY.getIndex();
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     private void invsort$render(int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
-        SortButtonWidget sortbtn = ((SortableContainerScreen) this.minecraft.currentScreen).getSortButton();
+        SortButtonWidget sortbtn = this.getSortButton();
         sortbtn.visible = selectedTab == ItemGroup.INVENTORY.getIndex();
     }
 }

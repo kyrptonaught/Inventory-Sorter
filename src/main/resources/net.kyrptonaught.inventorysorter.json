@@ -4,8 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinAbstractContainerScreen",
-    "MixinCreativeInventoryScreen",
-    "MixinInventoryScreen"
+    "MixinCreativeInventoryScreen"
   ],
   "injectors": {
     "defaultRequire": 1

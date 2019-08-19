@@ -5,8 +5,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.container.HorseContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.network.packet.CustomPayloadC2SPacket;
@@ -14,40 +12,31 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 
 public class InventorySortPacket {
-    private static final Identifier SORT_INV_Packet = new Identifier("inventorysorter", "sort_inv");
+    private static final Identifier SORT_INV_PACKET = new Identifier("inventorysorter", "sort_inv_packet");
 
     static void registerReceivePacket() {
-        ServerSidePacketRegistry.INSTANCE.register(SORT_INV_Packet, (packetContext, packetByteBuf) -> {
-            boolean isPlayer = packetByteBuf.readBoolean();
-            InventoryHelper.sortType = SortCases.SortType.values()[packetByteBuf.readInt()];
+        ServerSidePacketRegistry.INSTANCE.register(SORT_INV_PACKET, (packetContext, packetByteBuf) -> {
+            boolean playerInv = packetByteBuf.readBoolean();
+            SortCases.SortType sortType = SortCases.SortType.values()[packetByteBuf.readInt()];
             packetContext.getTaskQueue().execute(() -> {
                 PlayerEntity player = packetContext.getPlayer();
-                if (isPlayer) {
-                    InventoryHelper.sortInv(player.inventory, 9, 27);
+                if (playerInv) {
+                    InventoryHelper.sortInv(player.inventory, 9, 27, sortType);
                 } else {
                     Inventory inv = player.container.getSlot(0).inventory;
-                    InventoryHelper.sortInv(inv, 0, inv.getInvSize());
+                    InventoryHelper.sortInv(inv, 0, inv.getInvSize(), sortType);
                 }
             });
         });
     }
 
     @Environment(EnvType.CLIENT)
-    public static void sendSortPacket(Screen currentScreen) {
-        if (InventoryHelper.isPlayerOnlyInventory(currentScreen))
-            sendSortPacket(true);
-        else {
-            if (InventorySorterMod.configManager.config.sortPlayer)
-                sendSortPacket(true);
-            sendSortPacket(false);
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static void sendSortPacket(boolean isPlayer) {
+    public static void sendSortPacket(boolean playerInv) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-        buf.writeBoolean(isPlayer);
+        buf.writeBoolean(playerInv);
         buf.writeInt(InventorySorterMod.getConfig().sortType.ordinal());
-        MinecraftClient.getInstance().getNetworkHandler().getConnection().send(new CustomPayloadC2SPacket(SORT_INV_Packet, new PacketByteBuf(buf)));
+        MinecraftClient.getInstance().getNetworkHandler().getConnection().send(new CustomPayloadC2SPacket(SORT_INV_PACKET, new PacketByteBuf(buf)));
+        if (!playerInv && InventorySorterMod.getConfig().sortPlayer)
+            sendSortPacket(true);
     }
 }

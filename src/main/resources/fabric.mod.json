@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "inventorysorter",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "name": "Inventory Sorter",
   "description": "Quickly and easily sort inventorys",
   "authors": [
@@ -28,7 +28,7 @@
       "net.kyrptonaught.inventorysorter.InventorySorterMod"
     ],
     "modmenu": [
-      "net.kyrptonaught.inventorysorter.modmenu.ModMenuIntegration"
+      "net.kyrptonaught.inventorysorter.client.modmenu.ModMenuIntegration"
     ]
   },
   "depends": {

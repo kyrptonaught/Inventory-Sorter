@@ -7,7 +7,9 @@ import net.kyrptonaught.inventorysorter.client.SortButtonWidget;
 import net.kyrptonaught.inventorysorter.client.SortableContainerScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen;
+import net.minecraft.container.Container;
 import net.minecraft.text.Text;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,6 +29,10 @@ public abstract class MixinAbstractContainerScreen extends Screen implements Sor
     @Shadow
     protected int left;
 
+    @Shadow
+    @Final
+    protected Container container;
+
     private SortButtonWidget invsort$SortBtn;
 
     protected MixinAbstractContainerScreen(Text text_1) {
@@ -39,7 +45,7 @@ public abstract class MixinAbstractContainerScreen extends Screen implements Sor
             boolean playerOnly = InventoryHelper.isPlayerOnlyInventory(this);
             this.addButton(invsort$SortBtn = new SortButtonWidget(this.left + this.containerWidth - 20, top + (playerOnly ? (containerHeight - 95) : 6), playerOnly));
             if (!playerOnly && InventorySorterMod.getConfig().seperateBtn)
-                this.addButton(new SortButtonWidget(invsort$SortBtn.x, top + (containerHeight - 95), true));
+                this.addButton(new SortButtonWidget(invsort$SortBtn.x, this.top + this.container.getSlot(this.container.slotList.size() - 36).yPosition - 12, true));
         }
     }
 

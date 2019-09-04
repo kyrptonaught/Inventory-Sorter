@@ -1,9 +1,7 @@
-package net.kyrptonaught.inventorysorter.config;
+package net.kyrptonaught.inventorysorter.client.modmenu.config;
 
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 
@@ -13,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class ConfigManager {
-    private static final Gson GSON = new GsonBuilder().create();
     private static final Jankson JANKSON = Jankson.builder().build();
     private final File configFile, ignoreFile;
     public ConfigOptions config;
@@ -43,10 +40,6 @@ public class ConfigManager {
     public void loadAll() {
         load(configFile, true);
         load(ignoreFile, false);
-    }
-
-    public Gson getGSON() {
-        return GSON;
     }
 
     private void save(File saveFile, boolean isConfig) {
@@ -82,8 +75,8 @@ public class ConfigManager {
         try {
             JsonObject configJson = JANKSON.load(saveFile);
             String regularized = configJson.toJson(false, false, 0);
-            if (isConfig) config = GSON.fromJson(regularized, ConfigOptions.class);
-            else blacklist = GSON.fromJson(regularized, IgnoreList.class);
+            if (isConfig) config = JANKSON.fromJson(regularized, ConfigOptions.class);
+            else blacklist = JANKSON.fromJson(regularized, IgnoreList.class);
         } catch (Exception e) {
             e.printStackTrace();
             failed = true;

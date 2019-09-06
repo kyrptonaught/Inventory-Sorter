@@ -49,17 +49,19 @@ public abstract class MixinAbstractContainerScreen extends Screen implements Sor
         }
     }
 
-    @Inject(method = "mouseClicked", at = @At("TAIL"))
+    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable callbackInfoReturnable) {
         if (InventorySorterMod.getConfig().middleClick && button == 2) {
             InventorySortPacket.sendSortPacket(InventoryHelper.isPlayerOnlyInventory(this));
+            callbackInfoReturnable.cancel();
         }
     }
 
-    @Inject(method = "keyPressed", at = @At("TAIL"))
+    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void invsort$keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable callbackInfoReturnable) {
         if (InventorySorterMod.keyBinding.matchesKey(keycode, scancode)) {
             InventorySortPacket.sendSortPacket(InventoryHelper.isPlayerOnlyInventory(this));
+            callbackInfoReturnable.cancel();
         }
     }
 

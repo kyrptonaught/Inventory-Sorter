@@ -48,12 +48,12 @@ public class SortCases {
         List<String> names = new ArrayList<>();
         String enchantNames = "";
         for (int i = 0; i < enchants.size(); i++) {
-            CompoundTag enchantTag = enchants.getCompoundTag(i);
+            CompoundTag enchantTag = enchants.getCompound(i);
             Identifier enchantID = Identifier.tryParse(enchantTag.getString("id"));
             if (enchantID == null) continue;
             Enchantment enchant = Registry.ENCHANTMENT.get(enchantID);
             if (enchant == null) continue;
-            names.add(enchant.getName(enchants.getCompoundTag(i).getInt("lvl")).asFormattedString());
+            names.add(enchant.getName(enchants.getCompound(i).getInt("lvl")).asFormattedString());
         }
         Collections.sort(names);
         for (String enchant : names) {

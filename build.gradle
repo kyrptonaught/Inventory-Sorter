@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.5-SNAPSHOT'
+	id 'fabric-loom' version '0.2.6-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -12,22 +12,26 @@ group = project.maven_group
 
 minecraft {
 }
+
+repositories {
+	maven { url 'https://maven.fabricmc.net/io/github/prospector/modmenu/ModMenu/' }
+}
+
 dependencies {
-	
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.github.prospector.modmenu:ModMenu:+"
+	modImplementation "io.github.prospector:modmenu:1.7.15-unstable.1.15-pre1+build.13"
 
-	modImplementation ('me.shedaniel.cloth:config-2:0.+'){transitive = false}
-	include "me.shedaniel.cloth:config-2:+"
+	modImplementation ('me.shedaniel.cloth:config-2:+'){transitive = false}
+	include 'me.shedaniel.cloth:config-2:+'
 
 	modApi "blue.endless:jankson:+"
 	include "blue.endless:jankson:+"
-
 }
+
 
 processResources {
 	inputs.property "version", project.version

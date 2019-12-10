@@ -22,7 +22,7 @@ public class SortCases {
         switch (sortType) {
             case CATEGORY:
                 ItemGroup group = item.getGroup();
-                return group != null ? group.getName() : "zzz" + itemName;
+                return (group != null ? group.getName() : "zzz") + itemName;
             case MOD:
                 return Registry.ITEM.getId(item).getNamespace() + itemName;
         }

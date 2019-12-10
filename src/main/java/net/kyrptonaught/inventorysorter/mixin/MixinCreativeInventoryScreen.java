@@ -14,10 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CreativeInventoryScreen.class)
-public abstract class MixinCreativeInventoryScreen extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeContainer> implements SortableContainerScreen {
-    public MixinCreativeInventoryScreen(CreativeInventoryScreen.CreativeContainer container_1, PlayerInventory playerInventory_1, Text text_1) {
-        super(container_1, playerInventory_1, text_1);
-    }
+public abstract class MixinCreativeInventoryScreen implements SortableContainerScreen {
 
     @Shadow
     private static int selectedTab;

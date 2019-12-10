@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "id": "inventorysorter",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "name": "Inventory Sorter",
   "description": "Quickly and easily sort inventorys",
   "authors": [
     "kyrptonaught"
   ],
   "contact": {
-    "homepage": "https://github.com/kyrptonaught/Inventory-Sorter",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/inventory-sorting",
     "sources": "https://github.com/kyrptonaught/Inventory-Sorter"
   },
   "license": "MIT",

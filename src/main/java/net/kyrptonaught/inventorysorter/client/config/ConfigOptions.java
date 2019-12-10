@@ -1,4 +1,4 @@
-package net.kyrptonaught.inventorysorter.client.modmenu.config;
+package net.kyrptonaught.inventorysorter.client.config;
 
 import blue.endless.jankson.Comment;
 import net.kyrptonaught.inventorysorter.SortCases;

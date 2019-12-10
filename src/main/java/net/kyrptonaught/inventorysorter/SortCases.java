@@ -16,7 +16,7 @@ public class SortCases {
         NAME, CATEGORY, MOD
     }
 
-    public static String getStringForSort(ItemStack stack, SortType sortType) {
+    static String getStringForSort(ItemStack stack, SortType sortType) {
         Item item = stack.getItem();
         String itemName = specialCases(stack);
         switch (sortType) {
@@ -46,7 +46,7 @@ public class SortCases {
     private static String enchantedBookNameCase(ItemStack stack) {
         ListTag enchants = EnchantedBookItem.getEnchantmentTag(stack);
         List<String> names = new ArrayList<>();
-        String enchantNames = "";
+        StringBuilder enchantNames = new StringBuilder();
         for (int i = 0; i < enchants.size(); i++) {
             CompoundTag enchantTag = enchants.getCompound(i);
             Identifier enchantID = Identifier.tryParse(enchantTag.getString("id"));
@@ -57,7 +57,7 @@ public class SortCases {
         }
         Collections.sort(names);
         for (String enchant : names) {
-            enchantNames += enchant + " ";
+            enchantNames.append(enchant).append(" ");
         }
         return stack.getItem().toString() + " " + enchants.size() + " " + enchantNames;
     }

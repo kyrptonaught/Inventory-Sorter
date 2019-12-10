@@ -8,7 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
-import net.kyrptonaught.inventorysorter.client.modmenu.config.ConfigOptions;
+import net.kyrptonaught.inventorysorter.client.config.ConfigOptions;
 import net.minecraft.client.gui.screen.Screen;
 
 import java.util.function.Function;

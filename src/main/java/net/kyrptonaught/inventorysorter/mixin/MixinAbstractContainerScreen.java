@@ -24,15 +24,13 @@ public abstract class MixinAbstractContainerScreen extends Screen implements Sor
     protected int containerWidth;
     @Shadow
     protected int containerHeight;
-    @Shadow
-    protected int top;
-    @Shadow
-    protected int left;
 
     @Shadow
     @Final
     protected Container container;
 
+    @Shadow protected int x;
+    @Shadow protected int y;
     private SortButtonWidget invsort$SortBtn;
 
     protected MixinAbstractContainerScreen(Text text_1) {
@@ -43,9 +41,9 @@ public abstract class MixinAbstractContainerScreen extends Screen implements Sor
     private void invsort$init(CallbackInfo callbackinfo) {
         if (InventorySorterMod.getConfig().displaySort) {
             boolean playerOnly = InventoryHelper.isPlayerOnlyInventory(this);
-            this.addButton(invsort$SortBtn = new SortButtonWidget(this.left + this.containerWidth - 20, top + (playerOnly ? (containerHeight - 95) : 6), playerOnly));
+            this.addButton(invsort$SortBtn = new SortButtonWidget(this.x + this.containerWidth - 20, this.y + (playerOnly ? (containerHeight - 95) : 6), playerOnly));
             if (!playerOnly && InventorySorterMod.getConfig().seperateBtn)
-                this.addButton(new SortButtonWidget(invsort$SortBtn.x, this.top + this.container.getSlot(this.container.slotList.size() - 36).yPosition - 12, true));
+                this.addButton(new SortButtonWidget(invsort$SortBtn.x, this.y + this.container.getSlot(this.container.slotList.size() - 36).yPosition - 12, true));
         }
     }
 
@@ -68,7 +66,7 @@ public abstract class MixinAbstractContainerScreen extends Screen implements Sor
     @Inject(method = "render", at = @At("TAIL"))
     private void invsort$render(int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
         if (invsort$SortBtn != null)
-            invsort$SortBtn.x = this.left + this.containerWidth - 20;
+            invsort$SortBtn.x = this.x + this.containerWidth - 20;
     }
 
     @Override

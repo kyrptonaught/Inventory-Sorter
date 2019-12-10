@@ -23,7 +23,7 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.github.prospector:modmenu:1.7.15-unstable.1.15-pre1+build.13"
+	modImplementation "io.github.prospector:modmenu:+"
 
 	modImplementation ('me.shedaniel.cloth:config-2:+'){transitive = false}
 	include 'me.shedaniel.cloth:config-2:+'

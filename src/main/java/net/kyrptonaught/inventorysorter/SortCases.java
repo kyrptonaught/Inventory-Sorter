@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SortCases {
     public enum SortType {
-        NAME, CATEGORY, MOD
+        NAME, CATEGORY, MOD, ID
     }
 
     static String getStringForSort(ItemStack stack, SortType sortType) {
@@ -25,6 +25,8 @@ public class SortCases {
                 return (group != null ? group.getName() : "zzz") + itemName;
             case MOD:
                 return Registry.ITEM.getId(item).getNamespace() + itemName;
+            case NAME:
+                if (stack.hasCustomName()) return stack.getName() + itemName;
         }
         return itemName;
     }

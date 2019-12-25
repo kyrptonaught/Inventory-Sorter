@@ -29,8 +29,10 @@ public abstract class MixinAbstractContainerScreen extends Screen implements Sor
     @Final
     protected Container container;
 
-    @Shadow protected int x;
-    @Shadow protected int y;
+    @Shadow
+    protected int x;
+    @Shadow
+    protected int y;
     private SortButtonWidget invsort$SortBtn;
 
     protected MixinAbstractContainerScreen(Text text_1) {

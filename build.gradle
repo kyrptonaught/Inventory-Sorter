@@ -19,14 +19,14 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.github.prospector:modmenu:+"
+	modImplementation "io.github.prospector:modmenu:1.10.+"
 
-	modImplementation ('me.shedaniel.cloth:config-2:+'){transitive = false}
-	include 'me.shedaniel.cloth:config-2:+'
+	modImplementation ('me.shedaniel.cloth:config-2:2.11.+'){transitive = false}
+	include 'me.shedaniel.cloth:config-2:2.11.+'
 
 	modApi "blue.endless:jankson:+"
 	include "blue.endless:jankson:+"

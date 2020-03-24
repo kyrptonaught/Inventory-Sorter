@@ -2,8 +2,9 @@ package net.kyrptonaught.inventorysorter.client.config;
 
 import blue.endless.jankson.Comment;
 import net.kyrptonaught.inventorysorter.SortCases;
+import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 
-public class ConfigOptions {
+public class ConfigOptions implements AbstractConfigFile {
 
     @Comment("Enable 'Sort' button in inventorys")
     public boolean displaySort = true;

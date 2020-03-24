@@ -24,11 +24,9 @@ public class ModMenuIntegration implements ModMenuApi {
     @Override
     public Function<Screen, ? extends Screen> getConfigScreenFactory() {
         return (screen) -> {
-            ConfigOptions options = InventorySorterMod.configManager.config;
+            ConfigOptions options = InventorySorterMod.getConfig();
             ConfigBuilder builder = ConfigBuilder.create().setParentScreen(screen).setTitle("Inventory Sorting Config");
-            builder.setSavingRunnable(() -> {
-                InventorySorterMod.configManager.saveAll();
-            });
+            builder.setSavingRunnable(() -> InventorySorterMod.configManager.saveAll());
             ConfigEntryBuilder entryBuilder = ConfigEntryBuilder.create();
 
             ConfigCategory displayCat = builder.getOrCreateCategory("key.inventorysorter.config.category.display");

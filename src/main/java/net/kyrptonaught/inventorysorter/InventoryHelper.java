@@ -60,17 +60,9 @@ public class InventoryHelper {
         return ItemStack.areTagsEqual(itemStack_1, itemStack_2);
     }
 
-    //Start client side only
-    private static HashSet<String> playerOnlyScreens;
-
-    @Environment(EnvType.CLIENT)
-    static void registerScreens() {
-        playerOnlyScreens = new HashSet<>(InventorySorterMod.configManager.blacklist.defaultBlacklist);
-        playerOnlyScreens.addAll(InventorySorterMod.configManager.blacklist.blacklistedInventories);
-    }
-
     @Environment(EnvType.CLIENT)
     public static Boolean isPlayerOnlyInventory(Screen currentScreen) {
-        return playerOnlyScreens.contains(currentScreen.getClass().getName());
+        return InventorySorterMod.getBlacklist().blacklistedInventories.contains(currentScreen.getClass().getName()) ||
+                InventorySorterMod.getBlacklist().defaultBlacklist.contains(currentScreen.getClass().getName());
     }
 }

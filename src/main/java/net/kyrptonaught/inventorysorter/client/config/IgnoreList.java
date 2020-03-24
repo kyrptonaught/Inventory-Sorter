@@ -2,14 +2,16 @@ package net.kyrptonaught.inventorysorter.client.config;
 
 import blue.endless.jankson.Comment;
 import com.google.common.collect.ImmutableSet;
+import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 import net.minecraft.client.gui.screen.ingame.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-public class IgnoreList {
+public class IgnoreList implements AbstractConfigFile {
     @Comment("Inventories that should not be sorted")
-    public List<String> blacklistedInventories = new ArrayList<>();
+    public HashSet<String> blacklistedInventories = new HashSet<>();
 
     public transient ImmutableSet<String> defaultBlacklist = ImmutableSet.of(
             BeaconScreen.class.getName(), AnvilScreen.class.getName(), EnchantingScreen.class.getName(),

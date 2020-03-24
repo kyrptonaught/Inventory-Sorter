@@ -54,7 +54,6 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
         if (InventorySorterMod.getConfig().middleClick && button == 2) {
             InventorySortPacket.sendSortPacket(InventoryHelper.isPlayerOnlyInventory(this));
             callbackInfoReturnable.setReturnValue(true);
-            callbackInfoReturnable.cancel();
         }
     }
 
@@ -63,7 +62,6 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
         if (InventorySorterMod.keyBinding.matchesKey(keycode, scancode)) {
             InventorySortPacket.sendSortPacket(InventoryHelper.isPlayerOnlyInventory(this));
             callbackInfoReturnable.setReturnValue(true);
-            callbackInfoReturnable.cancel();
         }
     }
 

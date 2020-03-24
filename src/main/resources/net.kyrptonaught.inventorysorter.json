@@ -3,7 +3,7 @@
   "package": "net.kyrptonaught.inventorysorter.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinAbstractContainerScreen",
+    "MixinContainerScreen",
     "MixinCreativeInventoryScreen"
   ],
   "injectors": {

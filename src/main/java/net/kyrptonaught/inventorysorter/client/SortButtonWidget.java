@@ -37,7 +37,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
         minecraftClient_1.getTextureManager().bindTexture(texture);
         RenderSystem.scalef(.5f, .5f, 1);
         RenderSystem.translatef(this.x, this.y, 0);
-        blit(this.x, this.y, 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
+        drawTexture(this.x, this.y, 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
         this.renderToolTip(int_1, int_2);
         RenderSystem.disableLighting();
         RenderSystem.popMatrix();

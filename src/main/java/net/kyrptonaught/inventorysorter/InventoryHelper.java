@@ -16,12 +16,12 @@ public class InventoryHelper {
     static void sortInv(Inventory inv, int startSlot, int invSize, SortCases.SortType sortType) {
         List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < invSize; i++)
-            addStackWithMerge(stacks, inv.getInvStack(startSlot + i));
+            addStackWithMerge(stacks, inv.getStack(startSlot + i));
 
         stacks.sort(Comparator.comparing(stack -> SortCases.getStringForSort(stack, sortType)));
         if (stacks.size() == 0) return;
         for (int i = 0; i < invSize; i++)
-            inv.setInvStack(startSlot + i, i < stacks.size() ? stacks.get(i) : ItemStack.EMPTY);
+            inv.setStack(startSlot + i, i < stacks.size() ? stacks.get(i) : ItemStack.EMPTY);
         inv.markDirty();
     }
 

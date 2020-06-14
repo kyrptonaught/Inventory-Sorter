@@ -16,6 +16,11 @@ minecraft {
 repositories {
 	maven { url 'https://maven.fabricmc.net/io/github/prospector/modmenu/ModMenu/' }
 	maven {url 'https://dl.bintray.com/kyrptonaught/kyrptconfig'}
+    maven {
+        name = "Spinnery"
+        url  "https://dl.bintray.com/spinnery/Spinnery"
+    }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -24,8 +29,11 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-modImplementation 'net.kyrptonaught:kyrptconfig:+'
-	include 'net.kyrptonaught:kyrptconfig:+'
+	modImplementation 'net.kyrptonaught:kyrptconfig:1.0.1'
+	include 'net.kyrptonaught:kyrptconfig:1.0.1'
+
+	modCompile "com.github.vini2003:spinnery:2.0.28+fabric-1.15.2"
+	modCompile 'com.github.Draylar:inmis:2.1.1-beta_1.15.2'
 }
 
 

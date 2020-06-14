@@ -2,9 +2,13 @@
   "required": true,
   "package": "net.kyrptonaught.inventorysorter.mixin",
   "compatibilityLevel": "JAVA_8",
+  "plugin": "net.kyrptonaught.inventorysorter.compat.InventorySorterMixinPlugin",
   "mixins": [
     "MixinContainerScreen",
-    "MixinCreativeInventoryScreen"
+    "MixinCreativeInventoryScreen",
+    "MixinContainer",
+    "spinnery/MixinSpinneryBaseContainer",
+    "spinnery/MixinSpinneryBaseContainerScreen"
   ],
   "injectors": {
     "defaultRequire": 1

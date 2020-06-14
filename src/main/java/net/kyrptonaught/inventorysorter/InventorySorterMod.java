@@ -44,6 +44,7 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
     public static ConfigOptions getConfig() {
         return (ConfigOptions) configManager.getConfig("config.json5");
     }
+
     public static IgnoreList getBlacklist() {
         return (IgnoreList) configManager.getConfig("blacklist.json5");
     }

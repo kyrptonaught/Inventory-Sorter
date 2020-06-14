@@ -23,7 +23,7 @@ public class InventorySortPacket {
                 if (playerInv) {
                     InventoryHelper.sortInv(player.inventory, 9, 27, sortType);
                 } else {
-                    Inventory inv = player.container.getSlot(0).inventory;
+                    Inventory inv =((SortableContainer)player.container).getInventory();
                     InventoryHelper.sortInv(inv, 0, inv.getInvSize(), sortType);
                 }
             });

@@ -14,7 +14,7 @@ import org.lwjgl.glfw.GLFW;
 @Environment(EnvType.CLIENT)
 public class SortButtonWidget extends TexturedButtonWidget {
     private static final Identifier texture = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
-    private boolean playerInv;
+    private final boolean playerInv;
 
     public SortButtonWidget(int int_1, int int_2, boolean playerInv) {
         super(int_1, int_2, 10, 9, 0, 0, 19, texture, 20, 37, null, "");

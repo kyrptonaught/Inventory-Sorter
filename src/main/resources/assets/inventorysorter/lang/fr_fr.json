@@ -1,0 +1,12 @@
+{
+    "key.categories.inventorysorter": "Inventory Sorting",
+    "key.inventorysorter.sort": "Trier l'inventaire",
+    "key.inventorysorter.config.category.display": "Affichage",
+    "key.inventorysorter.config.category.logic": "Logique",
+    "key.inventorysorter.config.displaysort": "Affichage du bouton dans l'inventaire",
+    "key.inventorysorter.config.middleclick": "Clique du milieu pour trier l'inventaire",
+    "key.inventorysorter.config.seperatebtn": "Toujour afficher le bouton pour l'inventaire du joueur",
+    "key.inventorysorter.config.sortplayer": "Trier tri aussi l'inventaire du joueur",
+    "key.inventorysorter.config.sorttype": "Méthode de tri",
+    "key.inventorysorter.config.displaytooltip": "Afficher l'info-bulle du bouton de tri"
+  }

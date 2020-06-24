@@ -30,7 +30,7 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
     public void onInitializeClient() {
         configManager.registerFile("config.json5", new ConfigOptions());
         configManager.registerFile("blacklist.json5", new IgnoreList());
-        configManager.loadAll();
+        configManager.load();
         keyBinding = FabricKeyBinding.Builder.create(
                 new Identifier(MOD_ID, "sort"),
                 InputUtil.Type.KEYSYM,

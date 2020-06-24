@@ -4,9 +4,11 @@
   "compatibilityLevel": "JAVA_8",
   "plugin": "net.kyrptonaught.inventorysorter.compat.InventorySorterMixinPlugin",
   "mixins": [
-    "MixinContainerScreen",
-    "MixinCreativeInventoryScreen",
     "MixinContainer"
+  ],
+  "client": [
+    "MixinContainerScreen",
+    "MixinCreativeInventoryScreen"
   ],
   "injectors": {
     "defaultRequire": 1

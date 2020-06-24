@@ -21,7 +21,7 @@ public class InventorySorterMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if(mixinClassName.toLowerCase().contains("spinnery"))
+        if (mixinClassName.toLowerCase().contains("spinnery"))
             return FabricLoader.INSTANCE.isModLoaded("spinnery");
         return true;
     }

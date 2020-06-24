@@ -12,7 +12,9 @@ import java.util.List;
 
 @Mixin(ScreenHandler.class)
 public class MixinContainer implements SortableContainer {
-    @Shadow @Final public List<Slot> slots;
+    @Shadow
+    @Final
+    public List<Slot> slots;
 
     @Override
     public Inventory getInventory() {

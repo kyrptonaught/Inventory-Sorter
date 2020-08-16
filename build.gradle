@@ -14,7 +14,6 @@ minecraft {
 }
 
 repositories {
-	maven { url 'https://maven.fabricmc.net/io/github/prospector/modmenu/ModMenu/' }
 	maven {url 'https://dl.bintray.com/kyrptonaught/kyrptconfig'}
 }
 
@@ -24,8 +23,8 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation 'net.kyrptonaught:kyrptconfig:1.0.4-1.16'
-	include 'net.kyrptonaught:kyrptconfig:1.0.4-1.16'
+	modImplementation 'net.kyrptonaught:kyrptconfig:1.1.2-1.16'
+	include 'net.kyrptonaught:kyrptconfig:1.1.2-1.16'
 }
 
 

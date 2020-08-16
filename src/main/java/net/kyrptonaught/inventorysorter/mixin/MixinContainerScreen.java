@@ -81,6 +81,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Override
     public int getMiddleHeight() {
+        if (this.handler.slots.size() == 0) return 0;
         return this.handler.getSlot(this.handler.slots.size() - 36).y - 12;
         //return (float)(this.containerHeight - 96 + 2)
     }

@@ -18,7 +18,7 @@ public class SortCommand {
         dispatcher.register(CommandManager.literal("sort")
                 .requires((source) -> source.hasPermissionLevel(2))
                 .executes((commandContext) -> {
-                    HitResult hit = commandContext.getSource().getPlayer().rayTrace(6, 1, false);
+                    HitResult hit = commandContext.getSource().getPlayer().raycast(6, 1, false);
                     if (hit instanceof BlockHitResult) {
                         Inventory inventory = HopperBlockEntity.getInventoryAt(commandContext.getSource().getPlayer().getServerWorld(), ((BlockHitResult) hit).getBlockPos());
                         if (inventory == null) {

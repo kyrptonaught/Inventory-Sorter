@@ -55,7 +55,7 @@ public class SortCases {
             if (enchantID == null) continue;
             Enchantment enchant = Registry.ENCHANTMENT.get(enchantID);
             if (enchant == null) continue;
-            names.add(enchant.getName(enchants.getCompound(i).getInt("lvl")).asString());
+            names.add(enchant.getName(enchantTag.getInt("lvl")).getString());
         }
         Collections.sort(names);
         for (String enchant : names) {

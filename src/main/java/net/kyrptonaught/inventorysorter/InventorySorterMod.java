@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.kyrptonaught.inventorysorter.client.config.ConfigOptions;
 import net.kyrptonaught.inventorysorter.client.config.IgnoreList;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
@@ -30,7 +31,7 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
     public void onInitializeClient() {
         configManager.registerFile("config.json5", new ConfigOptions());
         configManager.registerFile("blacklist.json5", new IgnoreList());
-        configManager.loadAll();
+        configManager.load();
         keyBinding = FabricKeyBinding.Builder.create(
                 new Identifier(MOD_ID, "sort"),
                 InputUtil.Type.KEYSYM,
@@ -39,6 +40,7 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
         ).build();
         KeyBindingRegistry.INSTANCE.addCategory(KEY_BINDING_CATEGORY);
         KeyBindingRegistry.INSTANCE.register(keyBinding);
+        CommandRegistrationCallback.EVENT.register(SortCommand::register);
     }
 
     public static ConfigOptions getConfig() {

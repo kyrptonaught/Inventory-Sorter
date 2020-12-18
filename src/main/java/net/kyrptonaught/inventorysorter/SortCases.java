@@ -37,7 +37,7 @@ public class SortCases {
         Item item = stack.getItem();
         CompoundTag tag = stack.getTag();
 
-        if (tag.contains("SkullOwner"))
+        if (tag != null && tag.contains("SkullOwner"))
             return playerHeadCase(stack);
         if (stack.getCount() != stack.getMaxCount())
             return stackSize(stack);

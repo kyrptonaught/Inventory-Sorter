@@ -53,7 +53,13 @@ public class SortCases {
         CompoundTag skullOwner = tag.getCompound("SkullOwner");
         String ownerName = skullOwner.getString("Name");
 
-        return ownerName + stack.getCount();
+        // this is duplicated logic, so we should probably refactor
+        String count = "";
+        if (stack.getCount() != stack.getMaxCount()) {
+            count = Integer.toString(stack.getCount());
+        }
+
+        return ownerName + count;
     }
 
     private static String stackSize(ItemStack stack) {

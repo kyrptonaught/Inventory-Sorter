@@ -59,7 +59,7 @@ public class SortCases {
             count = Integer.toString(stack.getCount());
         }
 
-        return ownerName + count;
+        return stack.getItem().toString() + " " + ownerName + count;
     }
 
     private static String stackSize(ItemStack stack) {

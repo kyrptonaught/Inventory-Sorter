@@ -28,17 +28,38 @@ public class SortCases {
             case NAME:
                 if (stack.hasCustomName()) return stack.getName() + itemName;
         }
+
+
         return itemName;
     }
 
     private static String specialCases(ItemStack stack) {
+        Item item = stack.getItem();
+        CompoundTag tag = stack.getTag();
+
+        if (tag != null && tag.contains("SkullOwner"))
+            return playerHeadCase(stack);
         if (stack.getCount() != stack.getMaxCount())
             return stackSize(stack);
-        if (stack.getItem() instanceof EnchantedBookItem)
+        if (item instanceof EnchantedBookItem)
             return enchantedBookNameCase(stack);
-        if (stack.getItem() instanceof ToolItem)
+        if (item instanceof ToolItem)
             return toolDuribilityCase(stack);
-        return stack.getItem().toString();
+        return item.toString();
+    }
+
+    private static String playerHeadCase(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        CompoundTag skullOwner = tag.getCompound("SkullOwner");
+        String ownerName = skullOwner.getString("Name");
+
+        // this is duplicated logic, so we should probably refactor
+        String count = "";
+        if (stack.getCount() != stack.getMaxCount()) {
+            count = Integer.toString(stack.getCount());
+        }
+
+        return stack.getItem().toString() + " " + ownerName + count;
     }
 
     private static String stackSize(ItemStack stack) {

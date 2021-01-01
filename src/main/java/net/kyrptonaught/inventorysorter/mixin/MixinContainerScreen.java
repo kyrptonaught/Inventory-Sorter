@@ -7,6 +7,7 @@ import net.kyrptonaught.inventorysorter.InventorySortPacket;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.client.SortButtonWidget;
 import net.kyrptonaught.inventorysorter.client.SortableContainerScreen;
+import net.kyrptonaught.inventorysorter.client.config.IgnoreList;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -44,7 +45,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "init", at = @At("TAIL"))
     private void invsort$init(CallbackInfo callbackinfo) {
-        if (InventorySorterMod.getConfig().displaySort) {
+        if (InventorySorterMod.getConfig().displaySort && !InventorySorterMod.getBlacklist().hiddenList.contains(this.getClass().getName())) {
             boolean playerOnly = InventoryHelper.isPlayerOnlyInventory(this);
             this.addButton(invsort$SortBtn = new SortButtonWidget(this.x + this.backgroundWidth - 20, this.y + (playerOnly ? (backgroundHeight - 95) : 6), playerOnly));
             if (!playerOnly && InventorySorterMod.getConfig().seperateBtn)

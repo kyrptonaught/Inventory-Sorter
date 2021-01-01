@@ -20,11 +20,12 @@ public class InventorySortPacket {
             SortCases.SortType sortType = SortCases.SortType.values()[packetByteBuf.readInt()];
             packetContext.getTaskQueue().execute(() -> {
                 PlayerEntity player = packetContext.getPlayer();
-                if (playerInv) {
+                if (playerInv || !((SortableContainer) player.currentScreenHandler).hasSlots()) {
                     InventoryHelper.sortInv(player.inventory, 9, 27, sortType);
                 } else {
                     Inventory inv = ((SortableContainer) player.currentScreenHandler).getInventory();
-                    InventoryHelper.sortInv(inv, 0, inv.size(), sortType);
+                    if (inv != null)
+                        InventoryHelper.sortInv(inv, 0, inv.size(), sortType);
                 }
             });
         });

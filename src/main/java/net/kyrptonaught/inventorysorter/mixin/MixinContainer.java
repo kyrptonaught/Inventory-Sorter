@@ -18,6 +18,12 @@ public class MixinContainer implements SortableContainer {
 
     @Override
     public Inventory getInventory() {
+        if(hasSlots()) return null;
         return this.slots.get(0).inventory;
+    }
+
+    @Override
+    public boolean hasSlots() {
+        return this.slots.size() > 0;
     }
 }

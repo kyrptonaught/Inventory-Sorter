@@ -2,7 +2,6 @@
   "required": true,
   "package": "net.kyrptonaught.inventorysorter.mixin",
   "compatibilityLevel": "JAVA_8",
-  "plugin": "net.kyrptonaught.inventorysorter.compat.InventorySorterMixinPlugin",
   "mixins": [
     "MixinContainer"
   ],

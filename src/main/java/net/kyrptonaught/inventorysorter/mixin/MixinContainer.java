@@ -18,7 +18,7 @@ public class MixinContainer implements SortableContainer {
 
     @Override
     public Inventory getInventory() {
-        if(hasSlots()) return null;
+        if(!hasSlots()) return null;
         return this.slots.get(0).inventory;
     }
 

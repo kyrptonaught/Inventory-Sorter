@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.inventorysorter.InventorySortPacket;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
+import net.kyrptonaught.inventorysorter.SortCases;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -43,6 +44,23 @@ public class SortButtonWidget extends TexturedButtonWidget {
         this.renderToolTip(matrixStack, int_1, int_2);
         RenderSystem.disableLighting();
         RenderSystem.popMatrix();
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        int current = InventorySorterMod.getConfig().sortType.ordinal();
+        if (amount > 0) {
+            current++;
+            if (current >= SortCases.SortType.values().length)
+                current = 0;
+        } else {
+            current--;
+            if (current < 0)
+                current = SortCases.SortType.values().length - 1;
+        }
+        InventorySorterMod.getConfig().sortType = SortCases.SortType.values()[current];
+        InventorySorterMod.configManager.save();
+        return true;
     }
 
     @Override

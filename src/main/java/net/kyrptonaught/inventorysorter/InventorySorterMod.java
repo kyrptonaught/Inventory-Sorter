@@ -23,6 +23,7 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
 
     @Override
     public void onInitialize() {
+        CommandRegistrationCallback.EVENT.register(SortCommand::register);
         InventorySortPacket.registerReceivePacket();
     }
 
@@ -40,7 +41,6 @@ public class InventorySorterMod implements ModInitializer, ClientModInitializer 
         ).build();
         KeyBindingRegistry.INSTANCE.addCategory(KEY_BINDING_CATEGORY);
         KeyBindingRegistry.INSTANCE.register(keyBinding);
-        CommandRegistrationCallback.EVENT.register(SortCommand::register);
     }
 
     public static ConfigOptions getConfig() {

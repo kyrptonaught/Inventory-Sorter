@@ -32,5 +32,13 @@ public class SortCommand {
                     }
                     return 1;
                 }));
+        dispatcher.register(CommandManager.literal("sortme")
+                .requires((source) -> source.hasPermissionLevel(2))
+                .executes((commandContext) -> {
+                    InventoryHelper.sortInv(commandContext.getSource().getPlayer().inventory, 9, 27, SortCases.SortType.NAME);
+                    Text feedBack = new LiteralText("Sorted inventory");
+                    commandContext.getSource().sendFeedback(feedBack, false);
+                    return 1;
+                }));
     }
 }

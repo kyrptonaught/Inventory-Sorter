@@ -4,6 +4,7 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -35,9 +36,9 @@ public class InventorySortPacket {
     public static void sendSortPacket(boolean playerInv) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(playerInv);
-        buf.writeInt(InventorySorterMod.getConfig().sortType.ordinal());
+        buf.writeInt(InventorySorterModClient.getConfig().sortType.ordinal());
         MinecraftClient.getInstance().getNetworkHandler().getConnection().send(new CustomPayloadC2SPacket(SORT_INV_PACKET, new PacketByteBuf(buf)));
-        if (!playerInv && InventorySorterMod.getConfig().sortPlayer)
+        if (!playerInv && InventorySorterModClient.getConfig().sortPlayer)
             sendSortPacket(true);
     }
 }

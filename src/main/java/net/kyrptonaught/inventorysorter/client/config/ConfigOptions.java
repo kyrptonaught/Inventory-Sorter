@@ -19,6 +19,12 @@ public class ConfigOptions implements AbstractConfigFile {
     @Comment("Display Sort Button Tooltip")
     public boolean displayTooltip = true;
 
+    @Comment("Sort Inventory key")
+    public String keybinding = "key.keyboard.p";
+
+    @Comment("Should sort half of open inv highlighted by mouse")
+    public Boolean sortMouseHighlighted = true;
+
     public boolean debugMode = false;
 
 }

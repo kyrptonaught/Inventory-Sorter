@@ -2,10 +2,9 @@ package net.kyrptonaught.inventorysorter;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -64,8 +63,8 @@ public class InventoryHelper {
 
     @Environment(EnvType.CLIENT)
     public static Boolean isPlayerOnlyInventory(Screen currentScreen) {
-        return InventorySorterMod.getBlacklist().blacklistedInventories.contains(currentScreen.getClass().getName()) ||
-                InventorySorterMod.getBlacklist().defaultBlacklist.contains(currentScreen.getClass().getName()) || !isSortableContainer((HandledScreen) currentScreen);
+        return InventorySorterModClient.getBlacklist().blacklistedInventories.contains(currentScreen.getClass().getName()) ||
+                InventorySorterModClient.getBlacklist().defaultBlacklist.contains(currentScreen.getClass().getName()) || !isSortableContainer((HandledScreen) currentScreen);
     }
 
     public static boolean isSortableContainer(HandledScreen currentScreen) {

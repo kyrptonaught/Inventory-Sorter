@@ -26,7 +26,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
 
     @Override
     public void onPress() {
-        if (InventorySorterMod.getConfig().debugMode && GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
+        if (InventorySorterModClient.getConfig().debugMode && GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
             System.out.println("Add the line below to config/inventorysorter/blacklist.json5 to blacklist this inventory");
             System.out.println(MinecraftClient.getInstance().currentScreen.getClass().getName());
         } else
@@ -48,7 +48,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        int current = InventorySorterMod.getConfig().sortType.ordinal();
+        int current = InventorySorterModClient.getConfig().sortType.ordinal();
         if (amount > 0) {
             current++;
             if (current >= SortCases.SortType.values().length)
@@ -58,14 +58,14 @@ public class SortButtonWidget extends TexturedButtonWidget {
             if (current < 0)
                 current = SortCases.SortType.values().length - 1;
         }
-        InventorySorterMod.getConfig().sortType = SortCases.SortType.values()[current];
-        InventorySorterMod.configManager.save();
+        InventorySorterModClient.getConfig().sortType = SortCases.SortType.values()[current];
+        InventorySorterModClient.configManager.save();
         return true;
     }
 
     @Override
     public void renderToolTip(MatrixStack matrixStack, int x, int y) {
-        if (InventorySorterMod.getConfig().displayTooltip && this.isHovered())
-            MinecraftClient.getInstance().currentScreen.renderTooltip(matrixStack, new LiteralText("Sort by: " + StringUtils.capitalize(InventorySorterMod.getConfig().sortType.toString().toLowerCase())), x, y);
+        if (InventorySorterModClient.getConfig().displayTooltip && this.isHovered())
+            MinecraftClient.getInstance().currentScreen.renderTooltip(matrixStack, new LiteralText("Sort by: " + StringUtils.capitalize(InventorySorterModClient.getConfig().sortType.toString().toLowerCase())), x, y);
     }
 }

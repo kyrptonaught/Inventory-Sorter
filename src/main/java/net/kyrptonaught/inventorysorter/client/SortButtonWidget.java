@@ -8,6 +8,7 @@ import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
@@ -35,15 +36,15 @@ public class SortButtonWidget extends TexturedButtonWidget {
 
     @Override
     public void renderButton(MatrixStack matrixStack, int int_1, int int_2, float float_1) {
-        RenderSystem.pushMatrix();
-        MinecraftClient minecraftClient_1 = MinecraftClient.getInstance();
-        minecraftClient_1.getTextureManager().bindTexture(texture);
-        RenderSystem.scalef(.5f, .5f, 1);
-        RenderSystem.translatef(this.x, this.y, 0);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.enableDepthTest();
+        matrixStack.push();
+        matrixStack.scale(.5f,.5f,1);
+        matrixStack.translate(x,y,0);
         drawTexture(matrixStack, this.x, this.y, 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
         this.renderToolTip(matrixStack, int_1, int_2);
-        RenderSystem.disableLighting();
-        RenderSystem.popMatrix();
+        matrixStack.pop();
     }
 
     @Override

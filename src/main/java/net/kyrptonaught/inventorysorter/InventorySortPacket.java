@@ -4,6 +4,7 @@ import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,20 +17,19 @@ public class InventorySortPacket {
     private static final Identifier SORT_INV_PACKET = new Identifier("inventorysorter", "sort_inv_packet");
 
     static void registerReceivePacket() {
-        ServerSidePacketRegistry.INSTANCE.register(SORT_INV_PACKET, (packetContext, packetByteBuf) -> {
-            boolean playerInv = packetByteBuf.readBoolean();
-            SortCases.SortType sortType = SortCases.SortType.values()[packetByteBuf.readInt()];
-            packetContext.getTaskQueue().execute(() -> {
-                PlayerEntity player = packetContext.getPlayer();
+        ServerPlayNetworking.registerGlobalReceiver(SORT_INV_PACKET, ((server, player, handler, buf, responseSender) -> {
+            boolean playerInv = buf.readBoolean();
+            SortCases.SortType sortType = SortCases.SortType.values()[buf.readInt()];
+            server.execute(() -> {
                 if (playerInv || !((SortableContainer) player.currentScreenHandler).hasSlots()) {
-                    InventoryHelper.sortInv(player.inventory, 9, 27, sortType);
+                    InventoryHelper.sortInv(player.getInventory(), 9, 27, sortType);
                 } else {
                     Inventory inv = ((SortableContainer) player.currentScreenHandler).getInventory();
                     if (inv != null)
                         InventoryHelper.sortInv(inv, 0, inv.size(), sortType);
                 }
             });
-        });
+        }));
     }
 
     @Environment(EnvType.CLIENT)

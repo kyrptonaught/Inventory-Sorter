@@ -2,8 +2,8 @@ package net.kyrptonaught.inventorysorter;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -35,7 +35,7 @@ public class SortCases {
 
     private static String specialCases(ItemStack stack) {
         Item item = stack.getItem();
-        CompoundTag tag = stack.getTag();
+        NbtCompound tag = stack.getTag();
 
         if (tag != null && tag.contains("SkullOwner"))
             return playerHeadCase(stack);
@@ -49,8 +49,8 @@ public class SortCases {
     }
 
     private static String playerHeadCase(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        CompoundTag skullOwner = tag.getCompound("SkullOwner");
+        NbtCompound tag = stack.getTag();
+        NbtCompound skullOwner = tag.getCompound("SkullOwner");
         String ownerName = skullOwner.getString("Name");
 
         // this is duplicated logic, so we should probably refactor
@@ -67,11 +67,11 @@ public class SortCases {
     }
 
     private static String enchantedBookNameCase(ItemStack stack) {
-        ListTag enchants = EnchantedBookItem.getEnchantmentTag(stack);
+        NbtList enchants = EnchantedBookItem.getEnchantmentNbt(stack);
         List<String> names = new ArrayList<>();
         StringBuilder enchantNames = new StringBuilder();
         for (int i = 0; i < enchants.size(); i++) {
-            CompoundTag enchantTag = enchants.getCompound(i);
+            NbtCompound enchantTag = enchants.getCompound(i);
             Identifier enchantID = Identifier.tryParse(enchantTag.getString("id"));
             if (enchantID == null) continue;
             Enchantment enchant = Registry.ENCHANTMENT.get(enchantID);

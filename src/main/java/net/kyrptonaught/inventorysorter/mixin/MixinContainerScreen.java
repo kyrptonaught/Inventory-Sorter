@@ -51,9 +51,9 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
     private void invsort$init(CallbackInfo callbackinfo) {
         if (InventorySorterModClient.getConfig().displaySort && !InventorySorterModClient.getBlacklist().hiddenList.contains(this.getClass().getName())) {
             boolean playerOnly = InventoryHelper.isPlayerOnlyInventory(this);
-            this.addButton(invsort$SortBtn = new SortButtonWidget(this.x + this.backgroundWidth - 20, this.y + (playerOnly ? (backgroundHeight - 95) : 6), playerOnly));
+            this.addDrawableChild(invsort$SortBtn = new SortButtonWidget(this.x + this.backgroundWidth - 20, this.y + (playerOnly ? (backgroundHeight - 95) : 6), playerOnly));
             if (!playerOnly && InventorySorterModClient.getConfig().seperateBtn)
-                this.addButton(new SortButtonWidget(invsort$SortBtn.x, this.y + ((SortableContainerScreen) (this)).getMiddleHeight(), true));
+                this.addDrawableChild(new SortButtonWidget(invsort$SortBtn.x, this.y + ((SortableContainerScreen) (this)).getMiddleHeight(), true));
         }
     }
 

@@ -1,6 +1,7 @@
 package net.kyrptonaught.inventorysorter.client.modmenu;
 
-import io.github.prospector.modmenu.api.ModMenuApi;
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -19,13 +20,9 @@ import java.util.function.Function;
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
 
-    @Override
-    public String getModId() {
-        return InventorySorterMod.MOD_ID;
-    }
 
     @Override
-    public Function<Screen, ? extends Screen> getConfigScreenFactory() {
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return (screen) -> {
             ConfigOptions options = InventorySorterModClient.getConfig();
             ConfigBuilder builder = ConfigBuilder.create().setParentScreen(screen).setTitle(new TranslatableText("Inventory Sorting Config"));

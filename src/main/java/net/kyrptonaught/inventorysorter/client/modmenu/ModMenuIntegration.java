@@ -11,11 +11,9 @@ import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
 import net.kyrptonaught.inventorysorter.client.config.ConfigOptions;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.TranslatableText;
-
-import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
@@ -27,8 +25,10 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigOptions options = InventorySorterModClient.getConfig();
             ConfigBuilder builder = ConfigBuilder.create().setParentScreen(screen).setTitle(new TranslatableText("Inventory Sorting Config"));
             builder.setSavingRunnable(() -> {
-                InventorySorterModClient.configManager.save();
+                InventorySorterMod.configManager.save();
                 InventorySorterModClient.keycode = null;
+                if (MinecraftClient.getInstance().player != null)
+                    InventorySorterModClient.syncConfig();
             });
             ConfigEntryBuilder entryBuilder = ConfigEntryBuilder.create();
 

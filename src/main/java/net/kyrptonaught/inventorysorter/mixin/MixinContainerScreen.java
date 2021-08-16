@@ -3,7 +3,7 @@ package net.kyrptonaught.inventorysorter.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.inventorysorter.InventoryHelper;
-import net.kyrptonaught.inventorysorter.InventorySortPacket;
+import net.kyrptonaught.inventorysorter.network.InventorySortPacket;
 import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
 import net.kyrptonaught.inventorysorter.client.SortButtonWidget;
 import net.kyrptonaught.inventorysorter.client.SortableContainerScreen;
@@ -49,8 +49,8 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "init", at = @At("TAIL"))
     private void invsort$init(CallbackInfo callbackinfo) {
-        if (InventorySorterModClient.getConfig().displaySort && !InventorySorterModClient.getBlacklist().hiddenList.contains(this.getClass().getName())) {
-            boolean playerOnly = InventoryHelper.isPlayerOnlyInventory(this);
+        if (InventorySorterModClient.getConfig().displaySort && InventoryHelper.shouldDisplayBtns(client.player)) {
+            boolean playerOnly = !InventoryHelper.canSortInventory(client.player);
             this.addDrawableChild(invsort$SortBtn = new SortButtonWidget(this.x + this.backgroundWidth - 20, this.y + (playerOnly ? (backgroundHeight - 95) : 6), playerOnly));
             if (!playerOnly && InventorySorterModClient.getConfig().seperateBtn)
                 this.addDrawableChild(new SortButtonWidget(invsort$SortBtn.x, this.y + ((SortableContainerScreen) (this)).getMiddleHeight(), true));
@@ -59,27 +59,25 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (InventorySorterModClient.getConfig().middleClick && button == 2 || InventorySorterModClient.isKeybindPressed(button, true)) {
-            boolean playerOnlyInv = InventoryHelper.isPlayerOnlyInventory(this);
-            if (!playerOnlyInv && InventorySorterModClient.getConfig().sortMouseHighlighted) {
-                if (focusedSlot != null)
-                    playerOnlyInv = focusedSlot.inventory instanceof PlayerInventory;
+        if (InventorySorterModClient.isKeybindPressed(button, true)) {
+            if (InventorySorterModClient.getConfig().sortMouseHighlighted) {
+                if (focusedSlot != null) {
+                    InventorySortPacket.sendSortPacket(focusedSlot.inventory instanceof PlayerInventory);
+                    callbackInfoReturnable.setReturnValue(true);
+                }
             }
-            InventorySortPacket.sendSortPacket(playerOnlyInv);
-            callbackInfoReturnable.setReturnValue(true);
         }
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void invsort$keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (InventorySorterModClient.isKeybindPressed(keycode, false)) {
-            boolean playerOnlyInv = InventoryHelper.isPlayerOnlyInventory(this);
-            if (!playerOnlyInv && InventorySorterModClient.getConfig().sortMouseHighlighted) {
-                if (focusedSlot != null)
-                    playerOnlyInv = focusedSlot.inventory instanceof PlayerInventory;
+            if (InventorySorterModClient.getConfig().sortMouseHighlighted) {
+                if (focusedSlot != null) {
+                    InventorySortPacket.sendSortPacket(focusedSlot.inventory instanceof PlayerInventory);
+                    callbackInfoReturnable.setReturnValue(true);
+                }
             }
-            InventorySortPacket.sendSortPacket(playerOnlyInv);
-            callbackInfoReturnable.setReturnValue(true);
         }
     }
 

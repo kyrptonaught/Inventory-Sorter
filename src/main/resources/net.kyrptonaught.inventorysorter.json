@@ -3,7 +3,9 @@
   "package": "net.kyrptonaught.inventorysorter.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "MixinContainer"
+    "MixinContainer",
+    "ServerPlayerEntityMixin",
+    "ScreenHandlerTypeAccessor"
   ],
   "client": [
     "MixinContainerScreen",

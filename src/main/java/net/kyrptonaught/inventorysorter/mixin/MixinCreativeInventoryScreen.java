@@ -25,7 +25,8 @@ public abstract class MixinCreativeInventoryScreen implements SortableContainerS
     private void invsort$init(CallbackInfo callbackinfo) {
         if (InventorySorterModClient.getConfig().displaySort) {
             SortButtonWidget sortbtn = this.getSortButton();
-            sortbtn.visible = selectedTab == ItemGroup.INVENTORY.getIndex();
+            if (sortbtn != null)
+                sortbtn.visible = selectedTab == ItemGroup.INVENTORY.getIndex();
         }
     }
 
@@ -33,7 +34,8 @@ public abstract class MixinCreativeInventoryScreen implements SortableContainerS
     private void invsort$render(MatrixStack matrixStack, int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
         if (InventorySorterModClient.getConfig().displaySort) {
             SortButtonWidget sortbtn = this.getSortButton();
-            sortbtn.visible = selectedTab == ItemGroup.INVENTORY.getIndex();
+            if (sortbtn != null)
+                sortbtn.visible = selectedTab == ItemGroup.INVENTORY.getIndex();
         }
     }
 }

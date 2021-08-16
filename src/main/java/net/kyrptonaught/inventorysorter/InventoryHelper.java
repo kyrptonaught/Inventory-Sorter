@@ -1,19 +1,36 @@
 package net.kyrptonaught.inventorysorter;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.kyrptonaught.inventorysorter.interfaces.SortableContainer;
+import net.kyrptonaught.inventorysorter.mixin.ScreenHandlerTypeAccessor;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class InventoryHelper {
+    public static boolean sortInv(PlayerEntity player, boolean sortPlayerInv, SortCases.SortType sortType) {
+        if (sortPlayerInv) {
+            sortInv(player.getInventory(), 9, 27, sortType);
+            return true;
+        } else if (canSortInventory(player)) {
+            Inventory inv = ((SortableContainer) player.currentScreenHandler).getInventory();
+            if (inv != null) {
+                sortInv(inv, 0, inv.size(), sortType);
+                return true;
+            }
+        }
+        return false;
+    }
+
     static void sortInv(Inventory inv, int startSlot, int invSize, SortCases.SortType sortType) {
         List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < invSize; i++)
@@ -58,17 +75,35 @@ public class InventoryHelper {
             return false;
         if (itemStack_1.getDamage() != itemStack_2.getDamage())
             return false;
-        return ItemStack.areTagsEqual(itemStack_1, itemStack_2);
+        return ItemStack.areNbtEqual(itemStack_1, itemStack_2);
     }
 
-    @Environment(EnvType.CLIENT)
-    public static Boolean isPlayerOnlyInventory(Screen currentScreen) {
-        return InventorySorterModClient.getBlacklist().blacklistedInventories.contains(currentScreen.getClass().getName()) ||
-                InventorySorterModClient.getBlacklist().defaultBlacklist.contains(currentScreen.getClass().getName()) || !isSortableContainer((HandledScreen) currentScreen);
+    public static boolean shouldDisplayBtns(PlayerEntity player) {
+        if (player.currentScreenHandler == null || !player.currentScreenHandler.canUse(player) || player.currentScreenHandler instanceof PlayerScreenHandler)
+            return true;
+        ScreenHandlerType<?> type = ((ScreenHandlerTypeAccessor) player.currentScreenHandler).gettype();
+        if (type == null) return true;
+        Identifier id = Registry.SCREEN_HANDLER.getId(type);
+        if (id == null) return true;
+        return !InventorySorterMod.getBlackList().isDisplayBlacklisted(id);
     }
 
-    public static boolean isSortableContainer(HandledScreen currentScreen) {
-        int numSlots = currentScreen.getScreenHandler().slots.size();
+    public static boolean canSortInventory(PlayerEntity player) {
+        if (player.currentScreenHandler == null || !player.currentScreenHandler.canUse(player) || player.currentScreenHandler instanceof PlayerScreenHandler)
+            return false;
+        ScreenHandlerType<?> type = ((ScreenHandlerTypeAccessor) player.currentScreenHandler).gettype();
+        if (type == null) return false;
+        Identifier id = Registry.SCREEN_HANDLER.getId(type);
+        if (id == null) return false;
+        return isSortableContainer(player.currentScreenHandler, id);
+    }
+
+    private static boolean isSortableContainer(ScreenHandler currentScreen, Identifier screenID) {
+        if (InventorySorterMod.getBlackList().isSortBlackListed(screenID))
+            return false;
+        if (!((SortableContainer) currentScreen).hasSlots())
+            return false;
+        int numSlots = currentScreen.slots.size();
         if (numSlots <= 36) return false;
         return numSlots - 36 >= 9;
     }

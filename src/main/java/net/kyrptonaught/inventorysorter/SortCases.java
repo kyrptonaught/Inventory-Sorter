@@ -35,7 +35,7 @@ public class SortCases {
 
     private static String specialCases(ItemStack stack) {
         Item item = stack.getItem();
-        NbtCompound tag = stack.getTag();
+        NbtCompound tag = stack.getNbt();
 
         if (tag != null && tag.contains("SkullOwner"))
             return playerHeadCase(stack);
@@ -49,7 +49,7 @@ public class SortCases {
     }
 
     private static String playerHeadCase(ItemStack stack) {
-        NbtCompound tag = stack.getTag();
+        NbtCompound tag = stack.getNbt();
         NbtCompound skullOwner = tag.getCompound("SkullOwner");
         String ownerName = skullOwner.getString("Name");
 

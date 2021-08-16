@@ -15,10 +15,7 @@ minecraft {
 
 repositories {
 	maven { url 'https://maven.fabricmc.net' }
-	maven {
-		url = "http://maven.kyrptonaught.dev"
-		allowInsecureProtocol = true
-	}
+	maven {url = "https://maven.kyrptonaught.dev"}
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases"}
 }

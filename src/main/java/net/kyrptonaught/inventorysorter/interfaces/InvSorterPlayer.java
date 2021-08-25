@@ -10,4 +10,8 @@ public interface InvSorterPlayer {
    boolean getMiddleClick();
 
     void setMiddleClick(boolean middleClick);
+
+    boolean getDoubleClickSort();
+
+    void setDoubleClickSort(boolean doubleClick);
 }

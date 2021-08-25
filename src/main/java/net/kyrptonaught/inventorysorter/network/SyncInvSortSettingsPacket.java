@@ -18,16 +18,19 @@ public class SyncInvSortSettingsPacket {
     public static void registerSyncOnPlayerJoin() {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(InventorySorterModClient.getConfig().middleClick);
+        buf.writeBoolean(InventorySorterModClient.getConfig().doubleClickSort);
         buf.writeInt(InventorySorterModClient.getConfig().sortType.ordinal());
         ClientPlayNetworking.send(SYNC_SETTINGS, buf);
     }
 
     public static void registerReceiveSyncData() {
         ServerPlayNetworking.registerGlobalReceiver(SYNC_SETTINGS, ((server, player, handler, buf, responseSender) -> {
-            Boolean middleClick = buf.readBoolean();
+            boolean middleClick = buf.readBoolean();
+            boolean doubleClick = buf.readBoolean();
             int sortType = buf.readInt();
             server.execute(() -> {
                 ((InvSorterPlayer) player).setMiddleClick(middleClick);
+                ((InvSorterPlayer) player).setMiddleClick(doubleClick);
                 ((InvSorterPlayer) player).setSortType(SortCases.SortType.values()[sortType]);
             });
         }));

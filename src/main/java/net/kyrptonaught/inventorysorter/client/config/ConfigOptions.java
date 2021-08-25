@@ -8,8 +8,10 @@ public class ConfigOptions implements AbstractConfigFile {
 
     @Comment("Enable 'Sort' button in inventorys")
     public boolean displaySort = true;
-    @Comment("Middle click to sort inventorys")
+    @Comment("Middle click slot to sort inventorys")
     public boolean middleClick = true;
+    @Comment("Double click slot to sort inventorys")
+    public boolean doubleClickSort = true;
     @Comment("Enable second 'Sort' button in player inv")
     public boolean seperateBtn = true;
     @Comment("Sorting inv also sorts player inv")

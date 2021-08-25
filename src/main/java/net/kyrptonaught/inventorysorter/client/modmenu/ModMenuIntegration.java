@@ -45,6 +45,7 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigCategory activationCat = builder.getOrCreateCategory(new TranslatableText("key.inventorysorter.config.category.activation"));
             activationCat.addEntry(entryBuilder.startKeyCodeField(new TranslatableText("key.inventorysorter.sort"), InputUtil.fromTranslationKey(options.keybinding)).setSaveConsumer(key -> options.keybinding = key.toString()).build());
             activationCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.middleclick"), options.middleClick).setSaveConsumer(val -> options.middleClick = val).setDefaultValue(true).build());
+            activationCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.doubleclick"), options.doubleClickSort).setSaveConsumer(val -> options.doubleClickSort = val).setDefaultValue(true).build());
             activationCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.sortmousehighlighted"), options.sortMouseHighlighted).setSaveConsumer(val -> options.sortMouseHighlighted = val).setDefaultValue(true).build());
 
             return builder.build();

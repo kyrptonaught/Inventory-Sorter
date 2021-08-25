@@ -15,8 +15,10 @@ public class ServerPlayerEntityMixin implements InvSorterPlayer {
     private static final String saveKEY = InventorySorterMod.MOD_ID + "invsorter";
     private static final String sortTypeKey = "sorttype";
     private static final String middleClickKey = "middleclick";
+    private static final String doubleClickKey = "middleclick";
     private SortCases.SortType sortType = SortCases.SortType.NAME;
     private boolean middleClick = true;
+    private boolean doubleClick = true;
 
     @Override
     public SortCases.SortType getSortType() {
@@ -38,11 +40,22 @@ public class ServerPlayerEntityMixin implements InvSorterPlayer {
         this.middleClick = middleClick;
     }
 
+    @Override
+    public boolean getDoubleClickSort() {
+        return doubleClick;
+    }
+
+    @Override
+    public void setDoubleClickSort(boolean doubleClick) {
+        this.doubleClick = doubleClick;
+    }
+
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     public void writeSortType(NbtCompound nbt, CallbackInfo ci) {
         NbtCompound invSortNbt = new NbtCompound();
         invSortNbt.putInt(sortTypeKey, sortType.ordinal());
         invSortNbt.putBoolean(middleClickKey, middleClick);
+        invSortNbt.putBoolean(doubleClickKey, doubleClick);
         nbt.put(saveKEY, invSortNbt);
     }
 
@@ -52,6 +65,7 @@ public class ServerPlayerEntityMixin implements InvSorterPlayer {
             NbtCompound invSortNbt = nbt.getCompound(saveKEY);
             if (invSortNbt.contains(sortTypeKey)) sortType = SortCases.SortType.values()[invSortNbt.getInt(saveKEY)];
             if (invSortNbt.contains(middleClickKey)) middleClick = invSortNbt.getBoolean(middleClickKey);
+            if (invSortNbt.contains(doubleClickKey)) doubleClick = invSortNbt.getBoolean(doubleClickKey);
         }
     }
 }

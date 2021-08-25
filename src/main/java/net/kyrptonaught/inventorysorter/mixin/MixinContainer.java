@@ -20,13 +20,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ScreenHandler.class)
 public abstract class MixinContainer implements SortableContainer {
-    int lastClickedSlot = -1;
     @Shadow
     @Final
     public DefaultedList<Slot> slots;
 
     @Shadow
     private ItemStack cursorStack;
+
 
     @Override
     public Inventory getInventory() {
@@ -42,24 +42,14 @@ public abstract class MixinContainer implements SortableContainer {
 
     @Inject(method = "onSlotClick", at = @At("HEAD"), cancellable = true)
     public void sortOnDoubleClickEmpty(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
-        if (player instanceof InvSorterPlayer) {
-            if (!cursorStack.isEmpty()) {
-                lastClickedSlot = -1;
-                return;
-            }
-            if (slotIndex >= 0) {
-                if (((InvSorterPlayer) player).getMiddleClick() && button == 2) {
-                    InventoryHelper.sortInv(player, slots.get(slotIndex).inventory instanceof PlayerInventory, ((InvSorterPlayer) player).getSortType());
-                    lastClickedSlot = -1;
-                    ci.cancel();
-                } else {
-                    if (lastClickedSlot == slotIndex) {
+        if (!player.world.isClient && player instanceof InvSorterPlayer) {
+            if ((((InvSorterPlayer) player).getDoubleClickSort() && button == 0 && actionType.equals(SlotActionType.PICKUP_ALL)) ||
+                    (((InvSorterPlayer) player).getMiddleClick() && button == 2 && actionType.equals(SlotActionType.CLONE)))
+                if (cursorStack.isEmpty())
+                    if (slotIndex >= 0 && slotIndex < this.slots.size() && this.slots.get(slotIndex).getStack().isEmpty()) {
                         InventoryHelper.sortInv(player, slots.get(slotIndex).inventory instanceof PlayerInventory, ((InvSorterPlayer) player).getSortType());
-                        lastClickedSlot = -1;
                         ci.cancel();
-                    } else lastClickedSlot = slotIndex;
-                }
-            }
+                    }
         }
     }
 }

@@ -2,15 +2,21 @@ package net.kyrptonaught.inventorysorter;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import net.kyrptonaught.inventorysorter.interfaces.InvSorterPlayer;
 import net.minecraft.block.entity.HopperBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 
 public class SortCommand {
@@ -27,7 +33,7 @@ public class SortCommand {
                             commandContext.getSource().sendFeedback(feedBack, false);
                             return 1;
                         }
-                        InventoryHelper.sortInv(commandContext.getSource().getPlayer(), false, ((InvSorterPlayer)commandContext.getSource().getPlayer()).getSortType());
+                        InventoryHelper.sortInv(commandContext.getSource().getPlayer(), false, ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
                         Text feedBack = new LiteralText("Sorted inventory");
                         commandContext.getSource().sendFeedback(feedBack, false);
                     }
@@ -36,7 +42,7 @@ public class SortCommand {
         dispatcher.register(CommandManager.literal("sortme")
                 .requires((source) -> source.hasPermissionLevel(0))
                 .executes((commandContext) -> {
-                    InventoryHelper.sortInv(commandContext.getSource().getPlayer(), true, ((InvSorterPlayer)commandContext.getSource().getPlayer()).getSortType());
+                    InventoryHelper.sortInv(commandContext.getSource().getPlayer(), true, ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
                     Text feedBack = new LiteralText("Sorted inventory");
                     commandContext.getSource().sendFeedback(feedBack, false);
                     return 1;
@@ -54,22 +60,28 @@ public class SortCommand {
                                 return 1;
                             })));
         }
-        invsortCommand.then(CommandManager.literal("middleClickSort")
-                .then(CommandManager.literal("true")
-                        .executes(context -> {
-                            ((InvSorterPlayer) context.getSource().getPlayer()).setMiddleClick(true);
-                            Text feedBack = new LiteralText("Set Middle click to sort to true");
-                            context.getSource().sendFeedback(feedBack, false);
-                            return 1;
-                        })));
-        invsortCommand.then(CommandManager.literal("middleClickSort")
+        registerBooleanCommand(invsortCommand, "middleClickSort", new LiteralText("Set Middle click slot to sort to "), (player, value) -> ((InvSorterPlayer) player).setMiddleClick(value));
+        registerBooleanCommand(invsortCommand, "doubleClickSort", new LiteralText("Set Double click slot to sort to "), (player, value) -> ((InvSorterPlayer) player).setDoubleClickSort(value));
+
+        dispatcher.register(invsortCommand);
+    }
+
+    public static void registerBooleanCommand(LiteralArgumentBuilder<ServerCommandSource> invsortCommand, String command, Text response, BiConsumer<PlayerEntity, Boolean> storage) {
+        invsortCommand.then(CommandManager.literal(command)
                 .then(CommandManager.literal("false")
                         .executes(context -> {
-                            ((InvSorterPlayer) context.getSource().getPlayer()).setMiddleClick(false);
-                            Text feedBack = new LiteralText("Set Middle click to sort to false");
+                            storage.accept(context.getSource().getPlayer(), false);
+                            Text feedBack = response.copy().append("False");
                             context.getSource().sendFeedback(feedBack, false);
                             return 1;
                         })));
-        dispatcher.register(invsortCommand);
+        invsortCommand.then(CommandManager.literal(command)
+                .then(CommandManager.literal("true")
+                        .executes(context -> {
+                            storage.accept(context.getSource().getPlayer(), true);
+                            Text feedBack = response.copy().append("True");
+                            context.getSource().sendFeedback(feedBack, false);
+                            return 1;
+                        })));
     }
 }

@@ -7,7 +7,7 @@ public interface InvSorterPlayer {
 
     void setSortType(SortCases.SortType sortType);
 
-   boolean getMiddleClick();
+    boolean getMiddleClick();
 
     void setMiddleClick(boolean middleClick);
 

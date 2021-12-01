@@ -2,17 +2,18 @@ package net.kyrptonaught.inventorysorter.client.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
 import net.kyrptonaught.inventorysorter.client.config.ConfigOptions;
+import net.kyrptonaught.kyrptconfig.config.screen.ConfigScreen;
+import net.kyrptonaught.kyrptconfig.config.screen.ConfigSection;
+import net.kyrptonaught.kyrptconfig.config.screen.items.BooleanItem;
+import net.kyrptonaught.kyrptconfig.config.screen.items.EnumItem;
+import net.kyrptonaught.kyrptconfig.config.screen.items.KeybindItem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.TranslatableText;
 
 @Environment(EnvType.CLIENT)
@@ -23,32 +24,30 @@ public class ModMenuIntegration implements ModMenuApi {
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return (screen) -> {
             ConfigOptions options = InventorySorterModClient.getConfig();
-            ConfigBuilder builder = ConfigBuilder.create().setParentScreen(screen).setTitle(new TranslatableText("Inventory Sorting Config"));
-            builder.setSavingRunnable(() -> {
+            ConfigScreen configScreen = new ConfigScreen(screen, new TranslatableText("Inventory Sorting Config"));
+            configScreen.setSavingEvent(() -> {
                 InventorySorterMod.configManager.save();
                 InventorySorterModClient.keycode = null;
                 if (MinecraftClient.getInstance().player != null)
                     InventorySorterModClient.syncConfig();
             });
-            ConfigEntryBuilder entryBuilder = ConfigEntryBuilder.create();
 
-            ConfigCategory displayCat = builder.getOrCreateCategory(new TranslatableText("key.inventorysorter.config.category.display"));
-            displayCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.displaysort"), options.displaySort).setSaveConsumer(val -> options.displaySort = val).setDefaultValue(true).build());
-            displayCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.seperatebtn"), options.seperateBtn).setSaveConsumer(val -> options.seperateBtn = val).setDefaultValue(true).build());
-            displayCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.displaytooltip"), options.displayTooltip).setSaveConsumer(val -> options.displayTooltip = val).setDefaultValue(true).build());
+            ConfigSection displaySection = new ConfigSection(configScreen, new TranslatableText("key.inventorysorter.config.category.display"));
+            displaySection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.displaysort"), options.displaySort, true).setSaveConsumer(val -> options.displaySort = val));
+            displaySection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.seperatebtn"), options.seperateBtn, true).setSaveConsumer(val -> options.seperateBtn = val));
+            displaySection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.displaytooltip"), options.displayTooltip, true).setSaveConsumer(val -> options.displayTooltip = val));
 
-            ConfigCategory logicCat = builder.getOrCreateCategory(new TranslatableText("key.inventorysorter.config.category.logic"));
-            logicCat.addEntry(entryBuilder.startEnumSelector(new TranslatableText("key.inventorysorter.config.sorttype"), SortCases.SortType.class, options.sortType).setSaveConsumer(val -> options.sortType = val).build());
-            logicCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.sortplayer"), options.sortPlayer).setSaveConsumer(val -> options.sortPlayer = val).setDefaultValue(false).build());
+            ConfigSection logicSection = new ConfigSection(configScreen, new TranslatableText("key.inventorysorter.config.category.logic"));
+            logicSection.addConfigItem(new EnumItem<>(new TranslatableText("key.inventorysorter.config.sorttype"), SortCases.SortType.values(), options.sortType, SortCases.SortType.NAME).setSaveConsumer(val -> options.sortType = val));
+            logicSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.sortplayer"), options.sortPlayer, false).setSaveConsumer(val -> options.sortPlayer = val));
 
+            ConfigSection activationSection = new ConfigSection(configScreen, new TranslatableText("key.inventorysorter.config.category.activation"));
+            activationSection.addConfigItem(new KeybindItem(new TranslatableText("key.inventorysorter.sort"), options.keybinding, "key.keyboard.p").setSaveConsumer(key -> options.keybinding = key));
+            activationSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.middleclick"), options.middleClick, true).setSaveConsumer(val -> options.middleClick = val));
+            activationSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.doubleclick"), options.doubleClickSort, true).setSaveConsumer(val -> options.doubleClickSort = val));
+            activationSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.sortmousehighlighted"), options.sortMouseHighlighted, true).setSaveConsumer(val -> options.sortMouseHighlighted = val));
 
-            ConfigCategory activationCat = builder.getOrCreateCategory(new TranslatableText("key.inventorysorter.config.category.activation"));
-            activationCat.addEntry(entryBuilder.startKeyCodeField(new TranslatableText("key.inventorysorter.sort"), InputUtil.fromTranslationKey(options.keybinding)).setSaveConsumer(key -> options.keybinding = key.toString()).build());
-            activationCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.middleclick"), options.middleClick).setSaveConsumer(val -> options.middleClick = val).setDefaultValue(true).build());
-            activationCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.doubleclick"), options.doubleClickSort).setSaveConsumer(val -> options.doubleClickSort = val).setDefaultValue(true).build());
-            activationCat.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("key.inventorysorter.config.sortmousehighlighted"), options.sortMouseHighlighted).setSaveConsumer(val -> options.sortMouseHighlighted = val).setDefaultValue(true).build());
-
-            return builder.build();
+            return configScreen;
         };
     }
 }

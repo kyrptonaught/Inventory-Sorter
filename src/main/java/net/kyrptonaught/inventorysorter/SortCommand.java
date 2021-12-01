@@ -26,7 +26,7 @@ public class SortCommand {
                 .executes((commandContext) -> {
                     HitResult hit = commandContext.getSource().getPlayer().raycast(6, 1, false);
                     if (hit instanceof BlockHitResult) {
-                        Inventory inventory = HopperBlockEntity.getInventoryAt(commandContext.getSource().getPlayer().getServerWorld(), ((BlockHitResult) hit).getBlockPos());
+                        Inventory inventory = HopperBlockEntity.getInventoryAt(commandContext.getSource().getPlayer().getWorld(), ((BlockHitResult) hit).getBlockPos());
                         //commandContext.getSource().getWorld().getBlockState(((BlockHitResult) hit).getBlockPos()).onUse()
                         if (inventory == null) {
                             Text feedBack = new LiteralText("Not looking at an inventory");

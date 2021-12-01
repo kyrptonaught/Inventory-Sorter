@@ -20,15 +20,16 @@ public class IgnoreList implements AbstractConfigFile {
 
     public transient HashSet<Identifier> defaultHideSortBtnsList = Sets.newHashSet();
 
-    public transient HashSet<Identifier> defaultDoNotSortList =  Sets.newHashSet(
+    public transient HashSet<Identifier> defaultDoNotSortList = Sets.newHashSet(
             Registry.SCREEN_HANDLER.getId(ScreenHandlerType.CRAFTING),
             new Identifier("adorn:trading_station")
     );
 
-    public boolean isSortBlackListed(Identifier screenHandlerTypeID){
+    public boolean isSortBlackListed(Identifier screenHandlerTypeID) {
         return isDisplayBlacklisted(screenHandlerTypeID) || doNotSortList.contains(screenHandlerTypeID.toString()) || defaultDoNotSortList.contains(screenHandlerTypeID);
     }
-    public boolean isDisplayBlacklisted(Identifier screenHandlerTypeID){
+
+    public boolean isDisplayBlacklisted(Identifier screenHandlerTypeID) {
         return defaultHideSortBtnsList.contains(screenHandlerTypeID) || hideSortBtnsList.contains(screenHandlerTypeID.toString());
     }
     /*

@@ -29,7 +29,7 @@ public class InventorySorterModClient implements ClientModInitializer, AddNonCon
     }
 
     public static ConfigOptions getConfig() {
-        return (ConfigOptions)  InventorySorterMod.configManager.getConfig("config.json5");
+        return (ConfigOptions) InventorySorterMod.configManager.getConfig("config.json5");
     }
 
     public static boolean isKeybindPressed(int pressedKeyCode, boolean isMouse) {

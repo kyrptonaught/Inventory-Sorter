@@ -30,7 +30,7 @@ public class SyncInvSortSettingsPacket {
             int sortType = buf.readInt();
             server.execute(() -> {
                 ((InvSorterPlayer) player).setMiddleClick(middleClick);
-                ((InvSorterPlayer) player).setMiddleClick(doubleClick);
+                ((InvSorterPlayer) player).setDoubleClickSort(doubleClick);
                 ((InvSorterPlayer) player).setSortType(SortCases.SortType.values()[sortType]);
             });
         }));

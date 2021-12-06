@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "inventorysorter",
-  "version": "1.8.0-1.18",
+  "version": "1.8.1-1.18",
   "name": "Inventory Sorter",
   "description": "Quickly and easily sort inventorys",
   "authors": [
@@ -35,7 +35,7 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.5",
     "fabric": "*",
     "java": ">=17"
   }

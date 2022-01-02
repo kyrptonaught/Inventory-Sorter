@@ -9,6 +9,7 @@ import net.kyrptonaught.inventorysorter.client.SortButtonWidget;
 import net.kyrptonaught.inventorysorter.client.SortableContainerScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
@@ -59,7 +60,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (InventorySorterModClient.isKeybindPressed(button, true)) {
+        if (InventorySorterModClient.isKeybindPressed(button, InputUtil.Type.MOUSE)) {
             if (InventorySorterModClient.getConfig().sortMouseHighlighted) {
                 if (focusedSlot != null) {
                     InventorySortPacket.sendSortPacket(focusedSlot.inventory instanceof PlayerInventory);
@@ -71,7 +72,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void invsort$keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (InventorySorterModClient.isKeybindPressed(keycode, false)) {
+        if (InventorySorterModClient.isKeybindPressed(keycode, InputUtil.Type.KEYSYM)) {
             if (InventorySorterModClient.getConfig().sortMouseHighlighted) {
                 if (focusedSlot != null) {
                     InventorySortPacket.sendSortPacket(focusedSlot.inventory instanceof PlayerInventory);

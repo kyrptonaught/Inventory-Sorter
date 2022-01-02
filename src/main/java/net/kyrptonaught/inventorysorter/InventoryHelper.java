@@ -1,13 +1,14 @@
 package net.kyrptonaught.inventorysorter;
 
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.impl.transfer.item.InventoryStorageImpl;
 import net.kyrptonaught.inventorysorter.interfaces.SortableContainer;
 import net.kyrptonaught.inventorysorter.mixin.ScreenHandlerTypeAccessor;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.InventoryProvider;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -44,29 +45,19 @@ public class InventoryHelper {
         // check that block has block entity
         if (blockState.hasBlockEntity()) {
             BlockEntity blockEntity = world.getBlockEntity(blockPos);
-
-            // blockEntity needs to be an inventory
-            if (blockEntity instanceof Inventory) {
-                // Chest blocks have a special of way of being handled due to double chests being a thing
-                if (blockEntity instanceof ChestBlockEntity && block instanceof ChestBlock) {
-                    inventory = ChestBlock.getInventory((ChestBlock) block, blockState, world, blockPos, true);
-                    namedScreenHandlerFactory = ((ChestBlock) block).createScreenHandlerFactory(blockState, world, blockPos);
-                } else if(blockEntity instanceof NamedScreenHandlerFactory) {
-                    // if it's not a chest, it might still be openable
-                    inventory = (Inventory) blockEntity;
-                    namedScreenHandlerFactory = (NamedScreenHandlerFactory) blockEntity;
-                }
-            }
+            inventory = HopperBlockEntity.getInventoryAt(world, blockPos);
+            namedScreenHandlerFactory = block.createScreenHandlerFactory(blockState, world, blockPos);
+            if (namedScreenHandlerFactory == null && blockEntity instanceof NamedScreenHandlerFactory)
+                namedScreenHandlerFactory = (NamedScreenHandlerFactory) blockEntity;
         }
-
         // fail if either is not present
-        if(inventory == null || namedScreenHandlerFactory == null) {
-            return new LiteralText("Not looking at an inventory");
+        if (inventory == null || namedScreenHandlerFactory == null) {
+            return new LiteralText("Not looking at a valid inventory");
         }
 
         // open screen to perform validation
         OptionalInt syncId = player.openHandledScreen(namedScreenHandlerFactory);
-        if(syncId.isPresent()) {
+        if (syncId.isPresent()) {
             // get screenHandler from syncId
             ScreenHandler screenHandler = namedScreenHandlerFactory.createMenu(syncId.getAsInt(), player.getInventory(), player);
             try {
@@ -161,8 +152,7 @@ public class InventoryHelper {
     }
 
     public static boolean canSortInventory(PlayerEntity player) {
-        if(player.currentScreenHandler instanceof PlayerScreenHandler) return false;
-
+        if (player.currentScreenHandler instanceof PlayerScreenHandler) return false;
         return canSortInventory(player, player.currentScreenHandler);
     }
 

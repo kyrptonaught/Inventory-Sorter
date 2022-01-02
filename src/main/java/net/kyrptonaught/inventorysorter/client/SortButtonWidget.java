@@ -3,6 +3,7 @@ package net.kyrptonaught.inventorysorter.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.inventorysorter.InventoryHelper;
 import net.kyrptonaught.inventorysorter.network.InventorySortPacket;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
@@ -11,11 +12,18 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class SortButtonWidget extends TexturedButtonWidget {
@@ -31,10 +39,19 @@ public class SortButtonWidget extends TexturedButtonWidget {
     public void onPress() {
         if (InventorySorterModClient.getConfig().debugMode && GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
             if (InventoryHelper.canSortInventory(MinecraftClient.getInstance().player)) {
+                String screenID = Registry.SCREEN_HANDLER.getId(MinecraftClient.getInstance().player.currentScreenHandler.getType()).toString();
                 System.out.println("Add the line below to config/inventorysorter/blacklist.json5 to blacklist this inventory");
-                System.out.println(Registry.SCREEN_HANDLER.getId(MinecraftClient.getInstance().player.currentScreenHandler.getType()));
+                System.out.println(screenID);
+
+                MutableText MODID = new LiteralText("[" + InventorySorterMod.MOD_ID + "]: ").formatted(Formatting.BLUE);
+                MutableText autoDNS = (new LiteralText("Click me")).formatted(Formatting.UNDERLINE, Formatting.WHITE)
+                        .styled((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/invsort blacklist doNotSort " + screenID)));
+                MutableText autoDND = (new LiteralText("Click me")).formatted(Formatting.UNDERLINE, Formatting.WHITE)
+                        .styled((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/invsort blacklist doNotDisplay " + screenID)));
+                MinecraftClient.getInstance().player.sendMessage(MODID.shallowCopy().append(autoDNS).append(new LiteralText(" to automatically add to the Do Not Sort Inv list").formatted(Formatting.WHITE)), false);
+                MinecraftClient.getInstance().player.sendMessage(MODID.shallowCopy().append(autoDND).append(new LiteralText(" to automatically add to the Hide Sort Buttons list").formatted(Formatting.WHITE)), false);
             } else
-                System.out.println("Un-blacklistable screen, or screen is already blacklisted");
+                MinecraftClient.getInstance().player.sendMessage(new LiteralText("[" + InventorySorterMod.MOD_ID + "]: Un-blacklistable screen, or screen is already blacklisted"), false);
         } else
             InventorySortPacket.sendSortPacket(playerInv);
     }
@@ -72,7 +89,14 @@ public class SortButtonWidget extends TexturedButtonWidget {
 
     @Override
     public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
-        if (InventorySorterModClient.getConfig().displayTooltip && this.isHovered())
-            MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, new LiteralText("Sort by: " + StringUtils.capitalize(InventorySorterModClient.getConfig().sortType.toString().toLowerCase())), x, y);
+        if (InventorySorterModClient.getConfig().displayTooltip && this.isHovered()) {
+            List<Text> lines = new ArrayList<>();
+            lines.add(new LiteralText("Sort by: " + StringUtils.capitalize(InventorySorterModClient.getConfig().sortType.toString().toLowerCase())));
+            if (GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
+                lines.add(new LiteralText("Click while holding LEFTCONTROL"));
+                lines.add(new LiteralText("to blacklist this inventory"));
+            }
+            MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, lines, x, y);
+        }
     }
 }

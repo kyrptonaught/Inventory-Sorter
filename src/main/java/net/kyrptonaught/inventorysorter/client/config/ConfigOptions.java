@@ -1,10 +1,13 @@
 package net.kyrptonaught.inventorysorter.client.config;
 
 import blue.endless.jankson.Comment;
+import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
+import net.kyrptonaught.kyrptconfig.config.ConfigWDefaults;
+import net.kyrptonaught.kyrptconfig.keybinding.CustomKeyBinding;
 
-public class ConfigOptions implements AbstractConfigFile {
+public class ConfigOptions extends ConfigWDefaults {
 
     @Comment("Enable 'Sort' button in inventorys")
     public boolean displaySort = true;
@@ -22,11 +25,20 @@ public class ConfigOptions implements AbstractConfigFile {
     public boolean displayTooltip = true;
 
     @Comment("Sort Inventory key")
-    public String keybinding = "key.keyboard.p";
+    public CustomKeyBinding keybinding = CustomKeyBinding.configDefault(InventorySorterMod.MOD_ID, "key.keyboard.p");
 
     @Comment("Should sort half of open inv highlighted by mouse")
     public Boolean sortMouseHighlighted = true;
 
     public boolean debugMode = false;
 
+    @Override
+    public ConfigOptions getDefaults() {
+        return (ConfigOptions) super.getDefaults();
+    }
+
+    @Override
+    public void afterLoad() {
+        keybinding.copyFromDefault(getDefaults().keybinding);
+    }
 }

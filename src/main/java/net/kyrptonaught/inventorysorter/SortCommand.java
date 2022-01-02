@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.kyrptonaught.inventorysorter.interfaces.InvSorterPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -14,6 +16,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.registry.Registry;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -26,15 +29,10 @@ public class SortCommand {
                 .executes((commandContext) -> {
                     HitResult hit = commandContext.getSource().getPlayer().raycast(6, 1, false);
                     if (hit instanceof BlockHitResult) {
-                        Inventory inventory = HopperBlockEntity.getInventoryAt(commandContext.getSource().getPlayer().getWorld(), ((BlockHitResult) hit).getBlockPos());
-                        //commandContext.getSource().getWorld().getBlockState(((BlockHitResult) hit).getBlockPos()).onUse()
-                        if (inventory == null) {
-                            Text feedBack = new LiteralText("Not looking at an inventory");
-                            commandContext.getSource().sendFeedback(feedBack, false);
-                            return 1;
-                        }
-                        InventoryHelper.sortInv(commandContext.getSource().getPlayer(), false, ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
-                        Text feedBack = new LiteralText("Sorted inventory");
+                       //Inventory inventory = HopperBlockEntity.getInventoryAt(commandContext.getSource().getPlayer().getWorld(), ((BlockHitResult) hit).getBlockPos());
+
+                        Text feedBack = null;
+                        feedBack = InventoryHelper.sortBlock(commandContext.getSource().getPlayer().getWorld(), ((BlockHitResult) hit).getBlockPos(), commandContext.getSource().getPlayer(), ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
                         commandContext.getSource().sendFeedback(feedBack, false);
                     }
                     return 1;

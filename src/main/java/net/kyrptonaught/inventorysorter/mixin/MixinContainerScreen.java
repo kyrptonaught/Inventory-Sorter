@@ -67,7 +67,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
                     callbackInfoReturnable.setReturnValue(true);
                 }
             }else {
-                InventorySortPacket.sendSortPacket(false);
+                InventorySortPacket.sendSortPacket(!InventoryHelper.canSortInventory(client.player));
                 callbackInfoReturnable.setReturnValue(true);
             }
         }
@@ -82,7 +82,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
                     callbackInfoReturnable.setReturnValue(true);
                 }
             }else {
-                InventorySortPacket.sendSortPacket(false);
+                InventorySortPacket.sendSortPacket(!InventoryHelper.canSortInventory(client.player));
                 callbackInfoReturnable.setReturnValue(true);
             }
         }

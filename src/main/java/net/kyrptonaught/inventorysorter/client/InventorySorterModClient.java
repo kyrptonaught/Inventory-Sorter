@@ -15,9 +15,6 @@ import net.minecraft.client.util.InputUtil;
 import java.util.List;
 
 public class InventorySorterModClient implements ClientModInitializer {
-
-    public static InputUtil.Key keycode;
-
     @Override
     public void onInitializeClient() {
         InventorySorterMod.configManager.registerFile("config.json5", new ConfigOptions());

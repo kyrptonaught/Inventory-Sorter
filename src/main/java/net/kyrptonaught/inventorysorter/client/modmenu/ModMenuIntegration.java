@@ -27,7 +27,6 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigScreen configScreen = new ConfigScreen(screen, new TranslatableText("Inventory Sorting Config"));
             configScreen.setSavingEvent(() -> {
                 InventorySorterMod.configManager.save();
-                InventorySorterModClient.keycode = null;
                 if (MinecraftClient.getInstance().player != null)
                     InventorySorterModClient.syncConfig();
             });

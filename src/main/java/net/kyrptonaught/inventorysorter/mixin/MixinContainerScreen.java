@@ -66,6 +66,9 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
                     InventorySortPacket.sendSortPacket(focusedSlot.inventory instanceof PlayerInventory);
                     callbackInfoReturnable.setReturnValue(true);
                 }
+            }else {
+                InventorySortPacket.sendSortPacket(false);
+                callbackInfoReturnable.setReturnValue(true);
             }
         }
     }
@@ -78,6 +81,9 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
                     InventorySortPacket.sendSortPacket(focusedSlot.inventory instanceof PlayerInventory);
                     callbackInfoReturnable.setReturnValue(true);
                 }
+            }else {
+                InventorySortPacket.sendSortPacket(false);
+                callbackInfoReturnable.setReturnValue(true);
             }
         }
     }

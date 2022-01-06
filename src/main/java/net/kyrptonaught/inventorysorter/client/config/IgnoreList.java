@@ -18,11 +18,15 @@ public class IgnoreList implements AbstractConfigFile {
     @Comment("Inventories that should not display any sort buttons")
     public HashSet<String> hideSortBtnsList = new HashSet<>();
 
-    public transient HashSet<Identifier> defaultHideSortBtnsList = Sets.newHashSet();
+    public transient HashSet<Identifier> defaultHideSortBtnsList = Sets.newHashSet(
+            new Identifier("guild:quest_screen")
+
+    );
 
     public transient HashSet<Identifier> defaultDoNotSortList = Sets.newHashSet(
             Registry.SCREEN_HANDLER.getId(ScreenHandlerType.CRAFTING),
-            new Identifier("adorn:trading_station")
+            new Identifier("adorn:trading_station"),
+            new Identifier("guild:quest_screen")
     );
 
     public boolean isSortBlackListed(Identifier screenHandlerTypeID) {

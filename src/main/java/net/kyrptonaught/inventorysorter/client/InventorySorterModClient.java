@@ -4,15 +4,11 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
+import net.kyrptonaught.inventorysorter.client.config.ConfigOptions;
 import net.kyrptonaught.inventorysorter.network.SyncBlacklistPacket;
 import net.kyrptonaught.inventorysorter.network.SyncInvSortSettingsPacket;
-import net.kyrptonaught.inventorysorter.client.config.ConfigOptions;
-import net.kyrptonaught.kyrptconfig.config.NonConflicting.AddNonConflictingKeyBind;
-import net.kyrptonaught.kyrptconfig.config.NonConflicting.NonConflictingKeyBindData;
 import net.kyrptonaught.kyrptconfig.keybinding.DisplayOnlyKeyBind;
 import net.minecraft.client.util.InputUtil;
-
-import java.util.List;
 
 public class InventorySorterModClient implements ClientModInitializer {
     @Override

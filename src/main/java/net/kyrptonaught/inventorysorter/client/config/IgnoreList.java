@@ -2,7 +2,6 @@ package net.kyrptonaught.inventorysorter.client.config;
 
 
 import blue.endless.jankson.Comment;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 import net.minecraft.screen.ScreenHandlerType;

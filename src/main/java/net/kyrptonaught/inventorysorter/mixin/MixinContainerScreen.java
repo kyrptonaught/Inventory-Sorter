@@ -50,6 +50,8 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "init", at = @At("TAIL"))
     private void invsort$init(CallbackInfo callbackinfo) {
+        if (client == null || client.player == null)
+            return;
         if (InventorySorterModClient.getConfig().displaySort && InventoryHelper.shouldDisplayBtns(client.player)) {
             boolean playerOnly = !InventoryHelper.canSortInventory(client.player);
             this.addDrawableChild(invsort$SortBtn = new SortButtonWidget(this.x + this.backgroundWidth - 20, this.y + (playerOnly ? (backgroundHeight - 95) : 6), playerOnly));
@@ -60,6 +62,8 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void invsort$mouseClicked(double x, double y, int button, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+        if (client == null || client.player == null)
+            return;
         if (InventorySorterModClient.isKeybindPressed(button, InputUtil.Type.MOUSE)) {
             boolean playerOnlyInv = !InventoryHelper.canSortInventory(client.player);
             if (!playerOnlyInv && InventorySorterModClient.getConfig().sortMouseHighlighted) {
@@ -73,6 +77,8 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void invsort$keyPressed(int keycode, int scancode, int modifiers, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+        if (client == null || client.player == null)
+            return;
         if (InventorySorterModClient.isKeybindPressed(keycode, InputUtil.Type.KEYSYM)) {
             boolean playerOnlyInv = !InventoryHelper.canSortInventory(client.player);
             if (!playerOnlyInv && InventorySorterModClient.getConfig().sortMouseHighlighted) {

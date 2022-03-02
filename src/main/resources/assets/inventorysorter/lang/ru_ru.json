@@ -1,0 +1,15 @@
+{
+  "key.categories.inventorysorter": "Inventory Sorting",
+  "key.inventorysorter.sort": "Сортировать инвентарь",
+  "key.inventorysorter.config.category.display": "Отображать",
+  "key.inventorysorter.config.category.logic": "Авто",
+  "key.inventorysorter.config.category.activation": "Активация",
+  "key.inventorysorter.config.displaysort": "Отображать кнопку в инвентаре",
+  "key.inventorysorter.config.middleclick": "Нажатие колёсиком по слоту, чтобы отсортировать инвентарь",
+  "key.inventorysorter.config.doubleclick": "Двойной клик по слоту, чтобы отсортировать инвентарь",
+  "key.inventorysorter.config.seperatebtn": "Всегда отображать кнопку в инвентаре игрока",
+  "key.inventorysorter.config.sortplayer": "Сортировать инвентарь игрока",
+  "key.inventorysorter.config.sorttype": "Метод сортировки",
+  "key.inventorysorter.config.displaytooltip": "Отображать подсказку кнопки сортировки",
+  "key.inventorysorter.config.sortmousehighlighted": "Сортировка инвентаря при наведении курсора мыши"
+}

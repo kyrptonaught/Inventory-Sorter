@@ -613,3 +613,4 @@ nbdist/
 !.vscode/extensions.json
 *.code-workspace
 
+/.idea/

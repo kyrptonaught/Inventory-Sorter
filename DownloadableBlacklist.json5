@@ -1,0 +1,23 @@
+{
+  // The opened inventory's sort button will not be visible, only the player's when this inventory is opened
+  "doNotSortList": [
+    "conjuring:soulfire_forge",
+    "spectrum:pedestal"
+  ],
+  // Neither the opened inventory, nor your player inventory will be sortable when this inventory is opened
+  "hideSortBtnsList": [
+    "ae2:crystal_growth",
+    "ae2:advanced_inscriber",
+    "ae2:item_terminal",
+    "ae2:drive",
+    "ae2:patternterm",
+    "ae2:craftingterm",
+    "dankstorage:portable_dank_1",
+    "dankstorage:portable_dank_2",
+    "dankstorage:portable_dank_3",
+    "dankstorage:portable_dank_4",
+    "dankstorage:portable_dank_5",
+    "dankstorage:portable_dank_6",
+    "dankstorage:portable_dank_7"
+  ]
+}

@@ -1,5 +1,6 @@
 package net.kyrptonaught.inventorysorter.client.modmenu;
 
+import com.google.common.collect.Sets;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.EnvType;
@@ -8,13 +9,16 @@ import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.client.InventorySorterModClient;
 import net.kyrptonaught.inventorysorter.client.config.ConfigOptions;
+import net.kyrptonaught.inventorysorter.client.config.IgnoreList;
 import net.kyrptonaught.kyrptconfig.config.screen.ConfigScreen;
 import net.kyrptonaught.kyrptconfig.config.screen.ConfigSection;
-import net.kyrptonaught.kyrptconfig.config.screen.items.BooleanItem;
-import net.kyrptonaught.kyrptconfig.config.screen.items.EnumItem;
-import net.kyrptonaught.kyrptconfig.config.screen.items.KeybindItem;
+import net.kyrptonaught.kyrptconfig.config.screen.items.*;
+import net.kyrptonaught.kyrptconfig.config.screen.items.lists.StringList;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.TranslatableText;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
@@ -24,6 +28,7 @@ public class ModMenuIntegration implements ModMenuApi {
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return (screen) -> {
             ConfigOptions options = InventorySorterModClient.getConfig();
+            IgnoreList ignoreList = InventorySorterMod.getBlackList();
             ConfigScreen configScreen = new ConfigScreen(screen, new TranslatableText("Inventory Sorting Config"));
             configScreen.setSavingEvent(() -> {
                 InventorySorterMod.configManager.save();
@@ -45,6 +50,17 @@ public class ModMenuIntegration implements ModMenuApi {
             activationSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.middleclick"), options.middleClick, true).setSaveConsumer(val -> options.middleClick = val));
             activationSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.doubleclick"), options.doubleClickSort, true).setSaveConsumer(val -> options.doubleClickSort = val));
             activationSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.sortmousehighlighted"), options.sortMouseHighlighted, true).setSaveConsumer(val -> options.sortMouseHighlighted = val));
+
+            ConfigSection blackListSection = new ConfigSection(configScreen, new TranslatableText("key.inventorysorter.config.category.blacklist"));
+
+            blackListSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.showdebug"), options.debugMode, false).setSaveConsumer(val -> options.debugMode = val).setToolTipWithNewLine("key.inventorysorter.config.debugtooltip"));
+            blackListSection.addConfigItem(new TextItem(new TranslatableText("key.inventorysorter.config.blacklistURL"), ignoreList.blacklistDownloadURL, IgnoreList.DOWNLOAD_URL).setMaxLength(1024).setSaveConsumer(val -> ignoreList.blacklistDownloadURL = val));
+            blackListSection.addConfigItem(new ButtonItem(new TranslatableText("key.inventorysorter.config.downloadListButton")).setClickEvent(() -> {
+                ignoreList.downloadList();
+            }));
+
+            blackListSection.addConfigItem(new StringList(new TranslatableText("key.inventorysorter.config.hidesort"), ignoreList.hideSortBtnsList.stream().toList(), new ArrayList<>()).setSaveConsumer(val -> ignoreList.hideSortBtnsList = Sets.newHashSet(val)).setToolTipWithNewLine("key.inventorysorter.config.hidetooltip"));
+            blackListSection.addConfigItem(new StringList(new TranslatableText("key.inventorysorter.config.nosort"), ignoreList.doNotSortList.stream().toList(), new ArrayList<>()).setSaveConsumer(val -> ignoreList.doNotSortList = Sets.newHashSet(val)).setToolTipWithNewLine("key.inventorysorter.config.nosorttooltip"));
 
             return configScreen;
         };

@@ -1,7 +1,7 @@
 package net.kyrptonaught.inventorysorter;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.kyrptonaught.inventorysorter.client.config.IgnoreList;
 import net.kyrptonaught.inventorysorter.interfaces.InvSorterPlayer;

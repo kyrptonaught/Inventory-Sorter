@@ -1,6 +1,5 @@
 package net.kyrptonaught.inventorysorter.client.config;
 
-
 import blue.endless.jankson.Comment;
 import blue.endless.jankson.Jankson;
 import com.google.common.collect.Sets;
@@ -9,7 +8,7 @@ import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.io.IOUtils;
@@ -18,7 +17,7 @@ import java.net.URL;
 import java.util.HashSet;
 
 public class IgnoreList implements AbstractConfigFile {
-    public static final String DOWNLOAD_URL = "https://raw.githubusercontent.com/kyrptonaught/Inventory-Sorter/1.18/DownloadableBlacklist.json5";
+    public static final String DOWNLOAD_URL = "https://raw.githubusercontent.com/kyrptonaught/Inventory-Sorter/1.19/DownloadableBlacklist.json5";
 
     @Comment("URL for blacklist to be downloaded from")
     public String blacklistDownloadURL = DOWNLOAD_URL;
@@ -32,9 +31,9 @@ public class IgnoreList implements AbstractConfigFile {
             doNotSortList.addAll(newList.doNotSortList);
             hideSortBtnsList.addAll(newList.hideSortBtnsList);
             InventorySorterMod.configManager.save("blacklist");
-            SystemToast.add(MinecraftClient.getInstance().getToastManager(), SystemToast.Type.TUTORIAL_HINT, new TranslatableText("key.inventorysorter.toast.pass"), null);
+            SystemToast.add(MinecraftClient.getInstance().getToastManager(), SystemToast.Type.TUTORIAL_HINT, Text.translatable("key.inventorysorter.toast.pass"), null);
         } catch (Exception e) {
-            SystemToast.add(MinecraftClient.getInstance().getToastManager(), SystemToast.Type.TUTORIAL_HINT, new TranslatableText("key.inventorysorter.toast.error"), new TranslatableText("key.inventorysorter.toast.error2"));
+            SystemToast.add(MinecraftClient.getInstance().getToastManager(), SystemToast.Type.TUTORIAL_HINT, Text.translatable("key.inventorysorter.toast.error"), Text.translatable("key.inventorysorter.toast.error2"));
             System.out.println(e);
         }
     }

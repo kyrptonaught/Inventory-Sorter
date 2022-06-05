@@ -6,10 +6,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.kyrptonaught.inventorysorter.interfaces.InvSorterPlayer;
 import net.kyrptonaught.inventorysorter.network.SyncBlacklistPacket;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -20,7 +20,7 @@ import java.util.function.BiConsumer;
 
 
 public class SortCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean b) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("sort")
                 .requires((source) -> source.hasPermissionLevel(0))
                 .executes((commandContext) -> {
@@ -36,7 +36,8 @@ public class SortCommand {
                 .requires((source) -> source.hasPermissionLevel(0))
                 .executes((commandContext) -> {
                     InventoryHelper.sortInv(commandContext.getSource().getPlayer(), true, ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
-                    Text feedBack = new LiteralText("Sorted inventory");
+
+                    Text feedBack = Text.translatable("key.inventorysorter.sorting.sorted");
                     commandContext.getSource().sendFeedback(feedBack, false);
                     return 1;
                 }));
@@ -57,13 +58,13 @@ public class SortCommand {
                     .then(CommandManager.literal(sortType.name())
                             .executes(context -> {
                                 ((InvSorterPlayer) context.getSource().getPlayer()).setSortType(sortType);
-                                Text feedBack = new LiteralText("Updated Sorting Type");
+                                Text feedBack = Text.translatable("key.inventorysorter.cmd.updatesortingtype");
                                 context.getSource().sendFeedback(feedBack, false);
                                 return 1;
                             })));
         }
-        registerBooleanCommand(invsortCommand, "middleClickSort", new LiteralText("Set Middle click slot to sort to "), (player, value) -> ((InvSorterPlayer) player).setMiddleClick(value));
-        registerBooleanCommand(invsortCommand, "doubleClickSort", new LiteralText("Set Double click slot to sort to "), (player, value) -> ((InvSorterPlayer) player).setDoubleClickSort(value));
+        registerBooleanCommand(invsortCommand, "middleClickSort", Text.translatable("key.inventorysorter.cmd.middleClickSort"), (player, value) -> ((InvSorterPlayer) player).setMiddleClick(value));
+        registerBooleanCommand(invsortCommand, "doubleClickSort", Text.translatable("key.inventorysorter.cmd.doubleClickSort"), (player, value) -> ((InvSorterPlayer) player).setDoubleClickSort(value));
 
         dispatcher.register(invsortCommand);
     }
@@ -75,9 +76,9 @@ public class SortCommand {
             else InventorySorterMod.getBlackList().hideSortBtnsList.add(id);
             InventorySorterMod.configManager.save();
             commandContext.getSource().getServer().getPlayerManager().getPlayerList().forEach(SyncBlacklistPacket::sync);
-            commandContext.getSource().sendFeedback(new LiteralText("Added " + id + " to blacklist"), false);
+            commandContext.getSource().sendFeedback(Text.translatable("key.inventorysorter.cmd.addblacklist").append(id), false);
         } else
-            commandContext.getSource().sendFeedback(new LiteralText("Screen ID not valid"), false);
+            commandContext.getSource().sendFeedback(Text.translatable("key.inventorysorter.cmd.invalidscreen"), false);
         return 1;
     }
 

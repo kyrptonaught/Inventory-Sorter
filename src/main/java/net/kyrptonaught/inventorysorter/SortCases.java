@@ -13,7 +13,11 @@ import java.util.List;
 
 public class SortCases {
     public enum SortType {
-        NAME, CATEGORY, MOD, ID
+        NAME, CATEGORY, MOD, ID;
+
+        public String getTranslationKey() {
+            return "key." + InventorySorterMod.MOD_ID + ".sorttype." + this.toString().toLowerCase();
+        }
     }
 
     static String getStringForSort(ItemStack stack, SortType sortType) {

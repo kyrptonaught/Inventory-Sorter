@@ -1,4 +1,5 @@
 {
+  "key.inventorysorter.config": "Inventory Sorting Config",
   "key.categories.inventorysorter": "Inventory Sorting",
   "key.inventorysorter.sort": "Sort Inventory",
   "key.inventorysorter.config.category.display": "Display",
@@ -23,5 +24,31 @@
   "key.inventorysorter.config.nosorttooltip": "The opened inventory's sort button will not be visible, \nonly the player's when this inventory is opened",
   "key.inventorysorter.toast.pass": "Successfully Downloaded",
   "key.inventorysorter.toast.error": "Download Error",
-  "key.inventorysorter.toast.error2": "See logs for more info"
+  "key.inventorysorter.toast.error2": "See logs for more info",
+
+  "key.inventorysorter.sorting.invalid": "Not looking at a valid inventory",
+  "key.inventorysorter.sorting.sorted": "Sorted inventory",
+  "key.inventorysorter.sorting.notsortable": "This inventory is not sortable",
+  "key.inventorysorter.sorting.failed": "Sorting inventory failed",
+  "key.inventorysorter.sorting.error": "Could not sort inventory",
+
+  "key.inventorysorter.cmd.updatesortingtype": "Updated Sorting Type",
+  "key.inventorysorter.cmd.middleClickSort": "Set Middle click slot to sort to ",
+  "key.inventorysorter.cmd.doubleClickSort": "Set Double click slot to sort to ",
+  "key.inventorysorter.cmd.addblacklist": "Added to blacklist: ",
+  "key.inventorysorter.cmd.invalidscreen": "Screen ID not valid",
+
+  "key.inventorysorter.sorttype.name": "Name",
+  "key.inventorysorter.sorttype.category": "Category",
+  "key.inventorysorter.sorttype.mod": "Mod",
+  "key.inventorysorter.sorttype.id": "Id",
+
+  "key.inventorysorter.sortbtn.sort": "Sort by: ",
+  "key.inventorysorter.sortbtn.debug": "Click while holding LEFTCONTROL",
+  "key.inventorysorter.sortbtn.debug2": "to blacklist this inventory",
+
+  "key.inventorysorter.sortbtn.clickhere": "Click Here",
+  "key.inventorysorter.sortbtn.dnsadd": " to automatically add to the Do Not Sort Inv list",
+  "key.inventorysorter.sortbtn.dndadd": " to automatically add to the Hide Sort Buttons list",
+  "key.inventorysorter.sortbtn.error": "Un-blacklistable screen, or screen is already blacklisted"
 }

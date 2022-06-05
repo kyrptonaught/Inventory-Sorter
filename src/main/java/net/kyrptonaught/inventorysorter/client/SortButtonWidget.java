@@ -12,7 +12,6 @@ import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ClickEvent;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -30,7 +29,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
     private final boolean playerInv;
 
     public SortButtonWidget(int int_1, int int_2, boolean playerInv) {
-        super(int_1, int_2, 10, 9, 0, 0, 19, texture, 20, 37, null, new LiteralText(""));
+        super(int_1, int_2, 10, 9, 0, 0, 19, texture, 20, 37, null, Text.literal(""));
         this.playerInv = playerInv;
     }
 
@@ -42,15 +41,15 @@ public class SortButtonWidget extends TexturedButtonWidget {
                 System.out.println("Add the line below to config/inventorysorter/blacklist.json5 to blacklist this inventory");
                 System.out.println(screenID);
 
-                MutableText MODID = new LiteralText("[" + InventorySorterMod.MOD_ID + "]: ").formatted(Formatting.BLUE);
-                MutableText autoDNS = (new LiteralText("Click me")).formatted(Formatting.UNDERLINE, Formatting.WHITE)
+                MutableText MODID = Text.literal("[" + InventorySorterMod.MOD_ID + "]: ").formatted(Formatting.BLUE);
+                MutableText autoDNS = (Text.translatable("key.inventorysorter.sortbtn.clickhere")).formatted(Formatting.UNDERLINE, Formatting.WHITE)
                         .styled((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/invsort blacklist doNotSort " + screenID)));
-                MutableText autoDND = (new LiteralText("Click me")).formatted(Formatting.UNDERLINE, Formatting.WHITE)
+                MutableText autoDND = (Text.translatable("key.inventorysorter.sortbtn.clickhere")).formatted(Formatting.UNDERLINE, Formatting.WHITE)
                         .styled((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/invsort blacklist doNotDisplay " + screenID)));
-                MinecraftClient.getInstance().player.sendMessage(MODID.shallowCopy().append(autoDNS).append(new LiteralText(" to automatically add to the Do Not Sort Inv list").formatted(Formatting.WHITE)), false);
-                MinecraftClient.getInstance().player.sendMessage(MODID.shallowCopy().append(autoDND).append(new LiteralText(" to automatically add to the Hide Sort Buttons list").formatted(Formatting.WHITE)), false);
+                MinecraftClient.getInstance().player.sendMessage(MODID.copyContentOnly().append(autoDNS).append(Text.translatable("key.inventorysorter.sortbtn.dnsadd").formatted(Formatting.WHITE)), false);
+                MinecraftClient.getInstance().player.sendMessage(MODID.copyContentOnly().append(autoDND).append(Text.translatable("key.inventorysorter.sortbtn.dndadd").formatted(Formatting.WHITE)), false);
             } else
-                MinecraftClient.getInstance().player.sendMessage(new LiteralText("[" + InventorySorterMod.MOD_ID + "]: Un-blacklistable screen, or screen is already blacklisted"), false);
+                MinecraftClient.getInstance().player.sendMessage(Text.literal("[" + InventorySorterMod.MOD_ID + "]: ").append(Text.translatable("key.inventorysorter.sortbtn.error")), false);
         } else
             InventorySortPacket.sendSortPacket(playerInv);
     }
@@ -90,10 +89,10 @@ public class SortButtonWidget extends TexturedButtonWidget {
     public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
         if (InventorySorterModClient.getConfig().displayTooltip && this.isHovered()) {
             List<Text> lines = new ArrayList<>();
-            lines.add(new LiteralText("Sort by: " + StringUtils.capitalize(InventorySorterModClient.getConfig().sortType.toString().toLowerCase())));
+            lines.add(Text.translatable("key.inventorysorter.sortbtn.sort").append(Text.translatable(InventorySorterModClient.getConfig().sortType.getTranslationKey())));
             if (GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
-                lines.add(new LiteralText("Click while holding LEFTCONTROL"));
-                lines.add(new LiteralText("to blacklist this inventory"));
+                lines.add(Text.translatable("key.inventorysorter.sortbtn.debug"));
+                lines.add(Text.translatable("key.inventorysorter.sortbtn.debug2"));
             }
             MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, lines, x, y);
         }

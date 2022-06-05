@@ -15,7 +15,6 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -48,7 +47,7 @@ public class InventoryHelper {
         }
         // fail if either is not present
         if (inventory == null || namedScreenHandlerFactory == null) {
-            return new LiteralText("Not looking at a valid inventory");
+            return Text.translatable("key.inventorysorter.sorting.invalid");
         }
 
         // open screen to perform validation
@@ -62,18 +61,17 @@ public class InventoryHelper {
                     // actually sort inv
                     sortInv(inventory, 0, inventory.size(), sortType);
                     player.closeHandledScreen();
-                    return new LiteralText("Sorted inventory");
+                    return Text.translatable("key.inventorysorter.sorting.sorted");
                 } else {
                     player.closeHandledScreen();
-                    return new LiteralText("This inventory is not sortable");
+                    return Text.translatable("key.inventorysorter.sorting.notsortable");
                 }
             } catch (Exception ex) {
                 player.closeHandledScreen();
-                player.sendMessage(new LiteralText("Sorting inventory failed"), false);
+                return Text.translatable("key.inventorysorter.sorting.failed");
             }
         }
-
-        return new LiteralText("Could not sort inventory");
+        return Text.translatable("key.inventorysorter.sorting.error");
     }
 
     public static boolean sortInv(PlayerEntity player, boolean sortPlayerInv, SortCases.SortType sortType) {
@@ -172,5 +170,4 @@ public class InventoryHelper {
         if (numSlots <= 36) return false;
         return numSlots - 36 >= 9;
     }
-
 }

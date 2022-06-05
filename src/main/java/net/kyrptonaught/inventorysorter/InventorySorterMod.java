@@ -12,7 +12,7 @@ import net.kyrptonaught.kyrptconfig.config.ConfigManager;
 
 
 public class InventorySorterMod implements ModInitializer {
-    public static ConfigManager configManager = new ConfigManager.MultiConfigManager(InventorySorterMod.MOD_ID);
+    public static ConfigManager.MultiConfigManager configManager = new ConfigManager.MultiConfigManager(InventorySorterMod.MOD_ID);
     public static final String MOD_ID = "inventorysorter";
 
     @Override

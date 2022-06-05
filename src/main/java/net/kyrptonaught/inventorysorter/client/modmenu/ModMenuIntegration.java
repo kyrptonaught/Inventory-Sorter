@@ -18,7 +18,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.TranslatableText;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
@@ -54,14 +53,22 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigSection blackListSection = new ConfigSection(configScreen, new TranslatableText("key.inventorysorter.config.category.blacklist"));
 
             blackListSection.addConfigItem(new BooleanItem(new TranslatableText("key.inventorysorter.config.showdebug"), options.debugMode, false).setSaveConsumer(val -> options.debugMode = val).setToolTipWithNewLine("key.inventorysorter.config.debugtooltip"));
-            blackListSection.addConfigItem(new TextItem(new TranslatableText("key.inventorysorter.config.blacklistURL"), ignoreList.blacklistDownloadURL, IgnoreList.DOWNLOAD_URL).setMaxLength(1024).setSaveConsumer(val -> ignoreList.blacklistDownloadURL = val));
+
+            TextItem blackListURL = (TextItem) new TextItem(new TranslatableText("key.inventorysorter.config.blacklistURL"), ignoreList.blacklistDownloadURL, IgnoreList.DOWNLOAD_URL).setMaxLength(1024).setSaveConsumer(val -> ignoreList.blacklistDownloadURL = val);
+            blackListSection.addConfigItem(blackListURL);
+
+            StringList hideList = (StringList) new StringList(new TranslatableText("key.inventorysorter.config.hidesort"), ignoreList.hideSortBtnsList.stream().toList(), new ArrayList<>()).setSaveConsumer(val -> ignoreList.hideSortBtnsList = Sets.newHashSet(val)).setToolTipWithNewLine("key.inventorysorter.config.hidetooltip");
+            StringList nosortList = (StringList) new StringList(new TranslatableText("key.inventorysorter.config.nosort"), ignoreList.doNotSortList.stream().toList(), new ArrayList<>()).setSaveConsumer(val -> ignoreList.doNotSortList = Sets.newHashSet(val)).setToolTipWithNewLine("key.inventorysorter.config.nosorttooltip");
+
             blackListSection.addConfigItem(new ButtonItem(new TranslatableText("key.inventorysorter.config.downloadListButton")).setClickEvent(() -> {
+                blackListURL.save();
                 ignoreList.downloadList();
+                hideList.setValue(ignoreList.hideSortBtnsList.stream().toList());
+                nosortList.setValue(ignoreList.doNotSortList.stream().toList());
             }));
 
-            blackListSection.addConfigItem(new StringList(new TranslatableText("key.inventorysorter.config.hidesort"), ignoreList.hideSortBtnsList.stream().toList(), new ArrayList<>()).setSaveConsumer(val -> ignoreList.hideSortBtnsList = Sets.newHashSet(val)).setToolTipWithNewLine("key.inventorysorter.config.hidetooltip"));
-            blackListSection.addConfigItem(new StringList(new TranslatableText("key.inventorysorter.config.nosort"), ignoreList.doNotSortList.stream().toList(), new ArrayList<>()).setSaveConsumer(val -> ignoreList.doNotSortList = Sets.newHashSet(val)).setToolTipWithNewLine("key.inventorysorter.config.nosorttooltip"));
-
+            blackListSection.addConfigItem(hideList);
+            blackListSection.addConfigItem(nosortList);
             return configScreen;
         };
     }

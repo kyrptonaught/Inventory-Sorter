@@ -2,7 +2,9 @@
   // The opened inventory's sort button will not be visible, only the player's when this inventory is opened
   "doNotSortList": [
     "conjuring:soulfire_forge",
-    "spectrum:pedestal"
+    "spectrum:pedestal",
+    "adorn:trading_station",
+   "guild:quest_screen"
   ],
   // Neither the opened inventory, nor your player inventory will be sortable when this inventory is opened
   "hideSortBtnsList": [
@@ -18,6 +20,7 @@
     "dankstorage:portable_dank_4",
     "dankstorage:portable_dank_5",
     "dankstorage:portable_dank_6",
-    "dankstorage:portable_dank_7"
+    "dankstorage:portable_dank_7",
+   "guild:quest_screen"
   ]
 }

@@ -13,7 +13,7 @@ group = project.maven_group
 
 repositories {
 	maven { url 'https://maven.fabricmc.net' }
-	maven {url = "https://maven.kyrptonaught.dev"}
+	maven { url = "https://maven.kyrptonaught.dev"}
 	maven { url "https://maven.terraformersmc.com/releases"}
 }
 
@@ -23,8 +23,8 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation 'net.kyrptonaught:kyrptconfig:1.4.5-1.19'
-	include 'net.kyrptonaught:kyrptconfig:1.4.5-1.19'
+	modImplementation 'net.kyrptonaught:kyrptconfig:1.4.6-1.19'
+	include 'net.kyrptonaught:kyrptconfig:1.4.6-1.19'
 }
 
 processResources {

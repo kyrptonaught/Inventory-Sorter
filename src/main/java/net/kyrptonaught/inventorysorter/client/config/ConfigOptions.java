@@ -3,10 +3,11 @@ package net.kyrptonaught.inventorysorter.client.config;
 import blue.endless.jankson.Comment;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
+import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 import net.kyrptonaught.kyrptconfig.config.ConfigWDefaults;
 import net.kyrptonaught.kyrptconfig.keybinding.CustomKeyBinding;
 
-public class ConfigOptions extends ConfigWDefaults {
+public class ConfigOptions implements AbstractConfigFile {
 
     @Comment("Enable 'Sort' button in inventorys")
     public boolean displaySort = true;
@@ -31,13 +32,4 @@ public class ConfigOptions extends ConfigWDefaults {
 
     public boolean debugMode = false;
 
-    @Override
-    public ConfigOptions getDefaults() {
-        return (ConfigOptions) super.getDefaults();
-    }
-
-    @Override
-    public void afterLoad() {
-        keybinding.copyFromDefault(getDefaults().keybinding);
-    }
 }

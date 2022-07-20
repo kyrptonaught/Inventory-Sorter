@@ -23,8 +23,12 @@ public class IgnoreList implements AbstractConfigFile {
     public String blacklistDownloadURL = DOWNLOAD_URL;
 
     public void downloadList() {
+       downloadList(blacklistDownloadURL);
+    }
+
+    public void downloadList(String URL) {
         try {
-            URL url = new URL(blacklistDownloadURL);
+            URL url = new URL(URL);
             String downloaded = IOUtils.toString(url.openStream());
             IgnoreList newList = Jankson.builder().build().fromJson(downloaded, IgnoreList.class);
 
@@ -34,7 +38,7 @@ public class IgnoreList implements AbstractConfigFile {
             SystemToast.add(MinecraftClient.getInstance().getToastManager(), SystemToast.Type.TUTORIAL_HINT, Text.translatable("key.inventorysorter.toast.pass"), null);
         } catch (Exception e) {
             SystemToast.add(MinecraftClient.getInstance().getToastManager(), SystemToast.Type.TUTORIAL_HINT, Text.translatable("key.inventorysorter.toast.error"), Text.translatable("key.inventorysorter.toast.error2"));
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

@@ -21,18 +21,19 @@ import java.util.function.BiConsumer;
 
 public class SortCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(CommandManager.literal("sort")
+        LiteralArgumentBuilder<ServerCommandSource> invsortCommand = CommandManager.literal("invsort").requires((source) -> source.hasPermissionLevel(0));
+
+        invsortCommand.then(CommandManager.literal("sort")
                 .requires((source) -> source.hasPermissionLevel(0))
                 .executes((commandContext) -> {
                     HitResult hit = commandContext.getSource().getPlayer().raycast(6, 1, false);
                     if (hit instanceof BlockHitResult) {
-                        Text feedBack = null;
-                        feedBack = InventoryHelper.sortBlock(commandContext.getSource().getPlayer().getWorld(), ((BlockHitResult) hit).getBlockPos(), commandContext.getSource().getPlayer(), ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
+                        Text feedBack = InventoryHelper.sortBlock(commandContext.getSource().getPlayer().getWorld(), ((BlockHitResult) hit).getBlockPos(), commandContext.getSource().getPlayer(), ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
                         commandContext.getSource().sendFeedback(feedBack, false);
                     }
                     return 1;
                 }));
-        dispatcher.register(CommandManager.literal("sortme")
+        invsortCommand.then(CommandManager.literal("sortme")
                 .requires((source) -> source.hasPermissionLevel(0))
                 .executes((commandContext) -> {
                     InventoryHelper.sortInv(commandContext.getSource().getPlayer(), true, ((InvSorterPlayer) commandContext.getSource().getPlayer()).getSortType());
@@ -42,7 +43,18 @@ public class SortCommand {
                     return 1;
                 }));
 
-        LiteralArgumentBuilder<ServerCommandSource> invsortCommand = CommandManager.literal("invsort").requires((source) -> source.hasPermissionLevel(0));
+        invsortCommand.then(CommandManager.literal("downloadBlacklist")
+                .then(CommandManager.argument("URL", StringArgumentType.greedyString()).executes(context -> {
+                    String URL = StringArgumentType.getString(context, "URL");
+                    InventorySorterMod.getBlackList().downloadList(URL);
+                    context.getSource().getServer().getPlayerManager().getPlayerList().forEach(SyncBlacklistPacket::sync);
+                    return 1;
+                })).executes(context -> {
+                    InventorySorterMod.getBlackList().downloadList();
+                    context.getSource().getServer().getPlayerManager().getPlayerList().forEach(SyncBlacklistPacket::sync);
+                    return 1;
+                })
+        );
 
         invsortCommand.then(CommandManager.literal("blacklist")
                 .requires((source) -> source.hasPermissionLevel(2))

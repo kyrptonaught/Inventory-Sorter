@@ -30,19 +30,17 @@ public class SyncBlacklistPacket {
         String[] hideList = new String[blacklist.hideSortBtnsList.size()];
         hideList = blacklist.hideSortBtnsList.toArray(hideList);
         buf.writeInt(hideList.length);
-        for (int i = 0; i < hideList.length; i++)
-            buf.writeString(hideList[i]);
+        for (String value : hideList) buf.writeString(value);
 
         String[] unSortList = new String[blacklist.doNotSortList.size()];
         unSortList = blacklist.doNotSortList.toArray(unSortList);
         buf.writeInt(unSortList.length);
-        for (int i = 0; i < unSortList.length; i++)
-            buf.writeString(unSortList[i]);
+        for (String s : unSortList) buf.writeString(s);
         return buf;
     }
 
     @Environment(EnvType.CLIENT)
-    public static void registerRecieveBlackList() {
+    public static void registerReceiveBlackList() {
         ClientPlayNetworking.registerGlobalReceiver(SYNC_BLACKLIST, (client, handler, packet, sender) -> {
             int numHides = packet.readInt();
             for (int i = 0; i < numHides; i++)

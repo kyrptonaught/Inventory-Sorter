@@ -16,7 +16,7 @@ public class InventorySorterModClient implements ClientModInitializer {
         InventorySorterMod.configManager.registerFile("config.json5", new ConfigOptions());
         InventorySorterMod.configManager.load();
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> syncConfig());
-        SyncBlacklistPacket.registerRecieveBlackList();
+        SyncBlacklistPacket.registerReceiveBlackList();
 
         KeyBindingHelper.registerKeyBinding(new DisplayOnlyKeyBind(
                 "key.inventorysorter.sort",

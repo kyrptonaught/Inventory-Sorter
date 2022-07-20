@@ -1,9 +1,9 @@
 package net.kyrptonaught.inventorysorter.client.config;
 
 import blue.endless.jankson.Comment;
-import blue.endless.jankson.Jankson;
 import com.google.common.collect.Sets;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
+import net.kyrptonaught.jankson.Jankson;
 import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.toast.SystemToast;
@@ -30,7 +30,7 @@ public class IgnoreList implements AbstractConfigFile {
         try {
             URL url = new URL(URL);
             String downloaded = IOUtils.toString(url.openStream());
-            IgnoreList newList = Jankson.builder().build().fromJson(downloaded, IgnoreList.class);
+            IgnoreList newList = InventorySorterMod.configManager.getJANKSON().fromJson(downloaded, IgnoreList.class);
 
             doNotSortList.addAll(newList.doNotSortList);
             hideSortBtnsList.addAll(newList.hideSortBtnsList);

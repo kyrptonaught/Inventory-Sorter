@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "inventorysorter",
-  "version": "1.8.9-1.19",
+  "version": "1.8.10-1.19",
   "name": "Inventory Sorter",
   "description": "Quickly and easily sort inventorys",
   "authors": [

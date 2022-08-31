@@ -1,14 +1,20 @@
 package net.kyrptonaught.inventorysorter;
 
+import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.tag.ItemTags;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class SortCases {
@@ -32,8 +38,6 @@ public class SortCases {
             case NAME:
                 if (stack.hasCustomName()) return stack.getName() + itemName;
         }
-
-
         return itemName;
     }
 
@@ -49,6 +53,18 @@ public class SortCases {
             return enchantedBookNameCase(stack);
         if (item instanceof ToolItem)
             return toolDuribilityCase(stack);
+		if (tag != null && item instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock){
+			NbtCompound compound = BlockItem.getBlockEntityNbt(stack);
+			if (compound != null){
+				DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(27, ItemStack.EMPTY);
+				List<String> stringList = new ArrayList<>(27);
+				Inventories.readNbt(compound, defaultedList);
+				for (ItemStack itemStack : defaultedList) {
+					stringList.add(itemStack.getItem().toString());
+				}
+				return item + String.join(" ", stringList);
+			}
+		}
         return item.toString();
     }
 

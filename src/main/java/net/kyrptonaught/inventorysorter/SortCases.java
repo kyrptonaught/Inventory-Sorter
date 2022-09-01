@@ -1,10 +1,13 @@
 package net.kyrptonaught.inventorysorter;
 
+import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
@@ -32,24 +35,34 @@ public class SortCases {
             case NAME:
                 if (stack.hasCustomName()) return stack.getName() + itemName;
         }
-
-
         return itemName;
     }
 
     private static String specialCases(ItemStack stack) {
         Item item = stack.getItem();
         NbtCompound tag = stack.getNbt();
-
+		String modifiedString = item.toString();
         if (tag != null && tag.contains("SkullOwner"))
-            return playerHeadCase(stack);
+	        modifiedString = playerHeadCase(stack);
         if (stack.getCount() != stack.getMaxCount())
-            return stackSize(stack);
+	        modifiedString = stackSize(stack);
         if (item instanceof EnchantedBookItem)
-            return enchantedBookNameCase(stack);
+	        modifiedString = enchantedBookNameCase(stack);
         if (item instanceof ToolItem)
-            return toolDuribilityCase(stack);
-        return item.toString();
+	        modifiedString = toolDuribilityCase(stack);
+		if (tag != null && item instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock){
+			NbtCompound compound = BlockItem.getBlockEntityNbt(stack);
+			if (compound != null){
+				DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(27, ItemStack.EMPTY);
+				List<String> stringList = new ArrayList<>(27);
+				Inventories.readNbt(compound, defaultedList);
+				for (ItemStack itemStack : defaultedList) {
+					stringList.add(itemStack.getItem().toString());
+				}
+				modifiedString = item + String.join(" ", stringList);
+			}
+		}
+        return modifiedString;
     }
 
     private static String playerHeadCase(ItemStack stack) {

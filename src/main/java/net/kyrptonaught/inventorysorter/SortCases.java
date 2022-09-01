@@ -41,15 +41,15 @@ public class SortCases {
     private static String specialCases(ItemStack stack) {
         Item item = stack.getItem();
         NbtCompound tag = stack.getNbt();
-
+		String modifiedString = item.toString();
         if (tag != null && tag.contains("SkullOwner"))
-            return playerHeadCase(stack);
+	        modifiedString = playerHeadCase(stack);
         if (stack.getCount() != stack.getMaxCount())
-            return stackSize(stack);
+	        modifiedString = stackSize(stack);
         if (item instanceof EnchantedBookItem)
-            return enchantedBookNameCase(stack);
+	        modifiedString = enchantedBookNameCase(stack);
         if (item instanceof ToolItem)
-            return toolDuribilityCase(stack);
+	        modifiedString = toolDuribilityCase(stack);
 		if (tag != null && item instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock){
 			NbtCompound compound = BlockItem.getBlockEntityNbt(stack);
 			if (compound != null){
@@ -59,10 +59,10 @@ public class SortCases {
 				for (ItemStack itemStack : defaultedList) {
 					stringList.add(itemStack.getItem().toString());
 				}
-				return item + String.join(" ", stringList);
+				modifiedString = item + String.join(" ", stringList);
 			}
 		}
-        return item.toString();
+        return modifiedString;
     }
 
     private static String playerHeadCase(ItemStack stack) {

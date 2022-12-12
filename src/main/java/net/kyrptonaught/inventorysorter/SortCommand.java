@@ -8,13 +8,13 @@ import net.kyrptonaught.inventorysorter.interfaces.InvSorterPlayer;
 import net.kyrptonaught.inventorysorter.network.SyncBlacklistPacket;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.registry.Registry;
 
 import java.util.function.BiConsumer;
 
@@ -83,7 +83,7 @@ public class SortCommand {
 
     public static int executeBlackList(CommandContext<ServerCommandSource> commandContext, boolean isDNS) {
         String id = StringArgumentType.getString(commandContext, "screenid");
-        if (Registry.SCREEN_HANDLER.containsId(new Identifier(id))) {
+        if (Registries.SCREEN_HANDLER.containsId(new Identifier(id))) {
             if (isDNS) InventorySorterMod.getBlackList().doNotSortList.add(id);
             else InventorySorterMod.getBlackList().hideSortBtnsList.add(id);
             InventorySorterMod.configManager.save();

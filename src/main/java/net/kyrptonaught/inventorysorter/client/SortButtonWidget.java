@@ -8,16 +8,16 @@ import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.network.InventorySortPacket;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
     public void onPress() {
         if (InventorySorterModClient.getConfig().debugMode && GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_CONTROL) == 1) {
             if (InventoryHelper.canSortInventory(MinecraftClient.getInstance().player)) {
-                String screenID = Registry.SCREEN_HANDLER.getId(MinecraftClient.getInstance().player.currentScreenHandler.getType()).toString();
+                String screenID = Registries.SCREEN_HANDLER.getId(MinecraftClient.getInstance().player.currentScreenHandler.getType()).toString();
                 System.out.println("Add the line below to config/inventorysorter/blacklist.json5 to blacklist this inventory");
                 System.out.println(screenID);
 
@@ -56,13 +56,13 @@ public class SortButtonWidget extends TexturedButtonWidget {
 
     @Override
     public void renderButton(MatrixStack matrixStack, int int_1, int int_2, float float_1) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.enableDepthTest();
         matrixStack.push();
         matrixStack.scale(.5f, .5f, 1);
-        matrixStack.translate(x, y, 0);
-        drawTexture(matrixStack, this.x, this.y, 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
+        matrixStack.translate(getX(), getY(), 0);
+        drawTexture(matrixStack, getX(), getY(), 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
         this.renderTooltip(matrixStack, int_1, int_2);
         matrixStack.pop();
     }
@@ -85,7 +85,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
         return true;
     }
 
-    @Override
+
     public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
         if (InventorySorterModClient.getConfig().displayTooltip && this.isHovered()) {
             List<Text> lines = new ArrayList<>();
@@ -94,7 +94,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
                 lines.add(Text.translatable("key.inventorysorter.sortbtn.debug"));
                 lines.add(Text.translatable("key.inventorysorter.sortbtn.debug2"));
             }
-            MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, lines, x, y);
+            MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, lines, getX(), getY());
         }
     }
 }

@@ -56,7 +56,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
             boolean playerOnly = !InventoryHelper.canSortInventory(client.player);
             this.addDrawableChild(invsort$SortBtn = new SortButtonWidget(this.x + this.backgroundWidth - 20, this.y + (playerOnly ? (backgroundHeight - 95) : 6), playerOnly));
             if (!playerOnly && InventorySorterModClient.getConfig().seperateBtn)
-                this.addDrawableChild(new SortButtonWidget(invsort$SortBtn.x, this.y + ((SortableContainerScreen) (this)).getMiddleHeight(), true));
+                this.addDrawableChild(new SortButtonWidget(invsort$SortBtn.getX(), this.y + ((SortableContainerScreen) (this)).getMiddleHeight(), true));
         }
     }
 
@@ -93,7 +93,7 @@ public abstract class MixinContainerScreen extends Screen implements SortableCon
     @Inject(method = "render", at = @At("TAIL"))
     private void invsort$render(MatrixStack matrixStack, int int_1, int int_2, float float_1, CallbackInfo callbackinfo) {
         if (invsort$SortBtn != null)
-            invsort$SortBtn.x = this.x + this.backgroundWidth - 20;
+            invsort$SortBtn.setX(this.x + this.backgroundWidth - 20);
     }
 
     @Override

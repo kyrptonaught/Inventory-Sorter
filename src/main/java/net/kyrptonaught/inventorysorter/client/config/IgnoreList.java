@@ -3,14 +3,13 @@ package net.kyrptonaught.inventorysorter.client.config;
 import blue.endless.jankson.Comment;
 import com.google.common.collect.Sets;
 import net.kyrptonaught.inventorysorter.InventorySorterMod;
-import net.kyrptonaught.jankson.Jankson;
 import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.toast.SystemToast;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.io.IOUtils;
 
 import java.net.URL;
@@ -66,7 +65,7 @@ public class IgnoreList implements AbstractConfigFile {
     );
 
     public transient HashSet<Identifier> defaultDoNotSortList = Sets.newHashSet(
-            Registry.SCREEN_HANDLER.getId(ScreenHandlerType.CRAFTING),
+            Registries.SCREEN_HANDLER.getId(ScreenHandlerType.CRAFTING),
             new Identifier("adorn:trading_station"),
             new Identifier("guild:quest_screen"),
             new Identifier("conjuring:soulfire_forge"),

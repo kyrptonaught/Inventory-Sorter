@@ -4,8 +4,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,17 +24,30 @@ public class SortCases {
         Item item = stack.getItem();
         String itemName = specialCases(stack);
         switch (sortType) {
-            case CATEGORY:
-                ItemGroup group = item.getGroup();
-                return (group != null ? group.getName() : "zzz") + itemName;
-            case MOD:
-                return Registry.ITEM.getId(item).getNamespace() + itemName;
-            case NAME:
+            case CATEGORY -> {
+                ItemGroup group = getFirstItemGroup(stack);
+                return (group != null ? group.getDisplayName().getString() : "zzz") + itemName;
+            }
+            case MOD -> {
+                return Registries.ITEM.getId(item).getNamespace() + itemName;
+            }
+            case NAME -> {
                 if (stack.hasCustomName()) return stack.getName() + itemName;
+            }
         }
 
 
         return itemName;
+    }
+
+    private static ItemGroup getFirstItemGroup(ItemStack stack) {
+        List<ItemGroup> groups = ItemGroups.getGroups();
+        for (ItemGroup group : groups) {
+            if (group.contains(new ItemStack(stack.getItem())))
+                return group;
+
+        }
+        return null;
     }
 
     private static String specialCases(ItemStack stack) {
@@ -78,7 +91,7 @@ public class SortCases {
             NbtCompound enchantTag = enchants.getCompound(i);
             Identifier enchantID = Identifier.tryParse(enchantTag.getString("id"));
             if (enchantID == null) continue;
-            Enchantment enchant = Registry.ENCHANTMENT.get(enchantID);
+            Enchantment enchant = Registries.ENCHANTMENT.get(enchantID);
             if (enchant == null) continue;
             names.add(enchant.getName(enchantTag.getInt("lvl")).getString());
         }

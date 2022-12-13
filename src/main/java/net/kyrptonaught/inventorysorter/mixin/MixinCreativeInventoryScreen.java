@@ -20,14 +20,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinCreativeInventoryScreen implements SortableContainerScreen {
 
 
-    @Shadow private static ItemGroup selectedTab;
+    @Shadow public abstract boolean isInventoryTabSelected();
 
     @Inject(method = "init", at = @At("TAIL"))
     private void invsort$init(CallbackInfo callbackinfo) {
         if (InventorySorterModClient.getConfig().displaySort) {
             SortButtonWidget sortbtn = this.getSortButton();
             if (sortbtn != null)
-                sortbtn.visible = selectedTab == ItemGroups.INVENTORY;
+                sortbtn.visible = this.isInventoryTabSelected();
         }
     }
 
@@ -36,7 +36,7 @@ public abstract class MixinCreativeInventoryScreen implements SortableContainerS
         if (InventorySorterModClient.getConfig().displaySort) {
             SortButtonWidget sortbtn = this.getSortButton();
             if (sortbtn != null)
-                sortbtn.visible = selectedTab == ItemGroups.INVENTORY;
+                sortbtn.visible = this.isInventoryTabSelected();
         }
     }
 }

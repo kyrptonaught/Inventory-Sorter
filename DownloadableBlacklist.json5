@@ -4,7 +4,7 @@
     "conjuring:soulfire_forge",
     "spectrum:pedestal",
     "adorn:trading_station",
-   "guild:quest_screen"
+    "guild:quest_screen"
   ],
   // Neither the opened inventory, nor your player inventory will be sortable when this inventory is opened
   "hideSortBtnsList": [
@@ -21,6 +21,9 @@
     "dankstorage:portable_dank_5",
     "dankstorage:portable_dank_6",
     "dankstorage:portable_dank_7",
-   "guild:quest_screen"
+    "fwaystones:waystone",
+    "fwaystones:pocket_wormhole",
+    "fwaystones:abyss",
+    "guild:quest_screen"
   ]
 }

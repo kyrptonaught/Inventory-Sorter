@@ -132,7 +132,7 @@ public class InventoryHelper {
             return false;
         if (itemStack_1.getDamage() != itemStack_2.getDamage())
             return false;
-        return ItemStack.areNbtEqual(itemStack_1, itemStack_2);
+        return ItemStack.canCombine(itemStack_1, itemStack_2);
     }
 
     public static boolean shouldDisplayBtns(PlayerEntity player) {

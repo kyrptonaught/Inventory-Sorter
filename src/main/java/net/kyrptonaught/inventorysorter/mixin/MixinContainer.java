@@ -42,7 +42,7 @@ public abstract class MixinContainer implements SortableContainer {
 
     @Inject(method = "onSlotClick", at = @At("HEAD"), cancellable = true)
     public void sortOnDoubleClickEmpty(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
-        if (!player.world.isClient && player instanceof InvSorterPlayer) {
+        if (!player.getWorld().isClient && player instanceof InvSorterPlayer) {
             if ((((InvSorterPlayer) player).getDoubleClickSort() && button == 0 && actionType.equals(SlotActionType.PICKUP_ALL)) ||
                     (((InvSorterPlayer) player).getMiddleClick() && button == 2 && actionType.equals(SlotActionType.CLONE)))
                 if (cursorStack.isEmpty())

@@ -8,6 +8,7 @@ import net.kyrptonaught.inventorysorter.InventorySorterMod;
 import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.network.InventorySortPacket;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
@@ -55,16 +56,16 @@ public class SortButtonWidget extends TexturedButtonWidget {
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int int_1, int int_2, float float_1) {
+    public void renderButton(DrawContext context, int int_1, int int_2, float float_1) {
         RenderSystem.setShader(GameRenderer::getPositionProgram);
-        RenderSystem.setShaderTexture(0, texture);
         RenderSystem.enableDepthTest();
-        matrixStack.push();
-        matrixStack.scale(.5f, .5f, 1);
-        matrixStack.translate(getX(), getY(), 0);
-        drawTexture(matrixStack, getX(), getY(), 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
-        this.renderTooltip(matrixStack, int_1, int_2);
-        matrixStack.pop();
+        context.getMatrices().push();
+        context.getMatrices().scale(.5f, .5f, 1);
+        context.getMatrices().translate(getX(), getY(), 0);
+       
+        context.drawTexture(texture, getX(), getY(), 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
+        this.renderTooltip(context, int_1, int_2);
+        context.getMatrices().pop();
     }
 
     @Override
@@ -86,7 +87,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
     }
 
 
-    public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+    public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
         if (InventorySorterModClient.getConfig().displayTooltip && this.isHovered()) {
             List<Text> lines = new ArrayList<>();
             lines.add(Text.translatable("key.inventorysorter.sortbtn.sort").append(Text.translatable(InventorySorterModClient.getConfig().sortType.getTranslationKey())));
@@ -94,7 +95,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
                 lines.add(Text.translatable("key.inventorysorter.sortbtn.debug"));
                 lines.add(Text.translatable("key.inventorysorter.sortbtn.debug2"));
             }
-            MinecraftClient.getInstance().currentScreen.renderTooltip(matrices, lines, getX(), getY());
+            context.drawTooltip(MinecraftClient.getInstance().textRenderer, lines, getX(), getY());
         }
     }
 }

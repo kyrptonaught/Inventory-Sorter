@@ -9,10 +9,9 @@ import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.network.InventorySortPacket;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -27,10 +26,11 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class SortButtonWidget extends TexturedButtonWidget {
     private static final Identifier texture = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button.png");
+    private static final Identifier textureFocused = new Identifier(InventorySorterMod.MOD_ID, "textures/gui/button_focused.png");
     private final boolean playerInv;
 
     public SortButtonWidget(int int_1, int int_2, boolean playerInv) {
-        super(int_1, int_2, 10, 9, 0, 0, 19, texture, 20, 37, null, Text.literal(""));
+        super(int_1, int_2, 10, 9, new ButtonTextures(texture, textureFocused), null, Text.literal(""));
         this.playerInv = playerInv;
     }
 
@@ -56,22 +56,23 @@ public class SortButtonWidget extends TexturedButtonWidget {
     }
 
     @Override
-    public void renderButton(DrawContext context, int int_1, int int_2, float float_1) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableDepthTest();
         context.getMatrices().push();
         context.getMatrices().scale(.5f, .5f, 1);
         context.getMatrices().translate(getX(), getY(), 0);
-       
-        context.drawTexture(texture, getX(), getY(), 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
-        this.renderTooltip(context, int_1, int_2);
+
+        Identifier identifier = this.textures.get(true, this.isSelected() || this.isHovered());
+        context.drawTexture(identifier, getX(), getY(), 0, 0, 20, 18, 20, 18);
+        this.renderTooltip(context, mouseX, mouseY);
         context.getMatrices().pop();
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         int current = InventorySorterModClient.getConfig().sortType.ordinal();
-        if (amount > 0) {
+        if (verticalAmount > 0) {
             current++;
             if (current >= SortCases.SortType.values().length)
                 current = 0;

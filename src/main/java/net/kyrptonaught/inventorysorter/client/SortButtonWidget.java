@@ -1,6 +1,5 @@
 package net.kyrptonaught.inventorysorter.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.inventorysorter.InventoryHelper;
@@ -9,10 +8,7 @@ import net.kyrptonaught.inventorysorter.SortCases;
 import net.kyrptonaught.inventorysorter.network.InventorySortPacket;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
@@ -30,7 +26,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
     private final boolean playerInv;
 
     public SortButtonWidget(int int_1, int int_2, boolean playerInv) {
-        super(int_1, int_2, 10, 9, 0, 0, 19, texture, 20, 37, null, Text.literal(""));
+        super(int_1, int_2, 10, 9, 0, 0, 9, texture, 10, 18, null, Text.literal(""));
         this.playerInv = playerInv;
     }
 
@@ -57,15 +53,8 @@ public class SortButtonWidget extends TexturedButtonWidget {
 
     @Override
     public void renderButton(DrawContext context, int int_1, int int_2, float float_1) {
-        RenderSystem.setShader(GameRenderer::getPositionProgram);
-        RenderSystem.enableDepthTest();
-        context.getMatrices().push();
-        context.getMatrices().scale(.5f, .5f, 1);
-        context.getMatrices().translate(getX(), getY(), 0);
-       
-        context.drawTexture(texture, getX(), getY(), 0, this.isHovered() ? 19 : 0, 20, 18, 20, 37);
+        super.renderButton(context, int_1, int_2, float_1);
         this.renderTooltip(context, int_1, int_2);
-        context.getMatrices().pop();
     }
 
     @Override
@@ -95,7 +84,7 @@ public class SortButtonWidget extends TexturedButtonWidget {
                 lines.add(Text.translatable("key.inventorysorter.sortbtn.debug"));
                 lines.add(Text.translatable("key.inventorysorter.sortbtn.debug2"));
             }
-            context.drawTooltip(MinecraftClient.getInstance().textRenderer, lines, getX(), getY());
+            context.drawTooltip(MinecraftClient.getInstance().textRenderer, lines, mouseX, mouseY);
         }
     }
 }
